@@ -1,0 +1,27 @@
+TYPEMAP
+I64V                T_I64V
+
+moment_t            T_MOMENT
+const moment_t      T_MOMENT
+
+moment_t *          T_MOMENT_PTR
+const moment_t *    T_MOMENT_PTR
+
+
+INPUT
+T_I64V
+    $var = SvI64V($arg);
+
+T_MOMENT
+    $var = sv_2moment($arg, \"$var\");
+
+T_MOMENT_PTR
+    $var = sv_2moment_ptr($arg, \"$var\");
+
+OUTPUT
+T_I64V
+    $arg = newSVi64v($var);
+
+T_MOMENT
+    $arg = newSVmoment(&$var, stash);
+

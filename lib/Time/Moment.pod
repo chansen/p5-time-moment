@@ -1,0 +1,101 @@
+=encoding utf-8
+
+=head1 NAME
+
+Time::Moment
+
+=head1 SYNOPSIS
+    
+    $tm = Time::Moment->now;
+    $tm = Time::Moment->from_epoch($seconds [, $microsecond [, $offset ]]);
+    $tm = Time::Moment->from_object($object);
+    $tm = Time::Moment->from_string("YYYY-MM-DDThh:mm:ss.ffffff±hh:mm");
+    
+    $year         = $tm->year;                  # [1, 9999]
+    $quarter      = $tm->quarter;               # [1, 4]
+    $month        = $tm->month;                 # [1, 12]
+    
+    $day          = $tm->day_of_year;           # [1, 366]
+    $day          = $tm->day_of_quarter;        # [1, 92]
+    $day          = $tm->day_of_month;          # [1, 31]
+    $day          = $tm->day_of_week;           # [1=Monday, 7=Sunday]
+    
+    $hour         = $tm->hour;                  # [0, 23]
+    $minute       = $tm->minute;                # [0, 59]
+    $second       = $tm->second;                # [0, 59]
+    $millisecond  = $tm->millisecond;           # [0, 999]
+    $microsecond  = $tm->microsecond;           # [0, 999_999]
+    
+    $epoch        = $tm->epoch;
+    $offset       = $tm->offset;                # [-1080, 1080]
+    
+    $tm2          = $tm1->with_offset($offset);
+    
+    $string       = $tm->strftime($format);
+    
+    $boolean      = $tm1->is_before($tm2);
+    $boolean      = $tm1->is_after($tm2);
+    $boolean      = $tm1->is_equal($tm2);
+    
+    $integer      = $tm1->compare($tm2);
+    
+    @values       = $tm->utc_rd_values;
+    $seconds      = $tm->utc_rd_as_seconds;
+    @values       = $tm->local_rd_values;
+    $seconds      = $tm->local_rd_as_seconds;
+    
+    $boolean      = $tm1 == $tm2;
+    $boolean      = $tm1 != $tm2;
+    $boolean      = $tm1 <  $tm2;
+    $boolean      = $tm1 >  $tm2;
+    $boolean      = $tm1 <= $tm2;
+    $boolean      = $tm1 >= $tm2;
+    
+    $string       = "$tm";                      # YYYY-MM-DDThh:mm:ss.ffffff±hh:mm
+
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head1 DIAGNOSTICS
+
+=over 4
+
+=item B<(F)> Usage: %s
+
+Method called with wrong number of arguments.
+
+=back
+
+=head1 SEE ALSO
+
+=head1 SUPPORT
+
+=head2 Bugs / Feature Requests
+
+Please report any bugs or feature requests through the issue tracker
+at L<https://github.com/chansen/p5-time-moment/issues>.
+You will be notified automatically of any progress on your issue.
+
+=head2 SOURCE CODE
+
+This is open source software. The code repository is available for public 
+review and contribution under the terms of the license.
+
+L<httsp://github.com/chansen/p5-time-moment>
+
+    git clone https://github.com/chansen/p5-time-moment
+
+=head1 AUTHOR
+
+Christian Hansen C<chansen@cpan.org>
+
+=head1 COPYRIGHT
+
+Copyright 2013 by Christian Hansen.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+
