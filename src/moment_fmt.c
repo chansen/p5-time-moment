@@ -128,12 +128,12 @@ THX_format_N(pTHX_ const moment_t *mt, SV *dsv, int len) {
         len = 6;
     usec = moment_microsecond(mt);
     switch (len) {
-        case 6: buf[len - 6] = CHR(usec, 100000);
-        case 5: buf[len - 5] = CHR(usec, 10000);
-        case 4: buf[len - 4] = CHR(usec, 1000);
-        case 3: buf[len - 3] = CHR(usec, 100);
-        case 2: buf[len - 2] = CHR(usec, 10);
-        case 1: buf[len - 1] = CHR(usec, 1);
+        case 6: buf[5] = CHR(usec, 1);
+        case 5: buf[4] = CHR(usec, 10);
+        case 4: buf[3] = CHR(usec, 100);
+        case 3: buf[2] = CHR(usec, 1000);
+        case 2: buf[1] = CHR(usec, 10000);
+        case 1: buf[0] = CHR(usec, 100000);
     }
     sv_catpvn(dsv, buf, len);
 }
