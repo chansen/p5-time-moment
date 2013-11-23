@@ -146,7 +146,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
     dt_t dt;
     int year, month, day;
 
-    dsv = sv_2mortal(newSV(len + 1));
+    dsv = sv_2mortal(newSV(16));
     SvCUR_set(dsv, 0);
     SvPOK_only(dsv);
 
