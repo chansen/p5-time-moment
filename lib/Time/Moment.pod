@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Time::Moment
+Time::Moment - Represents a date and time with a time zone offset from UTC
 
 =head1 SYNOPSIS
     
@@ -56,6 +56,12 @@ Time::Moment
 
 =head1 DESCRIPTION
 
+Represents a date and time with a time zone offset from UTC in the ISO 8601 
+calendar with microsecond resolution.
+
+B<IMPORTANT:> This is an early preview release available for testing and 
+feedback. The API is still subject to change.
+
 =head1 METHODS
 
 =head1 DIAGNOSTICS
@@ -83,7 +89,7 @@ You will be notified automatically of any progress on your issue.
 This is open source software. The code repository is available for public 
 review and contribution under the terms of the license.
 
-L<httsp://github.com/chansen/p5-time-moment>
+L<https://github.com/chansen/p5-time-moment>
 
     git clone https://github.com/chansen/p5-time-moment
 
@@ -97,5 +103,4 @@ Copyright 2013 by Christian Hansen.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
-
 
