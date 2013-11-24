@@ -10,6 +10,11 @@ BEGIN {
     require XSLoader; XSLoader::load(__PACKAGE__, $VERSION);
 }
 
+BEGIN {
+    unless (exists &Time::Moment::now) {
+        eval sprintf <<'EOC', __FILE__;
+# line 17 %s
+
 # expects normalized tm values; algorithm is only valid for tm year's [1, 199]
 sub timegm {
     my ($y, $d, $h, $m, $s) = @_[5,7,2,1,0];
@@ -23,6 +28,10 @@ sub now {
     my ($sec, $usec) = Time::HiRes::gettimeofday();
     my $off = int((timegm(localtime($sec)) - $sec) / 60);
     return $class->from_epoch($sec, $usec, $off);
+}
+EOC
+        Carp::croak($@) if $@;
+    }
 }
 
 sub leap_year {
