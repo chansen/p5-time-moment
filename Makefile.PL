@@ -5,9 +5,10 @@ BEGIN {
     unshift @INC, 'inc';
 
     my @required = (
-        'inc::Module::Install'      => '1.00',
-        'Module::Install::XSUtil'   => '0.36',
-        'Test::More'                => '0.88',
+        'inc::Module::Install'           => '1.00',
+        'Module::Install::XSUtil'        => '0.36',
+        'Module::Install::ReadmeFromPod' => '0',
+        'Test::More'                     => '0.88',
     );
 
     my @missing;
@@ -28,13 +29,15 @@ BEGIN {
 use inc::Module::Install;
 
 name           'Time-Moment';
+perl_version   '5.008001';
 all_from       'lib/Time/Moment.pm';
-repository     'http://github.com/chansen/p5-time-moment';
+repository     'https://github.com/chansen/p5-time-moment';
+bugtracker     'https://github.com/chansen/p5-time-moment/issues';
+readme_from    'lib/Time/Moment.pod';
 
 requires       'Carp'        => '0';
-requires       'Exporter'    => '0';
 requires       'XSLoader'    => '0';
-requires       'Time::HiRes'  => '0';
+requires       'Time::HiRes' => '0';
 
 test_requires  'Test::More'  => '0.88';
 
