@@ -5,15 +5,19 @@ use warnings;
 use Benchmark     qw[];
 use DateTime      qw[];
 use Time::Moment  qw[];
+use Time::Piece   qw[];
 
 {
     print "Benchmarking constructor: ->now()\n";
     Benchmark::cmpthese( -10, {
+        'DateTime' => sub {
+            my $dt = DateTime->now;
+        },
         'Time::Moment' => sub {
             my $tm = Time::Moment->now;
         },
-        'DateTime' => sub {
-            my $dt = DateTime->now;
+        'Time::Piece' => sub {
+            my $tp = Time::Piece::localtime();
         },
     });
 }
@@ -21,39 +25,50 @@ use Time::Moment  qw[];
 {
     print "\nBenchmarking constructor: ->from_epoch()\n";
     Benchmark::cmpthese( -10, {
+        'DateTime' => sub {
+            my $dt = DateTime->from_epoch(epoch => 0);
+        },
         'Time::Moment' => sub {
             my $tm = Time::Moment->from_epoch(0);
         },
-        'DateTime' => sub {
-            my $dt = DateTime->from_epoch(epoch => 0);
+        'Time::Piece' => sub {
+            my $tp = Time::Piece::localtime(0);
         },
     });
 }
 
 {
     print "\nBenchmarking accessor: ->year()\n";
-    my $tm = Time::Moment->now;
     my $dt = DateTime->now;
+    my $tm = Time::Moment->now;
+    my $tp = Time::Piece::localtime();
     Benchmark::cmpthese( -10, {
+        'DateTime' => sub {
+            my $year = $dt->year;
+        },
         'Time::Moment' => sub {
             my $year = $tm->year;
         },
-        'DateTime' => sub {
-            my $year = $dt->year;
+        'Time::Piece' => sub {
+            my $year = $tp->year;
         },
     });
 }
 
 {
     print "\nBenchmarking strftime: ->strftime('%FT%T%z')\n";
-    my $tm = Time::Moment->now;
     my $dt = DateTime->now;
+    my $tm = Time::Moment->now;
+    my $tp = Time::Piece::localtime();
     Benchmark::cmpthese( -10, {
+        'DateTime' => sub {
+            my $string = $dt->strftime('%FT%T%z');
+        },
         'Time::Moment' => sub {
             my $string = $tm->strftime('%FT%T%z');
         },
-        'DateTime' => sub {
-            my $string = $dt->strftime('%FT%T%z');
+        'Time::Piece' => sub {
+            my $string = $tp->strftime('%FT%T%z');
         },
     });
 }
