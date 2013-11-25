@@ -34,66 +34,8 @@ EOC
     }
 }
 
-sub leap_year {
-    my ($y) = @_;
-    return (($y & 3) == 0 && ($y % 100 != 0 || $y % 400 == 0));
-}
-
-sub days_in_month {
-    my ($y, $m) = @_;
-    return 29 if $m == 2 && leap_year($y);
-    return (0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)[$m];
-}
-
-my @DayOffset = (0, 306, 337, 0, 31, 61, 92, 122, 153, 184, 214, 245, 275);
-
-my $Rx = qr/
-    \A
-    ([0-9]{4}) - ([0-9]{2}) - ([0-9]{2})
-    [T]
-    ([0-9]{2}) : ([0-9]{2}) : ([0-9]{2}) (?: [.,] ([0-9]{1,6}) )?
-    (?:
-         [Z]
-      | ([+-]) ([0-1][0-9]) : ([0-5][0-9])
-    )
-    \z
-/x;
-
-sub parse {
-    return
-      unless (defined $_[0])
-          && (my ($Y, $M, $D, $h, $m, $s, $fs, $zs, $zh, $zm) = $_[0] =~ $Rx);
-    return
-      unless ($Y >= 1)
-          && ($M >= 1 && $M <= 12)
-          && ($D >= 1 && ($D <= 28 || $D <= days_in_month($Y, $M)))
-          && ($h <= 23)
-          && ($m <= 59)
-          && ($s <= 59);
-
-    my $usec = $fs ? $fs * (10 ** (6 - length $fs)) : 0;
-    my $off  = $zs ? ($zs eq '-' ? -1 : 1) * ($zh * 60 + $zm) : 0;
-    my $sec  = do {
-        use integer;
-        $Y-- if $M < 3;
-        (1461 * $Y >> 2) - $Y/100 + $Y/400 + $DayOffset[$M] + $D - 719469;
-    } * 86400 + $h * 3600 + $m * 60 + $s - $off * 60;
-
-    return ($sec, $usec, $off);
-}
-
-sub from_string {
-    @_ == 2 || Carp::croak(q/Usage: Time::Moment->from_string($string)/);
-    my ($class, $string) = @_;
-
-    my ($sec, $usec, $off) = parse($string)
-      or Carp::croak(q/Cannot parse the given string/);
-
-    return $class->from_epoch($sec, $usec, $off);
-}
-
 BEGIN {
-    delete @Time::Moment::{qw(timegm parse leap_year days_in_month)};
+    delete @Time::Moment::{qw(timegm)};
 }
 
 sub __as_DateTime {
