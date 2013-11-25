@@ -5,6 +5,7 @@
 #include "ppport.h"
 #include "moment.h"
 #include "moment_fmt.h"
+#include "moment_parse.h"
 
 typedef int64_t I64V;
 
@@ -318,6 +319,20 @@ from_epoch(klass, seconds, microsecond=0, offset=0)
     dSTASH_CONSTRUCTOR_MOMENT(klass);
   CODE:
     RETVAL = moment_from_epoch(seconds, microsecond, offset);
+  OUTPUT:
+    RETVAL
+
+moment_t
+from_string(klass, string)
+    SV *klass
+    SV *string
+  PREINIT:
+    dSTASH_CONSTRUCTOR_MOMENT(klass);
+    STRLEN len;
+    const char *str;
+  CODE:
+    str = SvPV_const(string, len);
+    RETVAL = moment_from_string(str, len);
   OUTPUT:
     RETVAL
 
