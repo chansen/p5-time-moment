@@ -36,7 +36,7 @@ foreach my $name (@zones) {
 
 for my $clock (sort { $a->[1]->offset <=> $b->[1]->offset } @clocks) {
     my ($name, $time) = @$clock;
-    my $diff = ($time->local_rd_as_seconds - $now->local_rd_as_seconds) / 60;
+    my $diff = ($time->offset - $now->offset);
     printf "%-12s %-16s %s\n", $name, $time->strftime("%a %H:%M %Z"),
       $diff ? sprintf "(%+dm)", $diff : '';
 }
