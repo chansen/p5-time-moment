@@ -1,3 +1,9 @@
+0.02 2013-11-25
+  - Implemented ->from_string() in C
+  - Implemented ->now() in C if the system supports gettimeofday(2)
+  - Added dev/sizeof.pl
+  - Added Time::Piece to dev/bench.pl
+
 0.01 2013-11-24
   - Initial CPAN preview release.
 
