@@ -63,8 +63,8 @@ static const char *Meridiem[] = {
  */
 static int
 dt_week_number_sun(dt_t dt) {
-    int sun = dt_doy(dt) - dt_dow(dt) % 7;
-    return (sun + 6) / 7;
+    int sunday = dt_doy(dt) - dt_dow(dt) % 7;
+    return (sunday + 6) / 7;
 }
 
 /* 
@@ -73,8 +73,8 @@ dt_week_number_sun(dt_t dt) {
  */
 static int
 dt_week_number_mon(dt_t dt) {
-    int mon = dt_doy(dt) - (dt_dow(dt) + 6) % 7;
-    return (mon + 6) / 7;
+    int monday = dt_doy(dt) - (dt_dow(dt) + 6) % 7;
+    return (monday + 6) / 7;
 }
 
 static int 
