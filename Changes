@@ -1,3 +1,7 @@
+0.03 2013-11-28
+  - Renamed variable 'sun' to 'sunday' to prevent conflict on Solaris 
+    operating system which defines a macro named 'sun'. (leont++)
+
 0.02 2013-11-25
   - Implemented ->from_string() in C
   - Implemented ->now() in C if the system supports gettimeofday(2)
