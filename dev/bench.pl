@@ -32,7 +32,7 @@ use Time::Piece   qw[];
             my $tm = Time::Moment->from_epoch(0);
         },
         'Time::Piece' => sub {
-            my $tp = Time::Piece::localtime(0);
+            my $tp = Time::Piece::gmtime(0);
         },
     });
 }
@@ -56,35 +56,40 @@ use Time::Piece   qw[];
 }
 
 {
-    print "\nBenchmarking strftime: ->strftime('%FT%T%z')\n";
+    print "\nBenchmarking strftime: ->strftime('%FT%T')\n";
     my $dt = DateTime->now;
     my $tm = Time::Moment->now;
     my $tp = Time::Piece::localtime();
     Benchmark::cmpthese( -10, {
         'DateTime' => sub {
-            my $string = $dt->strftime('%FT%T%z');
+            my $string = $dt->strftime('%FT%T');
         },
         'Time::Moment' => sub {
-            my $string = $tm->strftime('%FT%T%z');
+            my $string = $tm->strftime('%FT%T');
         },
         'Time::Piece' => sub {
-            my $string = $tp->strftime('%FT%T%z');
+            my $string = $tp->strftime('%FT%T');
         },
     });
 }
 
 eval {
+    require DateTime::Format::ISO8601;
     require DateTime::Format::RFC3339;
 
     print "\nBenchmarking parsing\n";
-    my $p = DateTime::Format::RFC3339->new;
+    my $rfc_p = DateTime::Format::RFC3339->new;
+    my $iso_p = DateTime::Format::ISO8601->new;
     my $ts = '1970-01-01T02:00:00.123456+02:00';
     Benchmark::cmpthese( -10, {
         'Time::Moment' => sub {
             my $tm = Time::Moment->from_string($ts);
         },
-        'DateTime' => sub {
-            my $dt = $p->parse_datetime($ts);
+        'DT::F::ISO8601' => sub {
+            my $dt = $iso_p->parse_datetime($ts);
+        },
+        'DT::F::RFC3339' => sub {
+            my $dt = $rfc_p->parse_datetime($ts);
         },
     });
 };
