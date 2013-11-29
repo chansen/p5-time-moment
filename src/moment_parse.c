@@ -1,129 +1,313 @@
 #include "moment.h"
+#include "dt_parse.h"
 
-static bool
-leap_year(unsigned int y) {
-    return ((y & 3) == 0 && (y % 100 != 0 || y % 400 == 0));
-}
+static size_t
+count_digits(const unsigned char * const p, size_t i, const size_t len) {
+    size_t n = i;
 
-static unsigned int
-month_days(unsigned int y, unsigned int m) {
-    static const unsigned int days[2][13] = {
-        { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
-        { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
-    };
-    return days[m == 2 && leap_year(y)][m];
-}
-
-static int
-pnum(const unsigned char * const p, size_t i, const size_t end, unsigned int *vp) {
-    unsigned int v = 0;
-
-    for(; i <= end; i++) {
+    for(; i < len; i++) {
         const unsigned char c = p[i];
         if (c < '0' || c > '9')
-            return -1;
-        v = v * 10 + c - '0';
+            break;
     }
-    *vp = v;
-    return 0;
+    return i - n;
 }
 
 static int
-parse_string(const unsigned char *str, size_t len, int64_t *secp, IV *usecp, IV *offp) {
-    static const unsigned int DayOffset[13] = {
-        0, 306, 337, 0, 31, 61, 92, 122, 153, 184, 214, 245, 275,
-    };
-    unsigned int rdn, sod, usec, year, month, day, hour, min, sec;
-    const unsigned char *end;
-    unsigned char ch;
-    int off;
+parse_number(const unsigned char * const p, size_t i, const size_t len) {
+    int v = 0;
 
-    /*
-     *           1
-     * 01234567890123456789
-     * 2013-12-31T23:59:59Z
-     */
-    if (len < 20 ||
-        str[4]  != '-' || str[7]  != '-' ||
-        str[10] != 'T' ||
-        str[13] != ':' || str[16] != ':')
-        return -1;
+    switch (len) {
+        case 6: v += (p[i++] - '0') * 100000;
+        case 5: v += (p[i++] - '0') * 10000;
+        case 4: v += (p[i++] - '0') * 1000;
+        case 3: v += (p[i++] - '0') * 100;
+        case 2: v += (p[i++] - '0') * 10;
+        case 1: v += (p[i++] - '0');
+    }
+    return v;
+}
 
-    if (pnum(str,  0,  3, &year)  || year  < 1  ||
-        pnum(str,  5,  6, &month) || month < 1  || month > 12 ||
-        pnum(str,  8,  9, &day)   || day   < 1  || day   > 31 ||
-        pnum(str, 11, 12, &hour)  || hour  > 23 ||
-        pnum(str, 14, 15, &min)   || min   > 59 ||
-        pnum(str, 17, 18, &sec)   || sec   > 59)
-        return -1;
+static int pow10[] = {
+    1,
+    10,
+    100,
+    1000,
+    10000,
+    100000,
+    1000000,
+};
 
-    if (day > 28 && day > month_days(year, month))
-        return -1;
+/*
+ *  hhmm
+ *  hhmmss
+ *  hhmmss.ffffff
+ */
 
-    if (month < 3)
-        year--;
+static size_t
+parse_time_basic(const char *str, size_t len, int *sp, int *fp) {
+    const unsigned char *p;
+    int h, m, s, f;
+    size_t n;
 
-    rdn = (1461 * year)/4 - year/100 + year/400 + DayOffset[month] + day - 306;
-    sod = hour * 3600 + min * 60 + sec;
-    end = str + len;
-    str = str + 19;
-    off = usec = 0;
-
-    ch = *str;
-    if (ch == '.' || ch == ',') {
-        const unsigned char *p;
-        size_t n;
-
-        p = ++str;
-        while (str < end) {
-            ch = *str;
-            if (ch < '0' || ch > '9')
-                break;
-            usec = usec * 10 + ch - '0';
-            str++;
-        }
-
-        n = str - p;
-        if (n < 1 || n > 6)
-            return -1;
-
-        switch (n) {
-            case 1: usec *= 10;
-            case 2: usec *= 10;
-            case 3: usec *= 10;
-            case 4: usec *= 10;
-            case 5: usec *= 10;
-        }
+    p = (const unsigned char *)str;
+    n = count_digits(p, 0, len);
+    s = f = 0;
+    switch (n) {
+        case 4: /* hhmm */
+            h = parse_number(p, 0, 2);
+            m = parse_number(p, 2, 2);
+            goto hms;
+        case 6: /* hhmmss */
+            h = parse_number(p, 0, 2);
+            m = parse_number(p, 2, 2);
+            s = parse_number(p, 4, 2);
+            break;
+        default:
+            return 0;
     }
 
-    if (str == end)
-        return -1;
+    /* hhmmss.ffffff */
+    if (n < len && (p[n] == '.' || p[n] == ',')) {
+        size_t i, ndigits;
 
-    ch = *str++;
-    if (ch != 'Z') {
-        /*
-         *  01234
-         * ±00:00
-         */
-        if (str + 5 < end || !(ch == '+' || ch == '-') || str[2] != ':')
-            return -1;
-
-        if (pnum(str, 0, 1, &hour) || hour > 18 ||
-            pnum(str, 3, 4, &min)  || min  > 59)
-            return -1;
-
-        off = hour * 60 + min;
-        if (ch == '-')
-            off *= -1;
-
-        str += 5;
+        i = ++n;
+        ndigits = n = count_digits(p, i, len);
+        if (ndigits < 1)
+            return 0;
+        if (ndigits > 6)
+            ndigits = 6;
+        f = parse_number(p, i, ndigits) * pow10[6 - ndigits];
+        n = i + n;
     }
 
-    if (str != end)
-        return -1;
+  hms:
+    if (h > 23 || m > 59 || s > 59)
+        return 0;
 
-    *secp  = ((int64_t)rdn - 719163) * 86400 + sod - off * 60;
-    *usecp = usec;
+    if (sp)
+        *sp = h * 3600 + m * 60 + s;
+    if (fp)
+        *fp = f;
+    return n;
+}
+
+/*
+ *  Z
+ *  ±hh
+ *  ±hhmm
+ */
+
+static size_t
+parse_zone_basic(const char *str, size_t len, int *op) {
+    const unsigned char *p;
+    int o, h, m, sign;
+    size_t n;
+
+    if (len < 1)
+        return 0;
+
+    p = (const unsigned char *)str;
+    switch (*p) {
+        case 'Z':
+            o = 0;
+            n = 1;
+            goto offset;
+        case '+':
+            sign = 1;
+            break;
+        case '-':
+            sign = -1;
+            break;
+        default:
+            return 0;
+    }
+
+    if (len < 3)
+        return 0;
+
+    n = count_digits(p, 1, len);
+    m = 0;
+    switch (n) {
+        case 2:
+            h = parse_number(p, 1, 2);
+            n = 3;
+            break;
+        case 4:
+            h = parse_number(p, 1, 2);
+            m = parse_number(p, 3, 2);
+            n = 5;
+            break;
+        default:
+            return 0;
+    }
+
+    if (h > 18 || m > 59)
+        return 0;
+    o = sign * (h * 60 + m);
+
+ offset:
+    if (op)
+        *op = o;
+    return n;
+}
+
+/*
+ *  hh:mm
+ *  hh:mm:ss
+ *  hh:mm:ss.ffffff
+ */
+
+static size_t
+parse_time_extended(const char *str, size_t len, int *sp, int *fp) {
+    const unsigned char *p;
+    int h, m, s, f;
+    size_t n;
+
+    if (len < 5)
+        return 0;
+
+    p = (const unsigned char *)str;
+    if (count_digits(p, 0, len) != 2 || p[2] != ':' ||
+        count_digits(p, 3, len) != 2)
+        return 0;
+
+    h = parse_number(p, 0, 2);
+    m = parse_number(p, 3, 2);
+    s = f = 0;
+    n = 5;
+
+    if (len < 6 || p[5] != ':')
+        goto hms;
+
+    if (count_digits(p, 6, len) != 2)
+        return 0;
+
+    s = parse_number(p, 6, 2);
+    n = 8;
+
+    /* hhmmss.ffffff */
+    if (n < len && (p[n] == '.' || p[n] == ',')) {
+        size_t i, ndigits;
+
+        i = ++n;
+        ndigits = n = count_digits(p, i, len);
+        if (ndigits < 1)
+            return 0;
+        if (ndigits > 6)
+            ndigits = 6;
+        f = parse_number(p, i, ndigits) * pow10[6 - ndigits];
+        n = i + n;
+    }
+
+  hms:
+    if (h > 23 || m > 59 || s > 59)
+        return 0;
+
+    if (sp)
+        *sp = h * 3600 + m * 60 + s;
+    if (fp)
+        *fp = f;
+    return n;
+}
+
+/*
+ *  Z
+ *  ±hh
+ *  ±hh:mm
+ */
+
+static size_t
+parse_zone_extended(const char *str, size_t len, int *op) {
+    const unsigned char *p;
+    int o, h, m, sign;
+    size_t n;
+
+    if (len < 1)
+        return 0;
+
+    p = (const unsigned char *)str;
+    switch (*p) {
+        case 'Z':
+            o = 0;
+            n = 1;
+            goto offset;
+        case '+':
+            sign = 1;
+            break;
+        case '-':
+            sign = -1;
+            break;
+        default:
+            return 0;
+    }
+
+    if (len < 3 || count_digits(p, 1, len) != 2)
+        return 0;
+
+    h = parse_number(p, 1, 2);
+    m = 0;
+    n = 3;
+
+    if (len < 4 || p[3] != ':')
+        goto hm;
+
+    if (count_digits(p, 4, len) != 2)
+        return 0;
+
+    m = parse_number(p, 4, 2);
+    n = 6;
+
+ hm:
+    if (h > 18 || m > 59)
+        return 0;
+    o = sign * (h * 60 + m);
+
+ offset:
+    if (op)
+        *op = o;
+    return n;
+}
+
+static int
+parse_string(const char *str, size_t len, int64_t *secp, IV *fracp, IV *offp) {
+    size_t n;
+    dt_t dt;
+    int sod, frac, off;
+    bool ext;
+
+    if (!(n = dt_parse_string(str, len, &dt)))
+        return 1;
+
+    ext = str[4] == '-';
+    if (n == len || !(str[n] == 'T' || str[n] == ' '))
+        return 1;
+
+    ++n;
+    str += n;
+    len -= n;
+
+    if (ext)
+        n = parse_time_extended(str, len, &sod, &frac);
+    else
+        n = parse_time_basic(str, len, &sod, &frac);
+
+    if (!n)
+        return 1;
+
+    str += n;
+    len -= n;
+
+    if (ext)
+        n = parse_zone_extended(str, len, &off);
+    else
+        n = parse_zone_basic(str, len, &off);
+
+    if (!n || n != len)
+        return 1;
+
+    *secp  = ((int64_t)dt - 719163) * 86400 + sod - off * 60;
+    *fracp = frac;
     *offp  = off;
     return 0;
 }
@@ -133,7 +317,7 @@ THX_moment_from_string(pTHX_ const char *str, STRLEN len) {
     int64_t sec;
     IV usec, offset;
 
-    if (parse_string((const unsigned char *)str, len, &sec, &usec, &offset))
+    if (parse_string(str, len, &sec, &usec, &offset))
         croak("Cannot parse the given string");
 
     return moment_from_epoch(sec, usec, offset);
