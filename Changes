@@ -12,7 +12,7 @@
         * 0001-001T00:00:00Z    (Ordinal date, extended format)
         * 0001001T000000Z       (Ordinal date, basic format)
   - Added localtime() and POSIX::strftime() to benchmark, invoking 
-    Time::Moment->now is ~ 700% faster than invoking localtime().
+    Time::Moment->now is ~ 70% faster than invoking localtime().
 
 0.03 2013-11-28
   - Renamed variable 'sun' to 'sunday' to prevent conflict on Solaris 
