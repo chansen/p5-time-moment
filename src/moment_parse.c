@@ -1,4 +1,5 @@
 #include "moment.h"
+#include "dt_core.h"
 #include "dt_parse.h"
 
 static size_t
@@ -28,7 +29,7 @@ parse_number(const unsigned char * const p, size_t i, const size_t len) {
     return v;
 }
 
-static int pow_10[] = {
+static const int pow_10[] = {
     1,
     10,
     100,
@@ -37,6 +38,24 @@ static int pow_10[] = {
     100000,
     1000000,
 };
+
+/*
+ *  ffffff
+ */
+
+static size_t
+parse_fraction_digits(const unsigned char *p, size_t i, size_t len, int *fp) {
+    size_t n, ndigits;
+
+    ndigits = n = count_digits(p, i, len);
+    if (ndigits < 1)
+        return 0;
+    if (ndigits > 6)
+        ndigits = 6;
+    if (fp)
+        *fp = parse_number(p, i, ndigits) * pow_10[6 - ndigits];
+    return n;
+}
 
 /*
  *  hhmm
@@ -69,16 +88,10 @@ parse_time_basic(const char *str, size_t len, int *sp, int *fp) {
 
     /* hhmmss.ffffff */
     if (n < len && (p[n] == '.' || p[n] == ',')) {
-        size_t i, ndigits;
-
-        i = ++n;
-        ndigits = n = count_digits(p, i, len);
-        if (ndigits < 1)
+        size_t r = parse_fraction_digits(p, ++n, len, &f);
+        if (!r)
             return 0;
-        if (ndigits > 6)
-            ndigits = 6;
-        f = parse_number(p, i, ndigits) * pow_10[6 - ndigits];
-        n = i + n;
+        n += r;
     }
 
   hms:
@@ -129,11 +142,11 @@ parse_zone_basic(const char *str, size_t len, int *op) {
     n = count_digits(p, 1, len);
     m = 0;
     switch (n) {
-        case 2:
+        case 2: /* ±hh */
             h = parse_number(p, 1, 2);
             n = 3;
             break;
-        case 4:
+        case 4: /* ±hhmm */
             h = parse_number(p, 1, 2);
             m = parse_number(p, 3, 2);
             n = 5;
@@ -186,18 +199,12 @@ parse_time_extended(const char *str, size_t len, int *sp, int *fp) {
     s = parse_number(p, 6, 2);
     n = 8;
 
-    /* hhmmss.ffffff */
+    /* hh:mm:ss.ffffff */
     if (n < len && (p[n] == '.' || p[n] == ',')) {
-        size_t i, ndigits;
-
-        i = ++n;
-        ndigits = n = count_digits(p, i, len);
-        if (ndigits < 1)
+        size_t r = parse_fraction_digits(p, ++n, len, &f);
+        if (!r)
             return 0;
-        if (ndigits > 6)
-            ndigits = 6;
-        f = parse_number(p, i, ndigits) * pow_10[6 - ndigits];
-        n = i + n;
+        n += r;
     }
 
   hms:
@@ -306,7 +313,7 @@ parse_string(const char *str, size_t len, int64_t *secp, IV *fracp, IV *offp) {
     if (!n || n != len)
         return 1;
 
-    *secp  = ((int64_t)dt - 719163) * 86400 + sod - off * 60;
+    *secp  = ((int64_t)dt_rdn(dt) - 719163) * 86400 + sod - off * 60;
     *fracp = frac;
     *offp  = off;
     return 0;
