@@ -1,3 +1,16 @@
+0.04 2013-11-30
+  - Added accessor for week of the year, ->week
+  - Implemented support for parsing of any ISO 8601 date and time of day
+    in both extended and basic format. For example:
+        * 0001-01-01T00:00:00Z  (Calender date, extended format)
+        * 00010101T000000Z      (Calender date, basic format)
+        * 0001-W01-1T00:00:00Z  (Week date, extended format)
+        * 0001W011T000000Z      (Week date, basic format)
+        * 0001-001T00:00:00Z    (Ordinal date, extended format)
+        * 0001001T000000Z       (Ordinal date, basic format)
+  - Added localtime() and POSIX::strftime() to benchmark, invoking 
+    Time::Moment->now is ~ 700% faster than invoking localtime().
+
 0.03 2013-11-28
   - Renamed variable 'sun' to 'sunday' to prevent conflict on Solaris 
     operating system which defines a macro named 'sun'. (leont++)
