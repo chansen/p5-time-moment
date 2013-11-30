@@ -62,13 +62,13 @@ THX_moment_from_epoch(pTHX_ int64_t sec, IV usec, IV offset) {
     moment_t r;
 
     if (!VALID_EPOCH_SEC(sec))
-        croak("Parameter 'seconds' out of supported range");
+        croak("Parameter 'seconds' is out of supported range");
 
     if (usec < 0 || usec > 999999)
         croak("Parameter 'microsecond' is out of the range [0, 999999]");
 
     if (!VALID_OFFSET(offset))
-        croak("Parameter 'offset' out of the range [-1080, 1080]");
+        croak("Parameter 'offset' is out of the range [-1080, 1080]");
 
     r.ticks = (sec + UNIX_EPOCH + offset * 60) * TICKS_PER_SEC + usec * TICKS_PER_USEC;
     r.offset = offset;
@@ -80,7 +80,7 @@ THX_moment_with_offset(pTHX_ const moment_t *mt, IV offset) {
     moment_t r;
 
     if (!VALID_OFFSET(offset))
-        croak("Parameter 'offset' out of the range [-1080, 1080]");
+        croak("Parameter 'offset' is out of the range [-1080, 1080]");
 
     r.ticks  = moment_utc_ticks(mt) + offset * TICKS_PER_MIN;
     r.offset = offset;
@@ -103,42 +103,42 @@ moment_epoch(const moment_t *mt) {
 
 int
 moment_year(const moment_t *mt) {
-    return dt_year(moment_local_rd(mt));
+    return dt_year(moment_local_dt(mt));
 }
 
 int
 moment_month(const moment_t *mt) {
-    return dt_month(moment_local_rd(mt));
+    return dt_month(moment_local_dt(mt));
 }
 
 int
 moment_quarter(const moment_t *mt) {
-    return dt_quarter(moment_local_rd(mt));
+    return dt_quarter(moment_local_dt(mt));
 }
 
 int
 moment_week(const moment_t *mt) {
-    return dt_woy(moment_local_rd(mt));
+    return dt_woy(moment_local_dt(mt));
 }
 
 int
 moment_day_of_year(const moment_t *mt) {
-    return dt_doy(moment_local_rd(mt));
+    return dt_doy(moment_local_dt(mt));
 }
 
 int
 moment_day_of_quarter(const moment_t *mt) {
-    return dt_doq(moment_local_rd(mt));
+    return dt_doq(moment_local_dt(mt));
 }
 
 int
 moment_day_of_month(const moment_t *mt) {
-    return dt_dom(moment_local_rd(mt));
+    return dt_dom(moment_local_dt(mt));
 }
 
 int
 moment_day_of_week(const moment_t *mt) {
-    return dt_dow(moment_local_rd(mt));
+    return dt_dow(moment_local_dt(mt));
 }
 
 int
