@@ -6,6 +6,7 @@ use Benchmark     qw[];
 use DateTime      qw[];
 use Time::Moment  qw[];
 use Time::Piece   qw[];
+use POSIX         qw[];
 
 {
     print "Benchmarking constructor: ->now()\n";
@@ -18,6 +19,9 @@ use Time::Piece   qw[];
         },
         'Time::Piece' => sub {
             my $tp = Time::Piece::localtime();
+        },
+        'localtime()' => sub {
+            my @tm = localtime();
         },
     });
 }
@@ -60,6 +64,7 @@ use Time::Piece   qw[];
     my $dt = DateTime->now;
     my $tm = Time::Moment->now;
     my $tp = Time::Piece::localtime();
+    my @lt = localtime();
     Benchmark::cmpthese( -10, {
         'DateTime' => sub {
             my $string = $dt->strftime('%FT%T');
@@ -69,6 +74,9 @@ use Time::Piece   qw[];
         },
         'Time::Piece' => sub {
             my $string = $tp->strftime('%FT%T');
+        },
+        'POSIX::strftime' => sub {
+            my $string = POSIX::strftime('%FT%T', @lt);
         },
     });
 }
