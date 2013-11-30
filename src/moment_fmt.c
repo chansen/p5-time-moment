@@ -91,6 +91,27 @@ moment_hour_meridiem(const moment_t *mt) {
 }
 
 static void
+THX_format_s(pTHX_ const moment_t *mt, SV *dsv) {
+    char buf[30], *p, *e;
+    int64_t v;
+
+    v = moment_epoch(mt);
+    p = e = buf + sizeof(buf);
+    if (v < 0) {
+        do {
+            *--p = '0' - (v % 10);
+        } while (v /= 10);
+        *--p = '-';
+    }
+    else {
+        do {
+            *--p = '0' + (v % 10);
+        } while (v /= 10);
+    }
+    sv_catpvn(dsv, p, e - p);
+}
+
+static void
 THX_format_z(pTHX_ const moment_t *mt, SV *dsv) {
     int offset, sign;
 
@@ -144,7 +165,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
     const char *e, *p;
     SV *dsv;
     dt_t dt;
-    int year, month, day;
+    int year, month, day, width;
 
     dsv = sv_2mortal(newSV(16));
     SvCUR_set(dsv, 0);
@@ -162,7 +183,11 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
         if (p == e)
             break;
 
-        s = ++p;
+        width = 6;
+        s = p;
+
+      label:
+        ++s;
         switch (*s) {
             case 'a':
                 sv_catpv(dsv, aDoW[dt_dow(dt) - 1]);
@@ -232,7 +257,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                 sv_catpvn(dsv, "\n", 1);
                 break;
             case 'N':
-                THX_format_N(aTHX_ mt, dsv, 6);
+                THX_format_N(aTHX_ mt, dsv, width);
                 break;
             case 'p':
                 sv_catpv(dsv, moment_hour_meridiem(mt));
@@ -248,6 +273,9 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                 sv_catpvf(dsv, "%02d:%02d",
                           moment_hour(mt),
                           moment_minute(mt));
+                break;
+            case 's':
+                THX_format_s(aTHX_ mt, dsv);
                 break;
             case 'S':
                 sv_catpvf(dsv, "%02d", moment_second(mt));
@@ -295,13 +323,12 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
             case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
                 if (s + 1 <= e && s[1] == 'N') {
-                    THX_format_N(aTHX_ mt, dsv, *s - '0');
-                    s++;
-                    break;
+                    width = *s - '0';
+                    goto label;
                 }
                 /* FALLTROUGH */
             default:
-                sv_catpvn(dsv, s - 1, 2);
+                sv_catpvn(dsv, p, s - p + 1);
                 break;
         }
         s++;
