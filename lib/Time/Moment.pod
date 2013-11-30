@@ -65,6 +65,185 @@ feedback. The API is still subject to change.
 
 =head1 METHODS
 
+=head2 strftime
+
+    $string = $tm->strftime($format);
+
+The following conversion specifications are supported:
+
+=over 4
+
+=item C<%a>
+
+Replaced by the C locale's abbreviated day of the week name. 
+Example: Mon, Tue, ..., Sun.
+
+=item C<%A>
+
+Replaced by the C locale's full day of the week name.
+Example: Monday, Tuesday, ..., Sunday.
+
+=item C<%b>
+
+Replaced by the C locale's abbreviated month name.
+Example: Jan, Feb, ..., Dec.
+
+=item C<%B>
+
+Replaced by the C locale's full month name.
+Example: January, February, ..., December.
+
+=item C<%c>
+
+XXX
+
+=item C<%C>
+
+Replaced by the year divided by 100 and truncated to an integer, as a 
+decimal number [00, 99].
+
+=item C<%d>
+
+Replaced by the day of the month as a decimal number [01, 31].
+
+=item C<%D>
+
+Equivalent to C<"%m/%d/%y">.
+
+=item C<%e>
+
+Replaced by the day of the month as a decimal number [1, 31]; 
+a single digit is preceded by a space.
+
+=item C<%f>
+
+Replaced by the fractional second (microsecond) as a decimal 
+number [000000, 999999].
+
+=item C<%F>
+
+Equivalent to C<"%Y-%m-%d">.
+
+=item C<%g>
+
+Replaced by the last 2 digits of the year of the week as a decimal 
+number [00, 99].
+
+=item C<%h>
+
+Equivalent to C<%b>.
+
+=item C<%H>
+
+Replaced by the hour (24-hour clock) as a decimal number [00, 23].
+
+=item C<%I>
+
+Replaced by the hour (12-hour clock) as a decimal number [01, 12].
+
+=item C<%j>
+
+Replaced by the day of the year as a decimal number [001, 366].
+
+=item C<%m>
+
+Replaced by the month of the year as a decimal number [01, 12].
+
+=item C<%M>
+
+Replaced by the minute as a decimal number [00, 59].
+
+=item C<%n>
+
+Replaced by a <newline> character.
+
+=item C<%N>
+
+XXX
+
+=item C<%p>
+
+Replaced by the C locale's meridian notation.
+Example: AM, PM.
+
+=item C<%r>
+
+Replaced by the C locale's time in a.m. and p.m. notation. Equivalent 
+to C<"%I:%M:%S %p">.
+
+=item C<%R>
+
+Replaced by the time in 24-hour notation. Equivalent to C<%H:%M>.
+
+=item C<%S>
+
+Replaced by the second as a decimal number [00, 60].
+
+=item C<%t>
+
+Replaced by a <tab> character.
+
+=item C<%T>
+
+Replaced by the time of day. Equivalent to C<"%H:%M:%S">.
+
+=item C<%u>
+
+Replaced by the day of the week as a decimal number [1, 7], with 1 
+representing Monday.
+
+=item C<%U>
+
+Replaced by the week number of the year as a decimal number [00, 53]. The 
+first Sunday of January is the first day of week 1; days in the new year 
+before this are in week 0.
+
+=item C<%V>
+
+Replaced by the week number of the year (Monday as the first day of the week) 
+as a decimal number [01, 53]. If the week containing 1 January has four or 
+more days in the new year, then it is considered week 1. Otherwise, it is the 
+last week of the previous year, and the next week is week 1. Both January 4th 
+and the first Thursday of January are always in week 1. ISO 8601 calendar week 
+number.
+
+=item C<%W>
+
+Replaced by the week number of the year as a decimal number [00, 53]. The 
+first Monday of January is the first day of week 1; days in the new year 
+before this are in week 0.
+
+=item C<%x>
+
+Replaced by ISO 8601 calendar date in extended format. Equivalent to C<%F>.
+
+=item C<%X>
+
+Replaced by ISO 8601 local time of day in extended format. Equivalent to C<%T>.
+
+=item C<%y>
+
+Replaced by the last two digits of the year as a decimal number [00, 99].
+
+=item C<%Y>
+
+Replaced by the year as a decimal number [0001, 9999].
+
+=item C<%z>
+
+Replaced by the offset from UTC in the ISO 8601 basic format (+hhmm or -hhmm).
+
+=item C<%Z>
+
+Replaced by the offset from UTC in the ISO 8601 extended format or with UTC 
+designator (+hh:mm or -hh:mm or Z).
+
+=item C<%%>
+
+Replaced by %.
+
+=back
+
 =head1 DIAGNOSTICS
 
 =over 4
