@@ -65,6 +65,7 @@ IV          moment_compare(const moment_t *m1, const moment_t *m2);
 int         moment_year(const moment_t *mt);
 int         moment_quarter(const moment_t *mt);
 int         moment_month(const moment_t *mt);
+int         moment_week(const moment_t *mt);
 int         moment_day_of_year(const moment_t *mt);
 int         moment_day_of_quarter(const moment_t *mt);
 int         moment_day_of_month(const moment_t *mt);
