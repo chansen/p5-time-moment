@@ -158,6 +158,8 @@ parse_zone_basic(const char *str, size_t len, int *op) {
     if (h > 18 || m > 59)
         return 0;
     o = sign * (h * 60 + m);
+    if (o == 0 && sign < 0)
+        return 0;
 
  offset:
     if (op)
@@ -269,6 +271,8 @@ parse_zone_extended(const char *str, size_t len, int *op) {
     if (h > 18 || m > 59)
         return 0;
     o = sign * (h * 60 + m);
+    if (o == 0 && sign < 0)
+        return 0;
 
  offset:
     if (op)
