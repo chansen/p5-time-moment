@@ -186,7 +186,7 @@ my @tests = (
 );
 
 my @Accessors = qw(
-    year quarter month day_of_year day_of_quarter day_of_month day_of_week
+    year quarter month week day_of_year day_of_quarter day_of_month day_of_week
     hour minute second millisecond microsecond
     epoch offset utc_rd_as_seconds local_rd_as_seconds
 );
