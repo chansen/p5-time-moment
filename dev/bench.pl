@@ -85,19 +85,20 @@ eval {
     require DateTime::Format::ISO8601;
     require DateTime::Format::RFC3339;
 
-    print "\nBenchmarking parsing\n";
-    my $rfc_p = DateTime::Format::RFC3339->new;
-    my $iso_p = DateTime::Format::ISO8601->new;
-    my $ts = '1970-01-01T02:00:00.123456+02:00';
+    my $string = '2013-12-24T12:34:56.123456+02:00';
+
+    print "\nBenchmarking parsing: '$string'\n";
+    my $rfc_p  = DateTime::Format::RFC3339->new;
+    my $iso_p  = DateTime::Format::ISO8601->new;
     Benchmark::cmpthese( -10, {
         'Time::Moment' => sub {
-            my $tm = Time::Moment->from_string($ts);
+            my $tm = Time::Moment->from_string($string);
         },
         'DT::F::ISO8601' => sub {
-            my $dt = $iso_p->parse_datetime($ts);
+            my $dt = $iso_p->parse_datetime($string);
         },
         'DT::F::RFC3339' => sub {
-            my $dt = $rfc_p->parse_datetime($ts);
+            my $dt = $rfc_p->parse_datetime($string);
         },
     });
 };
