@@ -2,18 +2,19 @@
 
 =head1 NAME
 
-Time::Moment - Represents a date and time with a time zone offset from UTC
+Time::Moment - Represents a date and time of day combined with a time zone offset from UTC
 
 =head1 SYNOPSIS
     
     $tm = Time::Moment->now;
     $tm = Time::Moment->from_epoch($seconds [, $microsecond [, $offset ]]);
     $tm = Time::Moment->from_object($object);
-    $tm = Time::Moment->from_string("YYYY-MM-DDThh:mm:ss.ffffff±hh:mm");
+    $tm = Time::Moment->from_string($string);
     
     $year         = $tm->year;                  # [1, 9999]
     $quarter      = $tm->quarter;               # [1, 4]
     $month        = $tm->month;                 # [1, 12]
+    $week         = $tm->week;                  # [1, 53]
     
     $day          = $tm->day_of_year;           # [1, 366]
     $day          = $tm->day_of_quarter;        # [1, 92]
@@ -56,8 +57,8 @@ Time::Moment - Represents a date and time with a time zone offset from UTC
 
 =head1 DESCRIPTION
 
-Represents a date and time with a time zone offset from UTC in the ISO 8601 
-calendar with microsecond resolution.
+Represents a date and time of day combined with a time zone offset from UTC 
+in the ISO 8601 calendar with microsecond resolution.
 
 B<IMPORTANT:> This is an early preview release available for testing and 
 feedback. The API is still subject to change.
