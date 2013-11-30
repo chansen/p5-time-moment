@@ -28,7 +28,7 @@ parse_number(const unsigned char * const p, size_t i, const size_t len) {
     return v;
 }
 
-static int pow10[] = {
+static int pow_10[] = {
     1,
     10,
     100,
@@ -77,7 +77,7 @@ parse_time_basic(const char *str, size_t len, int *sp, int *fp) {
             return 0;
         if (ndigits > 6)
             ndigits = 6;
-        f = parse_number(p, i, ndigits) * pow10[6 - ndigits];
+        f = parse_number(p, i, ndigits) * pow_10[6 - ndigits];
         n = i + n;
     }
 
@@ -196,7 +196,7 @@ parse_time_extended(const char *str, size_t len, int *sp, int *fp) {
             return 0;
         if (ndigits > 6)
             ndigits = 6;
-        f = parse_number(p, i, ndigits) * pow10[6 - ndigits];
+        f = parse_number(p, i, ndigits) * pow_10[6 - ndigits];
         n = i + n;
     }
 
