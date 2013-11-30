@@ -95,8 +95,10 @@ parse_time_basic(const char *str, size_t len, int *sp, int *fp) {
     }
 
   hms:
-    if (h > 23 || m > 59 || s > 59)
-        return 0;
+    if (h > 23 || m > 59 || s > 59) {
+        if (!(h == 24 && m == 0 && s == 0 && f == 0))
+            return 0;
+    }
 
     if (sp)
         *sp = h * 3600 + m * 60 + s;
@@ -210,8 +212,10 @@ parse_time_extended(const char *str, size_t len, int *sp, int *fp) {
     }
 
   hms:
-    if (h > 23 || m > 59 || s > 59)
-        return 0;
+    if (h > 23 || m > 59 || s > 59) {
+        if (!(h == 24 && m == 0 && s == 0 && f == 0))
+            return 0;
+    }
 
     if (sp)
         *sp = h * 3600 + m * 60 + s;
@@ -281,7 +285,7 @@ parse_zone_extended(const char *str, size_t len, int *op) {
 }
 
 static int
-parse_string(const char *str, size_t len, int64_t *secp, IV *fracp, IV *offp) {
+parse_string(const char *str, size_t len, int64_t *sp, IV *fp, IV *op) {
     size_t n;
     dt_t dt;
     int sod, frac, off;
@@ -317,20 +321,20 @@ parse_string(const char *str, size_t len, int64_t *secp, IV *fracp, IV *offp) {
     if (!n || n != len)
         return 1;
 
-    *secp  = ((int64_t)dt_rdn(dt) - 719163) * 86400 + sod - off * 60;
-    *fracp = frac;
-    *offp  = off;
+    *sp = ((int64_t)dt_rdn(dt) - 719163) * 86400 + sod - off * 60;
+    *fp = frac;
+    *op = off;
     return 0;
 }
 
 moment_t
 THX_moment_from_string(pTHX_ const char *str, STRLEN len) {
     int64_t sec;
-    IV usec, offset;
+    IV frac, offset;
 
-    if (parse_string(str, len, &sec, &usec, &offset))
+    if (parse_string(str, len, &sec, &frac, &offset))
         croak("Cannot parse the given string");
 
-    return moment_from_epoch(sec, usec, offset);
+    return moment_from_epoch(sec, frac, offset);
 }
 
