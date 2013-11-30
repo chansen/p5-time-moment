@@ -117,6 +117,11 @@ moment_quarter(const moment_t *mt) {
 }
 
 int
+moment_week(const moment_t *mt) {
+    return dt_woy(moment_local_rd(mt));
+}
+
+int
 moment_day_of_year(const moment_t *mt) {
     return dt_doy(moment_local_rd(mt));
 }

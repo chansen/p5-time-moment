@@ -352,6 +352,8 @@ with_offset(self, offset)
   PREINIT:
     dSTASH_INVOCANT;
   CODE:
+    if (offset == moment_offset(self))
+        XSRETURN(1);
     RETVAL = moment_with_offset(self, offset);
   OUTPUT:
     RETVAL
@@ -363,16 +365,17 @@ year(self)
     Time::Moment::year           =  0
     Time::Moment::quarter        =  1
     Time::Moment::month          =  2
-    Time::Moment::day_of_year    =  3
-    Time::Moment::day_of_quarter =  4
-    Time::Moment::day_of_month   =  5
-    Time::Moment::day_of_week    =  6
-    Time::Moment::hour           =  7
-    Time::Moment::minute         =  8
-    Time::Moment::second         =  9
-    Time::Moment::millisecond    = 10
-    Time::Moment::microsecond    = 11
-    Time::Moment::offset         = 12
+    Time::Moment::week           =  3
+    Time::Moment::day_of_year    =  4
+    Time::Moment::day_of_quarter =  5
+    Time::Moment::day_of_month   =  6
+    Time::Moment::day_of_week    =  7
+    Time::Moment::hour           =  8
+    Time::Moment::minute         =  9
+    Time::Moment::second         = 10
+    Time::Moment::millisecond    = 11
+    Time::Moment::microsecond    = 12
+    Time::Moment::offset         = 13
   PREINIT:
     IV v = 0;
   PPCODE:
@@ -380,16 +383,17 @@ year(self)
         case  0: v = moment_year(self);             break;
         case  1: v = moment_quarter(self);          break;
         case  2: v = moment_month(self);            break;
-        case  3: v = moment_day_of_year(self);      break;
-        case  4: v = moment_day_of_quarter(self);   break;
-        case  5: v = moment_day_of_month(self);     break;
-        case  6: v = moment_day_of_week(self);      break;
-        case  7: v = moment_hour(self);             break;
-        case  8: v = moment_minute(self);           break;
-        case  9: v = moment_second(self);           break;
-        case 10: v = moment_millisecond(self);      break;
-        case 11: v = moment_microsecond(self);      break;
-        case 12: v = moment_offset(self);           break;
+        case  3: v = moment_week(self);             break;
+        case  4: v = moment_day_of_year(self);      break;
+        case  5: v = moment_day_of_quarter(self);   break;
+        case  6: v = moment_day_of_month(self);     break;
+        case  7: v = moment_day_of_week(self);      break;
+        case  8: v = moment_hour(self);             break;
+        case  9: v = moment_minute(self);           break;
+        case 10: v = moment_second(self);           break;
+        case 11: v = moment_millisecond(self);      break;
+        case 12: v = moment_microsecond(self);      break;
+        case 13: v = moment_offset(self);           break;
     }
     XSRETURN_IV(v);
 
