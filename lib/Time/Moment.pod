@@ -65,6 +65,76 @@ feedback. The API is still subject to change.
 
 =head1 METHODS
 
+=head2 now
+
+    $tm = Time::Moment->now;
+
+=head2 from_epoch
+
+    $tm = Time::Moment->from_epoch($epoch);
+    $tm = Time::Moment->from_epoch($epoch, $microsecond);
+    $tm = Time::Moment->from_epoch($epoch, $microsecond, $offset);
+
+=head2 from_object
+
+    $tm = Time::Moment->from_object($object);
+
+=head2 from_string
+
+    $tm = Time::Moment->from_string($string);
+
+=head2 year
+
+    $year = $tm->year;
+
+=head2 quarter
+
+    $quarter = $tm->quarter;
+
+=head2 month
+
+    $month = $tm->month;
+
+=head2 week
+
+    $week = $tm->week;
+
+=head2 day_of_year
+
+    $day = $tm->day_of_year;
+
+=head2 day_of_quarter
+
+    $day = $tm->day_of_quarter;
+
+=head2 day_of_month
+ 
+    $day = $tm->day_of_month;
+
+=head2 day_of_week
+ 
+    $day = $tm->day_of_week;
+
+=head2 hour
+
+    $hour = $tm->hour;
+
+=head2 minute
+
+    $minute = $tm->minute;
+
+=head2 second
+
+    $second = $tm->second;
+
+=head2 millisecond
+
+    $millisecond  = $tm->millisecond; 
+
+=head2 microsecond
+
+    $microsecond  = $tm->microsecond;
+
 =head2 strftime
 
     $string = $tm->strftime($format);
