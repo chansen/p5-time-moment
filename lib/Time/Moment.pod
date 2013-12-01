@@ -69,6 +69,10 @@ feedback. The API is still subject to change.
 
     $tm = Time::Moment->now;
 
+Constructs an instance of C<Time::Moment> that is set to the current date 
+and time from the system clock in the system time-zone, with the offset 
+set to the local time's offset from UTC.
+
 =head2 from_epoch
 
     $tm = Time::Moment->from_epoch($epoch);
@@ -87,65 +91,131 @@ feedback. The API is still subject to change.
 
     $year = $tm->year;
 
+Returns the year [1, 9999].
+
 =head2 quarter
 
     $quarter = $tm->quarter;
+
+Returns the quarter of the year [1, 4].
 
 =head2 month
 
     $month = $tm->month;
 
+Returns the month of the year [1, 12].
+
 =head2 week
 
     $week = $tm->week;
+
+Returns the week of the year [1, 53].
 
 =head2 day_of_year
 
     $day = $tm->day_of_year;
 
+Returns the day of the year [1, 366].
+
 =head2 day_of_quarter
 
     $day = $tm->day_of_quarter;
+
+Returns the day of the quarter [1, 92].
 
 =head2 day_of_month
  
     $day = $tm->day_of_month;
 
+Returns the day of the month [1, 31].
+
 =head2 day_of_week
  
     $day = $tm->day_of_week;
+
+Returns the day of the week [1=Monday, 7=Sunday].
 
 =head2 hour
 
     $hour = $tm->hour;
 
+Returns the hour of day [0, 23].
+
 =head2 minute
 
     $minute = $tm->minute;
+
+Returns the minute of hour [0, 59].
 
 =head2 second
 
     $second = $tm->second;
 
+Returns the second of minute [0, 59].
+
 =head2 millisecond
 
     $millisecond = $tm->millisecond;
+
+Returns the milli of second [0, 999].
 
 =head2 microsecond
 
     $microsecond = $tm->microsecond;
 
+Returns the micro of second [0, 999999].
+
 =head2 epoch
 
     $epoch = $tm->epoch;
+
+Returns the number of seconds from the epoch of 1970-01-01T00:00:00Z.
 
 =head2 offset
 
     $offset = $tm->offset;
 
+Returns the offset from UTC in minutes [-1080, 1080].
+
+=head2 is_before
+
+    $boolean = $tm->is_before($other);
+
+Returns a boolean indicating whether or not the instant of this time is before 
+the other time.
+
+=head2 is_after
+
+    $boolean = $tm->is_after($other);
+
+Returns a boolean indicating whether or not the instant of this time is after 
+the other time.
+
+=head2 is_equal
+
+    $boolean = $tm->is_equal($other);
+
+Returns a boolean indicating whether or not the instant of this time is equal 
+the other time.
+
+=head2 compare
+
+    $integer = $tm->compare($other);
+
+Returns an integer indicating whether the instant of this time is before, 
+after or equal another time. Returns a value less than zero if this time is 
+before the other; zero if this date is equal the other time; a value greater 
+than zero if this time is after the other time.
+
 =head2 strftime
 
     $string = $tm->strftime($format);
+
+Formats time according to the conversion specifications in the given format 
+string. The format string consists of zero or more conversion specifications 
+and ordinary characters. All ordinary characters are copied directly into the 
+resulting string. A conversion specification consists of a percent sign C<%> 
+and one other character.
 
 The following conversion specifications are supported:
 
@@ -252,6 +322,10 @@ to C<"%I:%M:%S %p">.
 =item C<%R>
 
 Replaced by the time in 24-hour notation. Equivalent to C<%H:%M>.
+
+=item C<%s>
+
+Replaced by the number of seconds from the epoch of 1970-01-01T00:00:00Z.
 
 =item C<%S>
 
