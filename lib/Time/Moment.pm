@@ -58,11 +58,6 @@ sub DateTime::__as_Time_Moment {
     return Time::Moment->from_epoch($dt->epoch, $usec, $off);
 }
 
-sub __as_Time_Piece {
-    my ($tm) = @_;
-    return scalar Time::Piece::localtime($tm->epoch);
-}
-
 sub Time::Piece::__as_Time_Moment {
     my ($tp) = @_;
     return Time::Moment->from_epoch($tp->epoch, 0, int($tp->tzoffset / 60));
