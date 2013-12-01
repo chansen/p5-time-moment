@@ -129,11 +129,19 @@ feedback. The API is still subject to change.
 
 =head2 millisecond
 
-    $millisecond  = $tm->millisecond; 
+    $millisecond = $tm->millisecond;
 
 =head2 microsecond
 
-    $microsecond  = $tm->microsecond;
+    $microsecond = $tm->microsecond;
+
+=head2 epoch
+
+    $epoch = $tm->epoch;
+
+=head2
+
+    $offset = $tm->offset;
 
 =head2 strftime
 
