@@ -1,4 +1,10 @@
-0.06  2013-11-31
+0.07 2013-12-02
+  - Documented most of the API.
+  - Implemented ->to_string().
+  - Changed stringification to only include fractional seconds in output 
+    if present.
+
+0.06 2013-11-31
   - Added more docs.
 
 0.05 2013-11-30
