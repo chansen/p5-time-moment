@@ -32,13 +32,14 @@ Time::Moment - Represents a date and time of day combined with a time zone offse
     
     $tm2          = $tm1->with_offset($offset);
     
-    $string       = $tm->strftime($format);
-    
     $boolean      = $tm1->is_before($tm2);
     $boolean      = $tm1->is_after($tm2);
     $boolean      = $tm1->is_equal($tm2);
     
     $integer      = $tm1->compare($tm2);
+    
+    $string       = $tm->to_string;
+    $string       = $tm->strftime($format);
     
     @values       = $tm->utc_rd_values;
     $seconds      = $tm->utc_rd_as_seconds;
@@ -86,6 +87,29 @@ set to the local time's offset from UTC.
 =head2 from_string
 
     $tm = Time::Moment->from_string($string);
+
+Constructs an instance of C<Time::Moment> from the given I<string>. The string 
+must consist of a complete representation of a date and time of day followed 
+by a zone designator. The second component of the time of day may have a 
+decimal fraction. All ISO 8601 date and time of day representations are 
+supported in both basic and extended format. The constructor raises an 
+exception if the given string cannot be parsed.
+
+The following are examples of complete representations of date and time of day 
+representations:
+
+    Basic format:               Example:
+    YYYYMMDDThhmmssZ            20121224T121530Z
+    YYYYMMDDThhmmss±hhmm        20121224T121530+0100
+    YYYYMMDDThhmmss±hh          20121224T121530+01
+    
+    Extended format:            Example:
+    YYYY-MM-DDThh:mm:ssZ        2012-12-24T12:15:30Z
+    YYYY-MM-DDThh:mm:ss±hh:mm   2012-12-24T12:15:30+01:00
+    YYYY-MM-DDThh:mm:ss±hh      2012-12-24T12:15:30+01
+
+Where complete representations using calendar dates are shown, ordinal dates or 
+week dates may be substituted.
 
 =head2 year
 
@@ -177,6 +201,13 @@ Returns the number of seconds from the epoch of 1970-01-01T00:00:00Z.
 
 Returns the offset from UTC in minutes [-1080, 1080].
 
+=head2 with_offset
+
+    $tm2 = $tm1->with_offset($offset);
+
+Returns a copy of this time with the given I<offset> altered. The result is at 
+the same instant.
+
 =head2 is_before
 
     $boolean = $tm->is_before($other);
@@ -206,6 +237,26 @@ Returns an integer indicating whether the instant of this time is before,
 after or equal another time. Returns a value less than zero if this time is 
 before the other; zero if this date is equal the other time; a value greater 
 than zero if this time is after the other time.
+
+=head2 to_string
+
+    $string = $tm->to_string;
+
+Returns a string representation of the object in one of the following 
+ISO 8601 formats:
+
+    YYYY-MM-DDThh:mmZ
+    YYYY-MM-DDThh:mm±hh
+    YYYY-MM-DDThh:mm±hh:mm
+    YYYY-MM-DDThh:mm:ss.fffZ
+    YYYY-MM-DDThh:mm:ss.fff±hh
+    YYYY-MM-DDThh:mm:ss.fff±hh:mm
+    YYYY-MM-DDThh:mm:ss.ffffffZ
+    YYYY-MM-DDThh:mm:ss.ffffff±hh
+    YYYY-MM-DDThh:mm:ss.ffffff±hh:mm
+
+The shortest representation will be used where the omitted parts are implied 
+to be zero.
 
 =head2 strftime
 
@@ -311,8 +362,7 @@ XXX
 
 =item C<%p>
 
-Replaced by the C locale's meridian notation.
-Example: AM, PM.
+Replaced by the C locale's meridian notation. Example: AM, PM.
 
 =item C<%r>
 
@@ -383,18 +433,38 @@ Replaced by the year as a decimal number [0001, 9999].
 
 =item C<%z>
 
-Replaced by the offset from UTC in the ISO 8601 basic format (+hhmm or -hhmm).
+Replaced by the offset from UTC in the ISO 8601 basic format (±hhmm).
 
 =item C<%Z>
 
 Replaced by the offset from UTC in the ISO 8601 extended format or with UTC 
-designator (+hh:mm or -hh:mm or Z).
+designator (±hh:mm or Z).
 
 =item C<%%>
 
 Replaced by %.
 
 =back
+
+=head2 utc_rd_values
+
+    ($rd, $sod, $nano) = $tm->utc_rd_values;
+
+=head2 utc_rd_as_seconds
+
+    $seconds = $tm->utc_rd_as_seconds;
+
+Returns the number of seconds from the Rata Die epoch of 0001-01-01T00:00:00Z.
+
+=head2 local_rd_values
+
+    ($rd, $sod, $nano) = $tm->local_rd_values;
+
+=head2 local_rd_as_seconds
+
+    $seconds = $tm->local_rd_as_seconds;
+
+Returns the number of seconds from the Rata Die epoch of 0001-01-01T00:00:00.
 
 =head1 DIAGNOSTICS
 
