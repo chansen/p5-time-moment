@@ -336,3 +336,49 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
     return dsv;
 }
 
+SV *
+THX_moment_to_string(pTHX_ const moment_t *mt) {
+    SV *dsv;
+    dt_t dt;
+    int year, month, day, sec, us, offset, sign;
+
+    dsv = sv_2mortal(newSV(16));
+    SvCUR_set(dsv, 0);
+    SvPOK_only(dsv);
+
+    dt = moment_local_dt(mt);
+    dt_to_ymd(dt, &year, &month, &day);
+
+    sv_catpvf(dsv, "%04d-%02d-%02dT%02d:%02d",
+        year, month, day, moment_hour(mt), moment_minute(mt));
+
+    sec = moment_second(mt);
+    us  = moment_microsecond(mt);
+    if (sec || us) {
+        sv_catpvf(dsv, ":%02d", sec);
+        if (us) {
+            if (us < 1000)
+                sv_catpvf(dsv, ".%03d", us);
+            else
+                sv_catpvf(dsv, ".%06d", us);
+        }
+    }
+
+    offset = moment_offset(mt);
+    if (offset == 0)
+        sv_catpvn(dsv, "Z", 1);
+    else {
+        if (offset < 0)
+            sign = '-', offset = -offset;
+        else
+            sign = '+';
+
+        if ((offset % 60) == 0)
+            sv_catpvf(dsv, "%c%02d", sign, offset / 60);
+        else
+            sv_catpvf(dsv, "%c%02d:%02d", sign, offset / 60, offset % 60);
+    }
+
+    return dsv;
+}
+

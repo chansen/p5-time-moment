@@ -67,6 +67,7 @@ my @tests = (
                              "Z"  => "Z",
                            },
     string              => "1970-01-01T00:00:00.000000Z",
+    to_string           => "1970-01-01T00:00Z",
     utc_rd_as_seconds   => 62135683200,
     week                => 1,
     year                => 1970,
@@ -129,6 +130,7 @@ my @tests = (
                              "Z"  => "+04:12",
                            },
     string              => "2013-12-21T13:00:14.426347+04:12",
+    to_string           => "2013-12-21T13:00:14.426347+04:12",
     utc_rd_as_seconds   => 63523298894,
     week                => 51,
     year                => 2013,
@@ -191,6 +193,7 @@ my @tests = (
                              "Z"  => "-14:00",
                            },
     string              => "2099-09-04T12:58:57.091592-14:00",
+    to_string           => "2099-09-04T12:58:57.091592-14",
     utc_rd_as_seconds   => 66227943537,
     week                => 36,
     year                => 2099,
@@ -201,6 +204,7 @@ my @Accessors = qw(
     year quarter month week day_of_year day_of_quarter day_of_month day_of_week
     hour minute second millisecond microsecond
     epoch offset utc_rd_as_seconds local_rd_as_seconds
+    to_string
 );
 
 foreach my $test (@tests) {

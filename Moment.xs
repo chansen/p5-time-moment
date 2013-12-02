@@ -475,3 +475,9 @@ strftime(self, format)
         SvUTF8_on(ret);
     XSRETURN_SV(ret);
 
+void
+to_string(self)
+    const moment_t *self
+  PPCODE:
+    XSRETURN_SV(moment_to_string(self));
+
