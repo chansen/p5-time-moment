@@ -93,19 +93,27 @@ moment_hour_meridiem(const moment_t *mt) {
 #define CHR(n, d) (char)('0' + ((n) / (d)) % 10)
 static void
 THX_format_f(pTHX_ const moment_t *mt, SV *dsv, int len) {
-    char buf[6];
-    int usec;
+    char buf[9];
+    int ns;
 
-    if (len > 6)
-        len = 6;
-    usec = moment_microsecond(mt);
+    if (len > 9)
+        len = 9;
+    ns = moment_nanosecond(mt);
+    if (len == 0) {
+        if      ((ns % 1000000) == 0) len = 3;
+        else if ((ns % 1000)    == 0) len = 6;
+        else                          len = 9;
+    }
     switch (len) {
-        case 6: buf[5] = CHR(usec, 1);
-        case 5: buf[4] = CHR(usec, 10);
-        case 4: buf[3] = CHR(usec, 100);
-        case 3: buf[2] = CHR(usec, 1000);
-        case 2: buf[1] = CHR(usec, 10000);
-        case 1: buf[0] = CHR(usec, 100000);
+        case 9: buf[8] = CHR(ns, 1);
+        case 8: buf[7] = CHR(ns, 10);
+        case 7: buf[6] = CHR(ns, 100);
+        case 6: buf[5] = CHR(ns, 1000);
+        case 5: buf[4] = CHR(ns, 10000);
+        case 4: buf[3] = CHR(ns, 100000);
+        case 3: buf[2] = CHR(ns, 1000000);
+        case 2: buf[1] = CHR(ns, 10000000);
+        case 1: buf[0] = CHR(ns, 100000000);
     }
     sv_catpvn(dsv, buf, len);
 }
@@ -183,7 +191,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
         if (p == e)
             break;
 
-        width = 6;
+        width = 0;
         s = p;
 
       label:
@@ -209,14 +217,12 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                           day,
                           moment_hour(mt),
                           moment_minute(mt),
-                          moment_second(mt),
-                          moment_microsecond(mt));
-                if (moment_microsecond(mt)) {
-                    int us = moment_microsecond(mt);
-                    if (us < 1000)
-                        sv_catpvf(dsv, ".%03d", us);
-                    else
-                        sv_catpvf(dsv, ".%06d", us);
+                          moment_second(mt));
+                if (moment_nanosecond(mt)) {
+                    int ns = moment_nanosecond(mt);
+                    if      ((ns % 1000000) == 0) sv_catpvf(dsv, ".%03d", ns / 1000000);
+                    else if ((ns % 1000)    == 0) sv_catpvf(dsv, ".%06d", ns / 1000);
+                    else                          sv_catpvf(dsv, ".%09d", ns);
                 }
                 THX_format_Z(aTHX_ mt, dsv);
                 break;
@@ -347,7 +353,7 @@ SV *
 THX_moment_to_string(pTHX_ const moment_t *mt) {
     SV *dsv;
     dt_t dt;
-    int year, month, day, sec, us, offset, sign;
+    int year, month, day, sec, ns, offset, sign;
 
     dsv = sv_2mortal(newSV(16));
     SvCUR_set(dsv, 0);
@@ -360,14 +366,13 @@ THX_moment_to_string(pTHX_ const moment_t *mt) {
         year, month, day, moment_hour(mt), moment_minute(mt));
 
     sec = moment_second(mt);
-    us  = moment_microsecond(mt);
-    if (sec || us) {
+    ns  = moment_nanosecond(mt);
+    if (sec || ns) {
         sv_catpvf(dsv, ":%02d", sec);
-        if (us) {
-            if (us < 1000)
-                sv_catpvf(dsv, ".%03d", us);
-            else
-                sv_catpvf(dsv, ".%06d", us);
+        if (ns) {
+            if      ((ns % 1000000) == 0) sv_catpvf(dsv, ".%03d", ns / 1000000);
+            else if ((ns % 1000)    == 0) sv_catpvf(dsv, ".%06d", ns / 1000);
+            else                          sv_catpvf(dsv, ".%09d", ns);
         }
     }
 

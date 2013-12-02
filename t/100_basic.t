@@ -17,6 +17,7 @@ my @tests = (
     epoch               => 0,
     hour                => 0,
     local_rd_as_seconds => 62135683200,
+    nanosecond          => 0,
     microsecond         => 0,
     millisecond         => 0,
     minute              => 0,
@@ -46,7 +47,7 @@ my @tests = (
                              "M"  => "00",
                              "m"  => "01",
                              "n"  => "\n",
-                             "N"  => "000000",
+                             "N"  => "000",
                              "p"  => "AM",
                              "r"  => "12:00:00 AM",
                              "R"  => "00:00",
@@ -80,6 +81,7 @@ my @tests = (
     epoch               => 1387615694,
     hour                => 13,
     local_rd_as_seconds => 63523314014,
+    nanosecond          => 426347000,
     microsecond         => 426347,
     millisecond         => 426,
     minute              => 0,
@@ -143,6 +145,7 @@ my @tests = (
     epoch               => 4092260337,
     hour                => 12,
     local_rd_as_seconds => 66227893137,
+    nanosecond          => 91592000,
     microsecond         => 91592,
     millisecond         => 91,
     minute              => 58,
@@ -210,7 +213,7 @@ my @Accessors = qw(
 foreach my $test (@tests) {
     my $name = $test->{string};
 
-    my $tm = Time::Moment->from_epoch(@$test{qw(epoch microsecond offset)});
+    my $tm = Time::Moment->from_epoch(@$test{qw(epoch nanosecond offset)});
     foreach my $accessor (@Accessors) {
         is($tm->$accessor, $test->{$accessor}, "${name} ->${accessor}");
     }

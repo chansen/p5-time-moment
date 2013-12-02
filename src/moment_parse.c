@@ -19,6 +19,9 @@ parse_number(const unsigned char * const p, size_t i, const size_t len) {
     int v = 0;
 
     switch (len) {
+        case 9: v += (p[i++] - '0') * 100000000;
+        case 8: v += (p[i++] - '0') * 10000000;
+        case 7: v += (p[i++] - '0') * 1000000;
         case 6: v += (p[i++] - '0') * 100000;
         case 5: v += (p[i++] - '0') * 10000;
         case 4: v += (p[i++] - '0') * 1000;
@@ -37,10 +40,13 @@ static const int pow_10[] = {
     10000,
     100000,
     1000000,
+    10000000,
+    100000000,
+    1000000000,
 };
 
 /*
- *  ffffff
+ *  fffffffff
  */
 
 static size_t
@@ -50,17 +56,17 @@ parse_fraction_digits(const unsigned char *p, size_t i, size_t len, int *fp) {
     ndigits = n = count_digits(p, i, len);
     if (ndigits < 1)
         return 0;
-    if (ndigits > 6)
-        ndigits = 6;
+    if (ndigits > 9)
+        ndigits = 9;
     if (fp)
-        *fp = parse_number(p, i, ndigits) * pow_10[6 - ndigits];
+        *fp = parse_number(p, i, ndigits) * pow_10[9 - ndigits];
     return n;
 }
 
 /*
  *  hhmm
  *  hhmmss
- *  hhmmss.ffffff
+ *  hhmmss.fffffffff
  */
 
 static size_t
@@ -172,7 +178,7 @@ parse_zone_basic(const char *str, size_t len, int *op) {
 /*
  *  hh:mm
  *  hh:mm:ss
- *  hh:mm:ss.ffffff
+ *  hh:mm:ss.fffffffff
  */
 
 static size_t
@@ -203,7 +209,7 @@ parse_time_extended(const char *str, size_t len, int *sp, int *fp) {
     s = parse_number(p, 6, 2);
     n = 8;
 
-    /* hh:mm:ss.ffffff */
+    /* hh:mm:ss.fffffffff */
     if (n < len && (p[n] == '.' || p[n] == ',')) {
         size_t r = parse_fraction_digits(p, ++n, len, &f);
         if (!r)

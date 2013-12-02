@@ -27,7 +27,7 @@ sub now {
 
     my ($sec, $usec) = Time::HiRes::gettimeofday();
     my $off = int((timegm(localtime($sec)) - $sec) / 60);
-    return $class->from_epoch($sec, $usec, $off);
+    return $class->from_epoch($sec, $usec * 1000, $off);
 }
 EOC
         die $@ if $@;
@@ -43,7 +43,7 @@ sub __as_DateTime {
     return DateTime->from_epoch(
         epoch     => $tm->epoch,
         time_zone => $tm->strftime('%Z'),
-    )->set_nanosecond($tm->microsecond * 1000);
+    )->set_nanosecond($tm->nanosecond);
 }
 
 sub DateTime::__as_Time_Moment {
@@ -53,9 +53,8 @@ sub DateTime::__as_Time_Moment {
       or Carp::croak(q/Cannot coerce an instance of DateTime in the 'floating' /
                     .q/time zone to an instance of Time::Moment/);
 
-    my $usec = int($dt->nanosecond / 1000);
-    my $off  = int($dt->offset / 60);
-    return Time::Moment->from_epoch($dt->epoch, $usec, $off);
+    my $offset = int($dt->offset / 60);
+    return Time::Moment->from_epoch($dt->epoch, $dt->nanosecond, $offset);
 }
 
 sub Time::Piece::__as_Time_Moment {

@@ -21,12 +21,9 @@
 #  endif
 #endif
 
-#define TICKS_PER_DAY       INT64_C(86400000000)
-#define TICKS_PER_HOUR      INT64_C(3600000000)
-#define TICKS_PER_MIN       INT64_C(60000000)
-#define TICKS_PER_SEC       INT64_C(1000000)
-#define TICKS_PER_MSEC      INT64_C(1000)
-#define TICKS_PER_USEC      INT64_C(1)
+#define SECS_PER_DAY        86400
+#define SECS_PER_HOUR       3600
+#define SECS_PER_MIN        60
 
 #define UNIX_EPOCH          INT64_C(62135683200)  /* 1970-01-01T00:00:00 */
 
@@ -43,7 +40,8 @@
     (o >= MIN_OFFSET && o <= MAX_OFFSET)
 
 typedef struct {
-    int64_t ticks;
+    int64_t sec;
+    int32_t nsec;
     int32_t offset;
 } moment_t;
 
@@ -75,6 +73,7 @@ int         moment_minute(const moment_t *mt);
 int         moment_second(const moment_t *mt);
 int         moment_millisecond(const moment_t *mt);
 int         moment_microsecond(const moment_t *mt);
+int         moment_nanosecond(const moment_t *mt);
 
 int         moment_offset(const moment_t *mt);
 

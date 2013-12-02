@@ -7,7 +7,7 @@ Time::Moment - Represents a date and time of day combined with a time zone offse
 =head1 SYNOPSIS
     
     $tm = Time::Moment->now;
-    $tm = Time::Moment->from_epoch($seconds [, $microsecond [, $offset ]]);
+    $tm = Time::Moment->from_epoch($seconds [, $nanosecond [, $offset ]]);
     $tm = Time::Moment->from_object($object);
     $tm = Time::Moment->from_string($string);
     
@@ -26,6 +26,7 @@ Time::Moment - Represents a date and time of day combined with a time zone offse
     $second       = $tm->second;                # [0, 59]
     $millisecond  = $tm->millisecond;           # [0, 999]
     $microsecond  = $tm->microsecond;           # [0, 999_999]
+    $nanosecond   = $tm->nanosecond;            # [0, 999_999_999]
     
     $epoch        = $tm->epoch;
     $offset       = $tm->offset;                # [-1080, 1080]
@@ -59,7 +60,7 @@ Time::Moment - Represents a date and time of day combined with a time zone offse
 =head1 DESCRIPTION
 
 Represents a date and time of day combined with a time zone offset from UTC 
-in the ISO 8601 calendar with microsecond resolution.
+in the ISO 8601 calendar with nanosecond resolution.
 
 B<IMPORTANT:> This is an early preview release available for testing and 
 feedback. The API is still subject to change.
@@ -76,9 +77,14 @@ set to the local time's offset from UTC.
 
 =head2 from_epoch
 
-    $tm = Time::Moment->from_epoch($epoch);
-    $tm = Time::Moment->from_epoch($epoch, $microsecond);
-    $tm = Time::Moment->from_epoch($epoch, $microsecond, $offset);
+    $tm = Time::Moment->from_epoch($seconds);
+    $tm = Time::Moment->from_epoch($seconds, $nanosecond);
+    $tm = Time::Moment->from_epoch($seconds, $nanosecond, $offset);
+
+Constructs an instance of C<Time::Moment> from the given I<seconds> from the 
+epoch of 1970-01-01T00:00:00Z. The optional parameter I<nanosecond> specifies
+the nano of second [0, 999_999_999]. The optional parameter I<offset> 
+specifies the offset from UTC in minutes [-1080, 1080].
 
 =head2 from_object
 
@@ -91,9 +97,8 @@ set to the local time's offset from UTC.
 Constructs an instance of C<Time::Moment> from the given I<string>. The string 
 must consist of a complete representation of a date and time of day followed 
 by a zone designator. The second component of the time of day may have a 
-decimal fraction. All ISO 8601 date and time of day representations are 
-supported in both basic and extended format. The constructor raises an 
-exception if the given string cannot be parsed.
+decimal fraction. The constructor raises an exception if the given string 
+cannot be parsed.
 
 The following are examples of complete representations of date and time of day 
 representations:
@@ -187,7 +192,13 @@ Returns the milli of second [0, 999].
 
     $microsecond = $tm->microsecond;
 
-Returns the micro of second [0, 999999].
+Returns the micro of second [0, 999_999].
+
+=head2 nanosecond
+
+    $nanosecond = $tm->nanosecond;
+
+Returns the nano of second [0, 999_999_999].
 
 =head2 epoch
 
@@ -255,8 +266,8 @@ ISO 8601 formats:
     YYYY-MM-DDThh:mm:ss.ffffff±hh
     YYYY-MM-DDThh:mm:ss.ffffff±hh:mm
 
-The shortest representation will be used where the omitted parts are implied 
-to be zero.
+The shortest representation will be used where the omitted components are 
+implied to be zero.
 
 =head2 strftime
 
@@ -316,8 +327,7 @@ a single digit is preceded by a space.
 
 =item C<%f>
 
-Replaced by the fractional second (microsecond) as a decimal 
-number [000000, 999999].
+Replaced by the fractional second (nanosecond) as a decimal number.
 
 =item C<%F>
 

@@ -3,74 +3,61 @@
 #include "dt_accessor.h"
 
 int64_t
-moment_utc_ticks(const moment_t *mt) {
-    return (mt->ticks - mt->offset * TICKS_PER_MIN);
+moment_utc_rd_seconds(const moment_t *mt) {
+    return (mt->sec - mt->offset * SECS_PER_MIN);
 }
 
 IV
 moment_utc_rd(const moment_t *mt) {
-    return (moment_utc_ticks(mt) / TICKS_PER_DAY);
-}
-
-int64_t
-moment_utc_rd_seconds(const moment_t *mt) {
-    return (moment_utc_ticks(mt) / TICKS_PER_SEC);
+    return (moment_utc_rd_seconds(mt) / SECS_PER_DAY);
 }
 
 void
 moment_to_utc_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos) {
-    const int64_t ticks = moment_utc_ticks(mt);
-    const int64_t tod   = ticks % TICKS_PER_DAY;
-    
-    *rdn = ticks / TICKS_PER_DAY;
-    *sod = tod / TICKS_PER_SEC;
-    *nos = (tod % TICKS_PER_SEC) * 1000;
-}
-
-int64_t
-moment_local_ticks(const moment_t *mt) {
-    return mt->ticks;
-}
-
-IV
-moment_local_rd(const moment_t *mt) {
-    return (moment_local_ticks(mt) / TICKS_PER_DAY);
+    const int64_t sec = moment_utc_rd_seconds(mt);
+    *rdn = sec / SECS_PER_DAY;
+    *sod = sec % SECS_PER_DAY;
+    *nos = mt->nsec;
 }
 
 int64_t
 moment_local_rd_seconds(const moment_t *mt) {
-    return (moment_local_ticks(mt) / TICKS_PER_SEC);
+    return mt->sec;
+}
+
+IV
+moment_local_rd(const moment_t *mt) {
+    return (moment_local_rd_seconds(mt) / SECS_PER_DAY);
 }
 
 dt_t
 moment_local_dt(const moment_t *mt) {
-    return (dt_t)moment_local_rd(mt);
+    return dt_from_rdn((int)moment_local_rd(mt));
 }
 
 void
 moment_to_local_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos) {
-    const int64_t ticks = moment_local_ticks(mt);
-    const int64_t tod   = ticks % TICKS_PER_DAY;
-    
-    *rdn = ticks / TICKS_PER_DAY;
-    *sod = tod / TICKS_PER_SEC;
-    *nos = (tod % TICKS_PER_SEC) * 1000;
+    const int64_t sec = moment_local_rd_seconds(mt);
+    *rdn = sec / SECS_PER_DAY;
+    *sod = sec % SECS_PER_DAY;
+    *nos = mt->nsec;
 }
 
 moment_t
-THX_moment_from_epoch(pTHX_ int64_t sec, IV usec, IV offset) {
+THX_moment_from_epoch(pTHX_ int64_t sec, IV nsec, IV offset) {
     moment_t r;
 
     if (!VALID_EPOCH_SEC(sec))
         croak("Parameter 'seconds' is out of supported range");
 
-    if (usec < 0 || usec > 999999)
-        croak("Parameter 'microsecond' is out of the range [0, 999999]");
+    if (nsec < 0 || nsec > 999999999)
+        croak("Parameter 'nanosecond' is out of the range [0, 999_999_999]");
 
     if (!VALID_OFFSET(offset))
         croak("Parameter 'offset' is out of the range [-1080, 1080]");
 
-    r.ticks = (sec + UNIX_EPOCH + offset * 60) * TICKS_PER_SEC + usec * TICKS_PER_USEC;
+    r.sec    = sec + UNIX_EPOCH + offset * 60;
+    r.nsec   = nsec;
     r.offset = offset;
     return r;
 }
@@ -82,17 +69,24 @@ THX_moment_with_offset(pTHX_ const moment_t *mt, IV offset) {
     if (!VALID_OFFSET(offset))
         croak("Parameter 'offset' is out of the range [-1080, 1080]");
 
-    r.ticks  = moment_utc_ticks(mt) + offset * TICKS_PER_MIN;
+    r.sec    = moment_utc_rd_seconds(mt) + offset * SECS_PER_MIN;
+    r.nsec   = mt->nsec;
     r.offset = offset;
     return r;
 }
 
 IV
 moment_compare(const moment_t *m1, const moment_t *m2) {
-    const int64_t t1 = moment_utc_ticks(m1);
-    const int64_t t2 = moment_utc_ticks(m2);
-    if (t1 > t2) return  1;
-    if (t1 < t2) return -1;
+    const int64_t s1 = moment_utc_rd_seconds(m1);
+    const int64_t s2 = moment_utc_rd_seconds(m2);
+    if (s1 < s2)
+        return -1;
+    if (s1 > s2)
+        return 1;
+    if (m1->nsec < m2->nsec)
+        return -1;
+    if (m1->nsec > m2->nsec)
+        return 1;
     return 0;
 }
 
@@ -143,27 +137,32 @@ moment_day_of_week(const moment_t *mt) {
 
 int
 moment_hour(const moment_t *mt) {
-    return (moment_local_ticks(mt) / TICKS_PER_HOUR) % 24;
+    return (moment_local_rd_seconds(mt) / SECS_PER_HOUR) % 24;
 }
 
 int
 moment_minute(const moment_t *mt) {
-    return (moment_local_ticks(mt) / TICKS_PER_MIN) % 60;
+    return (moment_local_rd_seconds(mt) / SECS_PER_MIN) % 60;
 }
 
 int
 moment_second(const moment_t *mt) {
-    return (moment_local_ticks(mt) / TICKS_PER_SEC) % 60;
+    return (moment_local_rd_seconds(mt)) % 60;
 }
 
 int
 moment_millisecond(const moment_t *mt) {
-    return (moment_local_ticks(mt) / TICKS_PER_MSEC) % 1000;
+    return (mt->nsec / 1000000);
 }
 
 int
 moment_microsecond(const moment_t *mt) {
-    return (moment_local_ticks(mt) / TICKS_PER_USEC) % 1000000;
+    return (mt->nsec / 1000);
+}
+
+int
+moment_nanosecond(const moment_t *mt) {
+    return mt->nsec;
 }
 
 int
