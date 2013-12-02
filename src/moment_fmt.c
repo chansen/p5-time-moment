@@ -203,7 +203,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                 sv_catpv(dsv, fMonth[month - 1]);
                 break;
             case 'c':
-                sv_catpvf(dsv, "%04d-%02d-%02dT%02d:%02d:%02d.%06d",
+                sv_catpvf(dsv, "%04d-%02d-%02dT%02d:%02d:%02d",
                           year,
                           month,
                           day,
@@ -211,6 +211,13 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                           moment_minute(mt),
                           moment_second(mt),
                           moment_microsecond(mt));
+                if (moment_microsecond(mt)) {
+                    int us = moment_microsecond(mt);
+                    if (us < 1000)
+                        sv_catpvf(dsv, ".%03d", us);
+                    else
+                        sv_catpvf(dsv, ".%06d", us);
+                }
                 THX_format_Z(aTHX_ mt, dsv);
                 break;
             case 'C':
