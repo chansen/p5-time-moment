@@ -358,6 +358,19 @@ with_offset(self, offset)
   OUTPUT:
     RETVAL
 
+moment_t
+with_nanosecond(self, nanosecond)
+    const moment_t *self
+    IV nanosecond
+  PREINIT:
+    dSTASH_INVOCANT;
+  CODE:
+    if (nanosecond == moment_nanosecond(self))
+        XSRETURN(1);
+    RETVAL = moment_with_nanosecond(self, nanosecond);
+  OUTPUT:
+    RETVAL
+
 void
 year(self)
     const moment_t *self

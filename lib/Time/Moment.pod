@@ -11,27 +11,28 @@ Time::Moment - Represents a date and time of day combined with a time zone offse
     $tm = Time::Moment->from_object($object);
     $tm = Time::Moment->from_string($string);
     
-    $year         = $tm->year;                  # [1, 9999]
-    $quarter      = $tm->quarter;               # [1, 4]
-    $month        = $tm->month;                 # [1, 12]
-    $week         = $tm->week;                  # [1, 53]
+    $year         = $tm->year;                          # [1, 9999]
+    $quarter      = $tm->quarter;                       # [1, 4]
+    $month        = $tm->month;                         # [1, 12]
+    $week         = $tm->week;                          # [1, 53]
     
-    $day          = $tm->day_of_year;           # [1, 366]
-    $day          = $tm->day_of_quarter;        # [1, 92]
-    $day          = $tm->day_of_month;          # [1, 31]
-    $day          = $tm->day_of_week;           # [1=Monday, 7=Sunday]
+    $day          = $tm->day_of_year;                   # [1, 366]
+    $day          = $tm->day_of_quarter;                # [1, 92]
+    $day          = $tm->day_of_month;                  # [1, 31]
+    $day          = $tm->day_of_week;                   # [1=Monday, 7=Sunday]
     
-    $hour         = $tm->hour;                  # [0, 23]
-    $minute       = $tm->minute;                # [0, 59]
-    $second       = $tm->second;                # [0, 59]
-    $millisecond  = $tm->millisecond;           # [0, 999]
-    $microsecond  = $tm->microsecond;           # [0, 999_999]
-    $nanosecond   = $tm->nanosecond;            # [0, 999_999_999]
+    $hour         = $tm->hour;                          # [0, 23]
+    $minute       = $tm->minute;                        # [0, 59]
+    $second       = $tm->second;                        # [0, 59]
+    $millisecond  = $tm->millisecond;                   # [0, 999]
+    $microsecond  = $tm->microsecond;                   # [0, 999_999]
+    $nanosecond   = $tm->nanosecond;                    # [0, 999_999_999]
     
     $epoch        = $tm->epoch;
-    $offset       = $tm->offset;                # [-1080, 1080]
+    $offset       = $tm->offset;                        # [-1080, 1080]
     
     $tm2          = $tm1->with_offset($offset);
+    $tm2          = $tm1->with_nanosecond($nanosecond);
     
     $boolean      = $tm1->is_before($tm2);
     $boolean      = $tm1->is_after($tm2);
@@ -216,8 +217,14 @@ Returns the offset from UTC in minutes [-1080, 1080].
 
     $tm2 = $tm1->with_offset($offset);
 
-Returns a copy of this time with the given I<offset> altered. The result is at 
-the same instant.
+Returns a copy of this time with the given I<offset> altered. The resulting 
+time is at the same instant.
+
+=head2 with_nanosecond
+
+    $tm2 = $tm1->with_nanosecond($nanosecond);
+
+Returns a copy of this time with the given I<nanosecond> altered.
 
 =head2 is_before
 

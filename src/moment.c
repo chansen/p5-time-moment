@@ -43,19 +43,31 @@ moment_to_local_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos) {
     *nos = mt->nsec;
 }
 
+static void
+THX_check_seconds(pTHX_ int64_t v) {
+    if (!VALID_EPOCH_SEC(v))
+        croak("Parameter 'seconds' is out of supported range");
+}
+
+static void
+THX_check_offset(pTHX_ IV v) {
+    if (v < -1080 || v > 1080)
+        croak("Parameter 'offset' is out of the range [-1080, 1080]");
+}
+
+static void
+THX_check_nanosecond(pTHX_ IV v) {
+    if (v < 0 || v > 999999999)
+        croak("Parameter 'nanosecond' is out of the range [0, 999_999_999]");
+}
+
 moment_t
 THX_moment_from_epoch(pTHX_ int64_t sec, IV nsec, IV offset) {
     moment_t r;
 
-    if (!VALID_EPOCH_SEC(sec))
-        croak("Parameter 'seconds' is out of supported range");
-
-    if (nsec < 0 || nsec > 999999999)
-        croak("Parameter 'nanosecond' is out of the range [0, 999_999_999]");
-
-    if (!VALID_OFFSET(offset))
-        croak("Parameter 'offset' is out of the range [-1080, 1080]");
-
+    THX_check_seconds(aTHX_ sec);
+    THX_check_nanosecond(aTHX_ nsec);
+    THX_check_offset(aTHX_ offset);
     r.sec    = sec + UNIX_EPOCH + offset * 60;
     r.nsec   = nsec;
     r.offset = offset;
@@ -66,12 +78,21 @@ moment_t
 THX_moment_with_offset(pTHX_ const moment_t *mt, IV offset) {
     moment_t r;
 
-    if (!VALID_OFFSET(offset))
-        croak("Parameter 'offset' is out of the range [-1080, 1080]");
-
+    THX_check_offset(aTHX_ offset);
     r.sec    = moment_utc_rd_seconds(mt) + offset * SECS_PER_MIN;
     r.nsec   = mt->nsec;
     r.offset = offset;
+    return r;
+}
+
+moment_t
+THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec) {
+    moment_t r;
+
+    THX_check_nanosecond(aTHX_ nsec);
+    r.sec    = mt->sec;
+    r.nsec   = nsec;
+    r.offset = mt->offset;
     return r;
 }
 
