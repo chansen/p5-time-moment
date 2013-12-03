@@ -211,7 +211,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                 sv_catpv(dsv, fMonth[month - 1]);
                 break;
             case 'c': /* locale's date and time (C locale: %a %b %e %H:%M:%S %Y) */
-                sv_catpvf(dsv, "%s %s %2d %02d:%02d:%02d",
+                sv_catpvf(dsv, "%s %s %2d %02d:%02d:%02d %04d",
                          aDoW[dt_dow(dt) - 1],
                          aMonth[month - 1],
                          day,
@@ -319,7 +319,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                 sv_catpvf(dsv, "%02d", year % 100);
                 break;
             case 'Y':
-                sv_catpvf(dsv, "%d", year);
+                sv_catpvf(dsv, "%04d", year);
                 break;
             case 'z':
                 THX_format_z(aTHX_ mt, dsv);
