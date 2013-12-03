@@ -97,9 +97,8 @@ specifies the offset from UTC in minutes [-1080, 1080].
 
 Constructs an instance of C<Time::Moment> from the given I<string>. The string 
 must consist of a complete representation of a date and time of day followed 
-by a zone designator. The second component of the time of day may have a 
-decimal fraction. The constructor raises an exception if the given string 
-cannot be parsed.
+by a zone designator. The second part of the time of day may have a decimal 
+fraction.
 
 The following are examples of complete representations of date and time of day 
 representations:
@@ -260,22 +259,23 @@ than zero if this time is after the other time.
 
     $string = $tm->to_string;
 
-Returns a string representation of the object in one of the following 
-ISO 8601 formats:
+Returns a string representation of the instance in one of the following 
+formats:
 
     YYYY-MM-DDThh:mm
+    YYYY-MM-DDThh:mm:ss
     YYYY-MM-DDThh:mm:ss.fff
     YYYY-MM-DDThh:mm:ss.ffffff
     YYYY-MM-DDThh:mm:ss.fffffffff
 
-Combined with a zone designator in one of the following formats:
+Followed by a zone designator in one of the following formats:
 
     Z
     ±hh
     ±hh:mm
 
-The shortest representation will be used where the omitted components are 
-implied to be zero.
+The shortest representation will be used where the omitted parts are implied 
+to be zero.
 
 =head2 strftime
 
@@ -313,7 +313,8 @@ Example: January, February, ..., December.
 
 =item C<%c>
 
-Equivalent to C<%Y-%m-%dT%H:%M:%S%f%Z>.
+Replaced by the C locale's date and time representation. 
+Equivalent to C<"%a %b %e %H:%M:%S %Y">.
 
 =item C<%C>
 
@@ -343,6 +344,9 @@ an empty string if the nano of second is C<0>.
     .fffffffff  (nanosecond)
 
 The shortest representation is used.
+
+I<Please note that this this conversion specification is an extension to the 
+L<"IEEE Std 1003.1, 2013 Edition"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
 
 =item C<%F>
 
@@ -383,9 +387,9 @@ Replaced by a <newline> character.
 
 =item C<%N>
 
-Replaced by the fractional second as a decimal number. This specifier
-permits use of a optional width where the default width of C<0> will use the 
-shortest representation.
+Replaced by the fractional second as a decimal number. This conversion 
+specification permits use of a optional width where the default width 
+of C<0> will use the shortest representation.
 
 Example: 
 
@@ -395,9 +399,13 @@ C<%N> or C<%0N> is replaced by one of the following (shortest representation):
     ffffff     (microsecond)
     fffffffff  (nanosecond)
 
-C<%N4> is replaced by exactly four fractional digits.
+C<%N4> is replaced by exactly four fractional digits, zero padded or truncated
+if needed.
 
     ffff
+
+I<Please note that this this conversion specification is an extension to the 
+L<"IEEE Std 1003.1, 2013 Edition"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
 
 =item C<%p>
 
@@ -410,7 +418,7 @@ to C<"%I:%M:%S %p">.
 
 =item C<%R>
 
-Replaced by the time in 24-hour notation. Equivalent to C<%H:%M>.
+Replaced by the time in 24-hour notation. Equivalent to C<"%H:%M">.
 
 =item C<%s>
 
@@ -445,8 +453,7 @@ Replaced by the week number of the year (Monday as the first day of the week)
 as a decimal number [01, 53]. If the week containing 1 January has four or 
 more days in the new year, then it is considered week 1. Otherwise, it is the 
 last week of the previous year, and the next week is week 1. Both January 4th 
-and the first Thursday of January are always in week 1. ISO 8601 calendar week 
-number.
+and the first Thursday of January are always in week 1.
 
 =item C<%W>
 
@@ -456,11 +463,11 @@ before this are in week 0.
 
 =item C<%x>
 
-Replaced by ISO 8601 calendar date in extended format. Equivalent to C<%F>.
+Replaced by the C locale's date representation. Equivalent to C<"%D">.
 
 =item C<%X>
 
-Replaced by ISO 8601 local time of day in extended format. Equivalent to C<%T>.
+Replaced by the C locale's time representation. Equivalent to C<"%T">.
 
 =item C<%y>
 
@@ -487,7 +494,7 @@ Replaced by %.
 
 =head2 utc_rd_values
 
-    ($rd, $sod, $nano) = $tm->utc_rd_values;
+    ($rd, $sod, $nanosecond) = $tm->utc_rd_values;
 
 =head2 utc_rd_as_seconds
 
@@ -497,7 +504,7 @@ Returns the number of seconds from the Rata Die epoch of 0001-01-01T00:00:00Z.
 
 =head2 local_rd_values
 
-    ($rd, $sod, $nano) = $tm->local_rd_values;
+    ($rd, $sod, $nanosecond) = $tm->local_rd_values;
 
 =head2 local_rd_as_seconds
 

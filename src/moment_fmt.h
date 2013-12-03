@@ -3,13 +3,13 @@
 #include "moment.h"
 
 SV * THX_moment_strftime(pTHX_ const moment_t *mt, const char *str, STRLEN len);
-SV * THX_moment_to_string(pTHX_ const moment_t *mt);
+SV * THX_moment_to_string(pTHX_ const moment_t *mt, bool full);
 
 #define moment_strftime(mt, str, len) \
     THX_moment_strftime(aTHX_ mt, str, len)
 
-#define moment_to_string(mt) \
-    THX_moment_to_string(aTHX_ mt)
+#define moment_to_string(mt, full) \
+    THX_moment_to_string(aTHX_ mt, full)
 
 #endif
 

@@ -218,7 +218,7 @@ XS(XS_Time_Moment_stringify) {
     dVAR; dXSARGS;
     if (items < 1)
         croak("Wrong number of arguments to Time::Moment::(\"\"");
-    ST(0) = moment_strftime(sv_2moment_ptr(ST(0), "self"), "%c", 2);
+    ST(0) = moment_to_string(sv_2moment_ptr(ST(0), "self"), FALSE);
     XSRETURN(1);
 }
 
@@ -494,5 +494,5 @@ void
 to_string(self)
     const moment_t *self
   PPCODE:
-    XSRETURN_SV(moment_to_string(self));
+    XSRETURN_SV(moment_to_string(self, TRUE));
 
