@@ -1,3 +1,13 @@
+0.08 2013-12-04
+  - Changed resolution from microsecond to nanosecond
+  - Implemented ->with_nanosecond()
+  - Documentation improvements
+  - Changed ->strftime() to preserve the SvUTF8 flag if the given format 
+    string has the SvUTF8 flag.
+  - Overhauled strftime() conversion specifications to better confirm to 
+    IEEE Std 1003.1. Extended conversion specifications is now documented 
+    as such.
+
 0.07 2013-12-02
   - Documented most of the API.
   - Implemented ->to_string().
