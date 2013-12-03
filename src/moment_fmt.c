@@ -96,8 +96,8 @@ THX_format_f(pTHX_ const moment_t *mt, SV *dsv, int len) {
     char buf[9];
     int ns;
 
-    if (len > 9)
-        len = 9;
+    if      (len > 9) len = 9;
+    else if (len < 0) len = 0;
     ns = moment_nanosecond(mt);
     if (len == 0) {
         if      ((ns % 1000000) == 0) len = 3;
@@ -191,7 +191,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
         if (p == e)
             break;
 
-        width = 0;
+        width = -1;
         s = p;
 
       label:
@@ -239,7 +239,10 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                 sv_catpvf(dsv, "%2d", day);
                 break;
             case 'f':
-                THX_format_f(aTHX_ mt, dsv, width);
+                if (width >= 0 || moment_nanosecond(mt)) {
+                    sv_catpvn(dsv, ".", 1);
+                    THX_format_f(aTHX_ mt, dsv, width);
+                }
                 break;
             case 'F':
             case 'x':

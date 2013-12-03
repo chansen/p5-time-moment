@@ -263,15 +263,16 @@ than zero if this time is after the other time.
 Returns a string representation of the object in one of the following 
 ISO 8601 formats:
 
-    YYYY-MM-DDThh:mmZ
-    YYYY-MM-DDThh:mm±hh
-    YYYY-MM-DDThh:mm±hh:mm
-    YYYY-MM-DDThh:mm:ss.fffZ
-    YYYY-MM-DDThh:mm:ss.fff±hh
-    YYYY-MM-DDThh:mm:ss.fff±hh:mm
-    YYYY-MM-DDThh:mm:ss.ffffffZ
-    YYYY-MM-DDThh:mm:ss.ffffff±hh
-    YYYY-MM-DDThh:mm:ss.ffffff±hh:mm
+    YYYY-MM-DDThh:mm
+    YYYY-MM-DDThh:mm:ss.fff
+    YYYY-MM-DDThh:mm:ss.ffffff
+    YYYY-MM-DDThh:mm:ss.fffffffff
+
+Combined with a zone designator in one of the following formats:
+
+    Z
+    ±hh
+    ±hh:mm
 
 The shortest representation will be used where the omitted components are 
 implied to be zero.
@@ -312,7 +313,7 @@ Example: January, February, ..., December.
 
 =item C<%c>
 
-XXX
+Equivalent to C<%Y-%m-%dT%H:%M:%S%f%Z>.
 
 =item C<%C>
 
@@ -334,7 +335,14 @@ a single digit is preceded by a space.
 
 =item C<%f>
 
-Replaced by the fractional second (nanosecond) as a decimal number.
+Replaced by the fractional second including preceding decimal point or by 
+an empty string if the nano of second is C<0>.
+
+    .fff        (millisecond)
+    .ffffff     (microsecond)
+    .fffffffff  (nanosecond)
+
+The shortest representation is used.
 
 =item C<%F>
 
@@ -375,7 +383,21 @@ Replaced by a <newline> character.
 
 =item C<%N>
 
-XXX
+Replaced by the fractional second as a decimal number. This specifier
+permits use of a optional width where the default width of C<0> will use the 
+shortest representation.
+
+Example: 
+
+C<%N> or C<%0N> is replaced by one of the following (shortest representation):
+
+    fff        (millisecond)
+    ffffff     (microsecond)
+    fffffffff  (nanosecond)
+
+C<%N4> is replaced by exactly four fractional digits.
+
+    ffff
 
 =item C<%p>
 
