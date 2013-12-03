@@ -269,7 +269,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
             case 'N': /* extended conversion specification */
                 THX_format_f(aTHX_ mt, dsv, width);
                 break;
-            case 'p':
+            case 'p': /* locale's equivalent of either a.m. or p.m (C locale: AM or PM) */
                 sv_catpv(dsv, moment_hour_meridiem(mt));
                 break;
             case 'r': /* locale's time in a.m. and p.m. notation (C locale: %I:%M:%S %p) */
