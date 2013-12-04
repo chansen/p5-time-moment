@@ -91,14 +91,38 @@ specifies the offset from UTC in minutes [-1080, 1080].
 
     $tm = Time::Moment->from_object($object);
 
+Constructs an instance of C<Time::Moment> from the given I<object>. If the 
+given object is an instance of C<Time::Moment> it's returned otherwise an 
+attempt is made to coerce the object to an instance of C<Time::Moment>.
+
+C<Time::Moment> provides coercion handlers for the following object types:
+
+=over 4
+
+=item L<DateTime>
+
+    $tm = Time::Moment->from_object( DateTime->now );
+    $tm = Params::Coerce::coerce('Time::Moment', DateTime->now);
+
+The given C<DateTime> object must be within the supported date range and must 
+have a time zone or an offset from UTC, coercing from the 'floating' time zone
+is not supported.
+
+=item L<Time::Piece>
+
+    $tm = Time::Moment->from_object( Time::Piece::localtime() );
+    $tm = Params::Coerce::coerce('Time::Moment', Time::Piece::localtime());
+
+=back
+
 =head2 from_string
 
     $tm = Time::Moment->from_string($string);
 
 Constructs an instance of C<Time::Moment> from the given I<string>. The string 
 must consist of a complete representation of a date and time of day followed 
-by a zone designator. The second part of the time of day may have a decimal 
-fraction.
+by a zone designator. The second part of the time of day representation may 
+have a decimal fraction.
 
 The following are examples of complete representations of date and time of day 
 representations:
