@@ -364,7 +364,7 @@ THX_moment_to_string(pTHX_ const moment_t *mt, bool reduced) {
 
     sec = moment_second(mt);
     ns  = moment_nanosecond(mt);
-    if (!reduced || (sec || ns)) {
+    if (!reduced || sec || ns) {
         sv_catpvf(dsv, ":%02d", sec);
         if (ns) {
             if      ((ns % 1000000) == 0) sv_catpvf(dsv, ".%03d", ns / 1000000);
