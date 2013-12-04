@@ -66,7 +66,7 @@ calendar system.
 B<IMPORTANT:> This is an early preview release available for testing and 
 feedback. The API is still subject to change.
 
-=head1 METHODS
+=head1 CONSTRUCTORS
 
 =head2 now
 
@@ -144,6 +144,8 @@ representations:
 
 Where complete representations using calendar dates are shown, ordinal dates or 
 week dates may be substituted.
+
+=head1 METHODS
 
 =head2 year
 
@@ -598,7 +600,7 @@ Followed by a zone designator in one of the following formats:
     Z
     ±hh:mm
 
-The shortest representation will be used. This format is compatible with most 
+The shortest representation will be used. This format is compatible with 
 ISO 8601 profiles, such as:
 
 =over 4
