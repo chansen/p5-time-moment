@@ -374,8 +374,8 @@ an empty string if no fractional second exists.
 
 The shortest representation is used.
 
-I<Please note that this this conversion specification is an extension to the 
-L<"IEEE Std 1003.1, 2013 Edition"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
+I<Please note that this conversion specification is an extension to the 
+L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
 
 =item C<%F>
 
@@ -433,8 +433,8 @@ if needed.
 
     ffff
 
-I<Please note that this this conversion specification is an extension to the 
-L<"IEEE Std 1003.1, 2013 Edition"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
+I<Please note that this conversion specification is an extension to the 
+L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
 
 =item C<%p>
 
@@ -453,8 +453,8 @@ Replaced by the time in 24-hour notation. Equivalent to C<"%H:%M">.
 
 Replaced by the number of seconds from the epoch of 1970-01-01T00:00:00Z.
 
-I<Please note that this this conversion specification is an extension to the 
-L<"IEEE Std 1003.1, 2013 Edition"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
+I<Please note that this conversion specification is an extension to the 
+L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
 
 =item C<%S>
 
@@ -579,6 +579,50 @@ The nano of the second [0, 999_999_999].
     $seconds = $tm->local_rd_as_seconds;
 
 Returns the number of seconds from the Rata Die epoch of 0001-01-01T00:00:00.
+
+=head1 OVERLOADED OPERATORS
+
+=head2 stringification
+
+    $string = "$tm";
+
+The C<$string> will be in one of the following formats:
+
+    YYYY-MM-DDThh:mm:ss
+    YYYY-MM-DDThh:mm:ss.fff
+    YYYY-MM-DDThh:mm:ss.ffffff
+    YYYY-MM-DDThh:mm:ss.fffffffff
+
+Followed by a zone designator in one of the following formats:
+
+    Z
+    ±hh:mm
+
+The shortest representation will be used. This format is compatible with most 
+ISO 8601 profiles, such as:
+
+=over 4
+
+=item * L<RFC 3339 Date and Time on the Internet: Timestamps|http://tools.ietf.org/html/rfc3339>
+
+=item * L<RFC 4287 The Atom Syndication Format|http://tools.ietf.org/html/rfc4287#section-3.3>
+
+=item * L<W3C Date and Time Formats|http://www.w3.org/TR/NOTE-datetime>
+
+=item * L<HTML5|http://www.w3.org/TR/html5/infrastructure.html#global-dates-and-times>
+
+=item * L<XML Schema|http://www.w3.org/TR/xmlschema-2/#dateTime>
+
+=back
+
+=head2 comparison
+
+    $boolean = $tm1 == $tm2;
+    $boolean = $tm1 != $tm2;
+    $boolean = $tm1 <  $tm2;
+    $boolean = $tm1 >  $tm2;
+    $boolean = $tm1 <= $tm2;
+    $boolean = $tm1 >= $tm2;
 
 =head1 DIAGNOSTICS
 
