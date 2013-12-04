@@ -502,15 +502,15 @@ Returns a list of three elements:
 
 =item C<$rd>
 
-    The number of days from the Rata Die epoch of 0001-01-01.
+The number of days from the Rata Die epoch of 0001-01-01.
 
 =item C<$sod>
 
-    The second of the day [0, 86_399].
+The second of the day [0, 86_399].
 
 =item C<$nanosecond>
 
-    The nano of the second [0, 999_999_999].
+The nano of the second [0, 999_999_999].
 
 =back
 
@@ -530,15 +530,15 @@ Returns a list of three elements:
 
 =item C<$rd>
 
-    The number of days from the Rata Die epoch of 0001-01-01.
+The number of days from the Rata Die epoch of 0001-01-01.
 
 =item C<$sod>
 
-    The second of the day [0, 86_399].
+The second of the day [0, 86_399].
 
 =item C<$nanosecond>
 
-    The nano of the second [0, 999_999_999].
+The nano of the second [0, 999_999_999].
 
 =back
 
