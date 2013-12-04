@@ -466,11 +466,11 @@ before this are in week 0.
 
 =item C<%x>
 
-Replaced by the C locale's date representation. Equivalent to C<"%D">.
+Replaced by the C locale's date representation. Equivalent to C<"%m/%d/%y">.
 
 =item C<%X>
 
-Replaced by the C locale's time representation. Equivalent to C<"%T">.
+Replaced by the C locale's time representation. Equivalent to C<"%H:%M:%S">.
 
 =item C<%y>
 
