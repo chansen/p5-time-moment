@@ -424,6 +424,9 @@ Replaced by the time in 24-hour notation. Equivalent to C<"%H:%M">.
 
 Replaced by the number of seconds from the epoch of 1970-01-01T00:00:00Z.
 
+I<Please note that this this conversion specification is an extension to the 
+L<"IEEE Std 1003.1, 2013 Edition"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
+
 =item C<%S>
 
 Replaced by the second as a decimal number [00, 60].
