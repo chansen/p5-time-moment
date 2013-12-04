@@ -93,7 +93,7 @@ specifies the offset from UTC in minutes [-1080, 1080].
 
 Constructs an instance of C<Time::Moment> from the given I<object>. If the 
 given object is an instance of C<Time::Moment> it's returned otherwise an 
-attempt is made to coerce the object to an instance of C<Time::Moment>.
+attempt is made to coerce the given object to an instance of C<Time::Moment>.
 
 C<Time::Moment> provides coercion handlers for the following object types:
 
@@ -113,7 +113,12 @@ is not supported.
     $tm = Time::Moment->from_object( Time::Piece::localtime() );
     $tm = Params::Coerce::coerce('Time::Moment', Time::Piece::localtime());
 
+The given C<Time::Piece> object must be within the supported date range.
+
 =back
+
+The coercion scheme is extensible and implemented as documented in 
+L<Params::Coerce>.
 
 =head2 from_string
 
