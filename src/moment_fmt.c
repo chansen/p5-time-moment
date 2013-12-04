@@ -284,7 +284,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                           moment_hour(mt),
                           moment_minute(mt));
                 break;
-            case 's':
+            case 's': /* extended conversion specification */
                 THX_format_s(aTHX_ mt, dsv);
                 break;
             case 'S':
