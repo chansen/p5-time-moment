@@ -387,6 +387,10 @@ Equivalent to C<"%Y-%m-%d">.
 Replaced by the last 2 digits of the year of the week as a decimal 
 number [00, 99].
 
+=item C<%G>
+
+Replaced by the week-based year as a decimal number [0001, 9999].
+
 =item C<%h>
 
 Equivalent to C<%b>.
