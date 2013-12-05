@@ -72,8 +72,8 @@ feedback. The API is still subject to change.
     $tm = Time::Moment->now;
 
 Constructs an instance of C<Time::Moment> that is set to the current date 
-and time from the system clock in the system time-zone, with the offset 
-set to the local time's offset from UTC.
+and time from the system clock in the system time zone, with the offset 
+set to the system's time zone offset from UTC.
 
 =head2 from_epoch
 
@@ -83,8 +83,8 @@ set to the local time's offset from UTC.
 
 Constructs an instance of C<Time::Moment> from the given I<seconds> from the 
 epoch of 1970-01-01T00:00:00Z. The optional parameter I<nanosecond> specifies
-the nano of second [0, 999_999_999]. The optional parameter I<offset> 
-specifies the offset from UTC in minutes [-1080, 1080].
+the nanosecond [0, 999_999_999]. The optional parameter I<offset> specifies 
+the time zone offset from UTC in minutes [-1080, 1080].
 
 =head2 from_object
 
@@ -104,8 +104,8 @@ C<Time::Moment> provides coercion handlers for the following object types:
     $tm = Params::Coerce::coerce('Time::Moment', DateTime->now);
 
 The given C<DateTime> object must be within the supported date range and must 
-have a time zone or an offset from UTC, coercing from the 'floating' time zone
-is not supported.
+have a time zone or a time zone offset from UTC, coercing from the 'floating' 
+time zone is not supported.
 
 =item L<Time::Piece>
 
@@ -198,37 +198,37 @@ Returns the day of the week [1=Monday, 7=Sunday].
 
     $hour = $tm->hour;
 
-Returns the hour of day [0, 23].
+Returns the hour of the day [0, 23].
 
 =head2 minute
 
     $minute = $tm->minute;
 
-Returns the minute of hour [0, 59].
+Returns the minute of the hour [0, 59].
 
 =head2 second
 
     $second = $tm->second;
 
-Returns the second of minute [0, 59].
+Returns the second of the minute [0, 59].
 
 =head2 millisecond
 
     $millisecond = $tm->millisecond;
 
-Returns the milli of second [0, 999].
+Returns the millisecond of the second [0, 999].
 
 =head2 microsecond
 
     $microsecond = $tm->microsecond;
 
-Returns the micro of second [0, 999_999].
+Returns the microsecond of the second [0, 999_999].
 
 =head2 nanosecond
 
     $nanosecond = $tm->nanosecond;
 
-Returns the nano of second [0, 999_999_999].
+Returns the nanosecond of the second [0, 999_999_999].
 
 =head2 epoch
 
@@ -240,14 +240,14 @@ Returns the number of seconds from the epoch of 1970-01-01T00:00:00Z.
 
     $offset = $tm->offset;
 
-Returns the offset from UTC in minutes [-1080, 1080].
+Returns the time zone offset from UTC in minutes [-1080, 1080].
 
 =head2 with_offset
 
     $tm2 = $tm1->with_offset($offset);
 
-Returns a copy of this time with the given I<offset> altered. The resulting 
-time is at the same instant.
+Returns a copy of this time with the given time zone I<offset> from UTC 
+in minutes altered. The resulting time is at the same instant.
 
 =head2 with_nanosecond
 
@@ -311,7 +311,7 @@ to be zero.
 
     $string = $tm->strftime($format);
 
-Formats time according to the conversion specifications in the given format 
+Formats time according to the conversion specifications in the given C<$format>
 string. The format string consists of zero or more conversion specifications 
 and ordinary characters. All ordinary characters are copied directly into the 
 resulting string. A conversion specification consists of a percent sign C<%> 
@@ -366,7 +366,7 @@ a single digit is preceded by a space.
 
 =item C<%f>
 
-Replaced by the fractional second including preceding decimal point or by 
+Replaced by the fractional second including the preceding decimal point or by 
 an empty string if no fractional second exists.
 
     .fff        (millisecond)
@@ -616,8 +616,8 @@ ISO 8601 profiles, such as:
 
 =back
 
-The format string C<"%FT%T%f%Z"> can be used to create an equivalent string 
-representation using C<strftime>.
+The format string C<"%FT%T%f%Z"> produces an equivalent string representation 
+using C<strftime>.
 
     "$tm" eq $tm->strftime("%FT%T%f%Z");
 
