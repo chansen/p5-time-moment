@@ -75,6 +75,13 @@ Constructs an instance of C<Time::Moment> that is set to the current date
 and time from the system clock in the system time zone, with the offset 
 set to the system's time zone offset from UTC.
 
+=head2 now_utc
+
+    $tm = Time::Moment->now_utc;
+
+Constructs an instance of C<Time::Moment> that is set to the current date 
+and time from the system clock in the UTC time zone.
+
 =head2 from_epoch
 
     $tm = Time::Moment->from_epoch($seconds);
@@ -384,7 +391,7 @@ C<%4f> is replaced by decimal point and exactly four fractional digits
 (zero-padded on the right or truncated if needed) if fractional seconds 
 are present:
 
-  .ffff
+    .ffff
 
 I<Please note that this conversion specification is an extension to the 
 L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
@@ -467,7 +474,8 @@ Replaced by the time in 24-hour notation. Equivalent to C<"%H:%M">.
 
 =item C<%s>
 
-Replaced by the number of seconds from the epoch of 1970-01-01T00:00:00Z.
+Replaced by the number of seconds from the epoch of 1970-01-01T00:00:00Z 
+as a decimal number.
 
 I<Please note that this conversion specification is an extension to the 
 L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.

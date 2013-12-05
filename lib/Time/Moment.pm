@@ -29,6 +29,14 @@ sub now {
     my $off = int((timegm(localtime($sec)) - $sec) / 60);
     return $class->from_epoch($sec, $usec * 1000, $off);
 }
+
+sub now_utc {
+    @_ == 1 || Carp::croak(q/Usage: Time::Moment->now()/);
+    my ($class) = @_;
+
+    my ($sec, $usec) = Time::HiRes::gettimeofday();
+    return $class->from_epoch($sec, $usec * 1000);
+}
 EOC
         die $@ if $@;
     }

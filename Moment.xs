@@ -249,18 +249,21 @@ XS(XS_Time_Moment_ncmp) {
 
 #ifdef HAS_GETTIMEOFDAY
 static moment_t
-THX_moment_now(pTHX) {
+THX_moment_now(pTHX_ bool utc) {
     struct timeval tv;
     struct tm *tm;
     IV off, sec;
 
     gettimeofday(&tv, NULL);
-    tm = localtime(&tv.tv_sec);
+    if (utc)
+        off = 0;
+    else {
+        tm = localtime(&tv.tv_sec);
 
-    sec = ((1461 * (tm->tm_year - 1) >> 2) + tm->tm_yday - 25202) * 86400
-        + tm->tm_hour * 3600 + tm->tm_min * 60 + tm->tm_sec;
-    off = (sec - tv.tv_sec) / 60;
-
+        sec = ((1461 * (tm->tm_year - 1) >> 2) + tm->tm_yday - 25202) * 86400
+            + tm->tm_hour * 3600 + tm->tm_min * 60 + tm->tm_sec;
+        off = (sec - tv.tv_sec) / 60;
+    }
     return moment_from_epoch(tv.tv_sec, tv.tv_usec * 1000, off);
 }
 #endif
@@ -300,10 +303,13 @@ CODE:
 moment_t
 now(klass)
     SV *klass
+  ALIAS:
+    Time::Moment::now     = 0
+    Time::Moment::now_utc = 1
   PREINIT:
     dSTASH_CONSTRUCTOR_MOMENT(klass);
   CODE:
-    RETVAL = THX_moment_now(aTHX);
+    RETVAL = THX_moment_now(aTHX_ !!ix);
   OUTPUT:
     RETVAL
 
