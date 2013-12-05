@@ -416,11 +416,11 @@ Equivalent to C<%b>.
 
 =item C<%H>
 
-Replaced by the hour (24-hour clock) as a decimal number [00, 23].
+Replaced by the hour of day (24-hour clock) as a decimal number [00, 23].
 
 =item C<%I>
 
-Replaced by the hour (12-hour clock) as a decimal number [01, 12].
+Replaced by the hour of day (12-hour clock) as a decimal number [01, 12].
 
 =item C<%j>
 
@@ -428,7 +428,7 @@ Replaced by the day of the year as a decimal number [001, 366].
 
 =item C<%k>
 
-Replaced by the hour (24-hour clock) as a decimal number [1, 23]; 
+Replaced by the hour of day (24-hour clock) as a decimal number [1, 23]; 
 a single digit is preceded by a space.
 
 I<This conversion specification is an extension to the 
@@ -448,7 +448,7 @@ Replaced by the month of the year as a decimal number [01, 12].
 
 =item C<%M>
 
-Replaced by the minute as a decimal number [00, 59].
+Replaced by the minute of hour as a decimal number [00, 59].
 
 =item C<%n>
 
@@ -499,7 +499,7 @@ L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/st
 
 =item C<%S>
 
-Replaced by the second as a decimal number [00, 60].
+Replaced by the second of hour as a decimal number [00, 60].
 
 =item C<%t>
 
