@@ -394,7 +394,7 @@ are present:
 
     .ffff
 
-I<Please note that this conversion specification is an extension to the 
+I<This conversion specification is an extension to the 
 L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
 
 =item C<%F>
@@ -425,6 +425,22 @@ Replaced by the hour (12-hour clock) as a decimal number [01, 12].
 =item C<%j>
 
 Replaced by the day of the year as a decimal number [001, 366].
+
+=item C<%k>
+
+Replaced by the hour (24-hour clock) as a decimal number [1, 23]; 
+a single digit is preceded by a space.
+
+I<This conversion specification is an extension to the 
+L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
+
+=item C<%l>
+
+Replaced by the hour (12-hour clock) as a decimal number [1, 12]; 
+a single digit is preceded by a space.
+
+I<This conversion specification is an extension to the 
+L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
 
 =item C<%m>
 
@@ -457,7 +473,7 @@ right or truncated if needed):
 
     ffff
 
-I<Please note that this conversion specification is an extension to the 
+I<This conversion specification is an extension to the 
 L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
 
 =item C<%p>
@@ -478,7 +494,7 @@ Replaced by the time in 24-hour notation. Equivalent to C<"%H:%M">.
 Replaced by the number of seconds from the epoch of 1970-01-01T00:00:00Z 
 as a decimal number.
 
-I<Please note that this conversion specification is an extension to the 
+I<This conversion specification is an extension to the 
 L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
 
 =item C<%S>

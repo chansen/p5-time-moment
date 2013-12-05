@@ -257,6 +257,12 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
             case 'j':
                 sv_catpvf(dsv, "%03d", dt_doy(dt));
                 break;
+            case 'k': /* extended conversion specification */
+                sv_catpvf(dsv, "%2d", moment_hour(mt));
+                break;
+            case 'l': /* extended conversion specification */
+                sv_catpvf(dsv, "%2d", moment_hour_12(mt));
+                break;
             case 'm':
                 sv_catpvf(dsv, "%02d", month);
                 break;
