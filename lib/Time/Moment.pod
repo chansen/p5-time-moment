@@ -55,8 +55,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $boolean      = $tm1 <= $tm2;
     $boolean      = $tm1 >= $tm2;
     
-    $string       = "$tm";                      # YYYY-MM-DDThh:mm:ss.ffffff±hh:mm
-
+    $string       = "$tm";
 
 =head1 DESCRIPTION
 
@@ -419,8 +418,8 @@ Replaced by a <newline> character.
 =item C<%N>
 
 Replaced by the fractional second as a decimal number. This conversion 
-specification permits use of a optional width flag where the default width 
-of C<0> will use the shortest representation.
+specification permits use of a width where the default width of C<0> will 
+use the shortest representation.
 
 Example: 
 
@@ -517,7 +516,7 @@ Replaced by the offset from UTC in the ISO 8601 basic format (±hhmm).
 
 =item C<%Z>
 
-Replaced by the offset from UTC in the ISO 8601 extended format or with UTC 
+Replaced by the offset from UTC in the ISO 8601 extended format or by UTC 
 designator (±hh:mm or Z).
 
 =item C<%%>
@@ -617,6 +616,11 @@ ISO 8601 profiles, such as:
 
 =back
 
+The format string C<"%FT%T%f%Z"> can be used to create an equivalent string 
+representation using C<strftime>.
+
+    "$tm" eq $tm->strftime("%FT%T%f%Z");
+
 =head2 comparison
 
     $boolean = $tm1 == $tm2;
@@ -633,6 +637,23 @@ ISO 8601 profiles, such as:
 =item B<(F)> Usage: %s
 
 Method called with wrong number of arguments.
+
+=item B<(F)> Parameter 'seconds' is out of supported range
+
+Seconds since the epoch of 1970-01-01T:00:00:00Z (0) is out of the range:
+
+    [ -62135596800 (0001-01-01T00:00:00Z),
+      253402300799 (9999-12-31T23:59:59Z) ]
+
+=item B<(F)> Parameter 'nanosecond' is out of the range [0, 999_999_999]
+
+=item B<(F)> Parameter 'offset' is out of the range [-1080, 1080]
+
+=item B<(F)> Cannot coerce object of type %s to Time::Moment
+
+=item B<(F)> Cannot parse the given string
+
+=item B<(F)> A %s object can only be compared to another %s object ('%s', '%s')
 
 =back
 
