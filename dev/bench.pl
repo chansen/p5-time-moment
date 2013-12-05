@@ -10,9 +10,10 @@ use POSIX         qw[];
 
 {
     print "Benchmarking constructor: ->now()\n";
+    my $zone = DateTime::TimeZone->new(name => 'local');
     Benchmark::cmpthese( -10, {
         'DateTime' => sub {
-            my $dt = DateTime->now;
+            my $dt = DateTime->now(time_zone => $zone);
         },
         'Time::Moment' => sub {
             my $tm = Time::Moment->now;
@@ -22,6 +23,24 @@ use POSIX         qw[];
         },
         'localtime()' => sub {
             my @tm = localtime();
+        },
+    });
+}
+
+{
+    print "\nBenchmarking constructor: ->now_utc()\n";
+    Benchmark::cmpthese( -10, {
+        'DateTime' => sub {
+            my $dt = DateTime->now;
+        },
+        'Time::Moment' => sub {
+            my $tm = Time::Moment->now_utc;
+        },
+        'Time::Piece' => sub {
+            my $tp = Time::Piece::gmtime();
+        },
+        'gmtime()' => sub {
+            my @tm = gmtime();
         },
     });
 }
