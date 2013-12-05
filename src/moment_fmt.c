@@ -234,7 +234,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                 sv_catpvf(dsv, "%2d", day);
                 break;
             case 'f': /* extended conversion specification */
-                if (width >= 0 || moment_nanosecond(mt)) {
+                if (moment_nanosecond(mt)) {
                     sv_catpvn(dsv, ".", 1);
                     THX_format_f(aTHX_ mt, dsv, width);
                 }

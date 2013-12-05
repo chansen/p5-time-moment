@@ -367,13 +367,24 @@ a single digit is preceded by a space.
 =item C<%f>
 
 Replaced by the fractional second including the preceding decimal point or by 
-an empty string if no fractional second exists.
+an empty string if no fractional seconds are present. This conversion 
+specification permits use of an optional maximum field width [0, 9] where the 
+default field width of 0 will use the shortest representation.
+
+Example:
+
+C<%f> or C<%0f> is replaced by one of the following if fractional seconds are 
+present (shortest representation):
 
     .fff        (millisecond)
     .ffffff     (microsecond)
     .fffffffff  (nanosecond)
 
-The shortest representation is used.
+C<%4f> is replaced by decimal point and exactly four fractional digits 
+(zero-padded on the right or truncated if needed) if fractional seconds 
+are present:
+
+  .ffff
 
 I<Please note that this conversion specification is an extension to the 
 L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
@@ -422,8 +433,8 @@ Replaced by a <newline> character.
 =item C<%N>
 
 Replaced by the fractional second as a decimal number. This conversion 
-specification permits use of a width where the default width of C<0> will 
-use the shortest representation.
+specification permits use of an optional maximum field width [0, 9] where 
+the default field width of 0 will use the shortest representation.
 
 Example: 
 
@@ -433,8 +444,8 @@ C<%N> or C<%0N> is replaced by one of the following (shortest representation):
     ffffff     (microsecond)
     fffffffff  (nanosecond)
 
-C<%N4> is replaced by exactly four fractional digits, zero padded or truncated
-if needed.
+C<%N4> is replaced by exactly four fractional digits (zero-padded on the 
+right or truncated if needed):
 
     ffff
 
