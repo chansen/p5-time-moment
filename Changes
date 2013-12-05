@@ -1,9 +1,18 @@
+0.09 2013-12-05
+  - Added new constructor method, ->now_utc
+  - Added two extended conversion specifications, %k and %l. Both common in
+    GNU, BSD and perl implementations of strftime()
+  - The extended %f conversion specification now accepts an optional maximum 
+    field width
+  - Documented remaining methods and overloaded operators
+  - Added the new constructor to dev/bench.pl
+
 0.08 2013-12-04
   - Changed resolution from microsecond to nanosecond
   - Implemented ->with_nanosecond()
   - Documentation improvements
-  - Changed ->strftime() to preserve the SvUTF8 flag if the given format 
-    string has the SvUTF8 flag.
+  - Fixed strftime() to preserve the SvUTF8 flag if the given format 
+    string has the SvUTF8 flag set.
   - Overhauled strftime() conversion specifications to better confirm to 
     IEEE Std 1003.1. Extended conversion specifications is now documented 
     as such.
