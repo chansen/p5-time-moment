@@ -31,7 +31,7 @@ sub now {
 }
 
 sub now_utc {
-    @_ == 1 || Carp::croak(q/Usage: Time::Moment->now()/);
+    @_ == 1 || Carp::croak(q/Usage: Time::Moment->now_utc()/);
     my ($class) = @_;
 
     my ($sec, $usec) = Time::HiRes::gettimeofday();
