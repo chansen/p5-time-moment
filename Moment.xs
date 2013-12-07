@@ -114,19 +114,18 @@ THX_newSVmoment(pTHX_ const moment_t *m, HV *stash) {
     SV *pv = newSVpvn((const char *)m, sizeof(moment_t));
     SV *sv = newRV_noinc(pv);
     sv_bless(sv, stash);
-    SvREADONLY_on(pv);
     return sv;
 }
 
 static bool
-THX_sv_isa_stash(pTHX_ SV *sv, const char *klass, HV *stash) {
+THX_sv_isa_stash(pTHX_ SV *sv, const char *klass, HV *stash, size_t size) {
     SV *rv;
 
     SvGETMAGIC(sv);
     if (!SvROK(sv))
         return FALSE;
     rv = SvRV(sv);
-    if (!(SvOBJECT(rv) && SvSTASH(rv) && SvPOKp(rv)))
+    if (!(SvOBJECT(rv) && SvSTASH(rv) && SvPOKp(rv) && SvCUR(rv) == size))
         return FALSE;
     if (!(SvSTASH(rv) == stash || sv_derived_from(sv, klass)))
         return FALSE;
@@ -153,7 +152,7 @@ THX_stash_constructor(pTHX_ SV *sv, const char *name, STRLEN namelen, HV *stash)
 static bool
 THX_sv_isa_moment(pTHX_ SV *sv) {
     dMY_CXT;
-    return THX_sv_isa_stash(aTHX_ sv, "Time::Moment", MY_CXT.stash);
+    return THX_sv_isa_stash(aTHX_ sv, "Time::Moment", MY_CXT.stash, sizeof(moment_t));
 }
 
 static moment_t *
