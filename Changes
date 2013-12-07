@@ -1,3 +1,14 @@
+0.10 2013-12-07
+  - Added support for fractional seconds in the constructor ->from_epoch
+  - Added serialization support for:
+        - Storable
+        - JSON
+        - CBOR
+  - Changed the method ->to_string to return the same string representation 
+    as stringification.
+  - Optimized the usage of chained method calls from constructors.
+  - Added eg/cbor.pl and eg/json.pl
+
 0.09 2013-12-05
   - Added new constructor method, ->now_utc
   - Added two extended conversion specifications, %k and %l. Both common in
