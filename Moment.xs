@@ -528,8 +528,9 @@ strftime(self, format)
     XSRETURN_SV(ret);
 
 void
-to_string(self)
+to_string(self, reduced=FALSE)
     const moment_t *self
+    bool reduced
   PPCODE:
-    XSRETURN_SV(moment_to_string(self, TRUE));
+    XSRETURN_SV(moment_to_string(self, reduced));
 

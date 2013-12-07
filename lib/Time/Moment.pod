@@ -91,8 +91,9 @@ and time from the system clock in the UTC time zone.
 
 Constructs an instance of C<Time::Moment> from the given I<seconds> from the 
 epoch of 1970-01-01T00:00:00Z. The optional parameter I<nanosecond> specifies
-the nanosecond [0, 999_999_999]. The optional parameter I<offset> specifies 
-the time zone offset from UTC in minutes [-1080, 1080].
+the nanosecond of the second [0, 999_999_999]. The optional parameter I<offset> 
+specifies the time zone offset from UTC in minutes [-1080, 1080].
+
 
 =head2 from_object
 
@@ -296,20 +297,23 @@ than zero if this time is after the other time.
 =head2 to_string
 
     $string = $tm->to_string;
+    $string = $tm->to_string($reduced);
 
-Returns a string representation of the instance in one of the following 
-formats:
+Returns a string representation of the instance. If the optional boolean 
+parameter I<reduced> is true an shorter representation is attempted.
 
-    YYYY-MM-DDThh:mm
+The string will be in one of the following representations:
+
+    YYYY-MM-DDThh:mm                (only if $reduced = true)
     YYYY-MM-DDThh:mm:ss
     YYYY-MM-DDThh:mm:ss.fff
     YYYY-MM-DDThh:mm:ss.ffffff
     YYYY-MM-DDThh:mm:ss.fffffffff
 
-Followed by a zone designator in one of the following formats:
+Followed by a zone designator in one of the following representations:
 
     Z
-    ±hh
+    ±hh                             (only if $reduced = true)
     ±hh:mm
 
 The shortest representation will be used where the omitted parts are implied 
@@ -436,7 +440,7 @@ L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/st
 
 =item C<%l>
 
-Replaced by the hour (12-hour clock) as a decimal number [1, 12]; 
+Replaced by the hour of day (12-hour clock) as a decimal number [1, 12]; 
 a single digit is preceded by a space.
 
 I<This conversion specification is an extension to the 
@@ -627,7 +631,7 @@ Returns the number of seconds from the Rata Die epoch of 0001-01-01T00:00:00.
 
     $string = "$tm";
 
-The C<$string> will be in one of the following formats:
+The C<$string> will be in one of the following representations:
 
     YYYY-MM-DDThh:mm:ss
     YYYY-MM-DDThh:mm:ss.fff
@@ -639,8 +643,8 @@ Followed by a zone designator in one of the following formats:
     Z
     ±hh:mm
 
-The shortest representation will be used. This format is compatible with 
-ISO 8601 profiles, such as:
+The shortest representation will be used. This representation is conformant 
+with ISO 8601 profiles, such as:
 
 =over 4
 
@@ -669,8 +673,6 @@ using C<strftime>.
     $boolean = $tm1 >  $tm2;
     $boolean = $tm1 <= $tm2;
     $boolean = $tm1 >= $tm2;
-
-=head1 DIAGNOSTICS
 
 =over 4
 
