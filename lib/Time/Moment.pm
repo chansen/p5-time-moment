@@ -86,5 +86,15 @@ sub STORABLE_thaw {
     $$self = ${ ref($self)->from_epoch($seconds, $nos, $offset) };
 }
 
+sub TO_JSON {
+    return "$_[0]";
+}
+
+sub TO_CBOR {
+    my ($self) = @_;
+    # Use the standard tag for date/time string; see RFC 7049 Section 2.4.1
+    return CBOR::XS::tag(0, "$_[0]");
+}
+
 1;
 
