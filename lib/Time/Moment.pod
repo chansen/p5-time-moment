@@ -107,7 +107,7 @@ Constructs an instance of C<Time::Moment> from the given I<object>. If the
 given object is an instance of C<Time::Moment> it's returned otherwise an 
 attempt is made to coerce the given object to an instance of C<Time::Moment>.
 
-C<Time::Moment> provides coercion handlers for the following object types:
+C<Time::Moment> implements coercion handlers for the following object types:
 
 =over 4
 
@@ -132,6 +132,10 @@ L<Params::Coerce>:
 
     $tm = Params::Coerce::coerce('Time::Moment', Time::Piece::localtime());
     $tm = Params::Coerce::coerce('Time::Moment', DateTime->now);
+
+C<Time::Moment> implements coercion handler from C<Time::Moment> to C<DateTime>:
+
+    $dt = Params::Coerce::coerce('DateTime', Time::Moment->now);
 
 =head2 from_string
 
@@ -665,9 +669,10 @@ with ISO 8601 profiles, such as:
 
 =back
 
-The format string C<"%FT%T%f%Z"> produces an equivalent string representation 
-using C<strftime>.
+The C<to_string> method or the C<strftime> format string C<"%FT%T%f%Z"> 
+produces an equivalent string representation:
 
+    "$tm" eq $tm->to_string;
     "$tm" eq $tm->strftime("%FT%T%f%Z");
 
 =head2 comparison
@@ -691,8 +696,8 @@ The total size of the serialized C<Time::Moment> using C<nfreeze> is 30 bytes.
 
 =head2 JSON
 
-C<Time::Moment> implements a C<TO_JSON> method that returns the 
-L<stringified|stringification> representation of the instance.
+C<Time::Moment> implements a C<TO_JSON> method that returns the stringified 
+representation of the instance.
 
 =head2 CBOR
 
