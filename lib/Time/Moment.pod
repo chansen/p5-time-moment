@@ -691,16 +691,17 @@ The total size of the serialized C<Time::Moment> using C<nfreeze> is 30 bytes.
 
 =head2 JSON
 
-C<Time::Moment> implements a C<TO_JSON> method that returns the stringified
-representation of the instance.
+C<Time::Moment> implements a C<TO_JSON> method that returns the 
+L<stringified|stringification> representation of the instance.
 
 =head2 CBOR
 
 C<Time::Moment> implements a C<TO_CBOR> method that stores the stringified
 representation of the instance as standard date/time string using tag C<0>.
 
-See L<RFC 7049 Section 2.4.1|http://tools.ietf.org/html/rfc7049#section-2.4.1> 
-and L<CBOR Tags|http://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml>.
+See L<CBOR::XS> and L<RFC 7049 Section 2.4.1|http://tools.ietf.org/html/rfc7049#section-2.4.1>.
+
+See C<eg/cbor.pl> for an example how to roundtrip instances of C<Time::Moment>.
 
 =head1 DIAGNOSTICS
 
