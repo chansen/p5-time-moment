@@ -305,7 +305,7 @@ than zero if this time is after the other time.
     $string = $tm->to_string($reduced);
 
 Returns a string representation of the instance. If the optional boolean 
-parameter I<reduced> is true an shorter representation is attempted.
+parameter I<reduced> is true a shorter representation is attempted.
 
 The string will be in one of the following representations:
 
@@ -683,9 +683,24 @@ using C<strftime>.
 
 =head2 Storable
 
+The internal representation of a C<Time::Moment> is a string of 16 bytes that 
+contains MAGIC (2 bytes), time zone offset from UTC (2 bytes), the number of 
+days from Rata Die (4 bytes) followed by nanosecond of the second (4 bytes).
+
+The total size of the serialized C<Time::Moment> using C<nfreeze> is 30 bytes.
+
 =head2 JSON
 
+C<Time::Moment> implements a C<TO_JSON> method that returns the stringified
+representation of the instance.
+
 =head2 CBOR
+
+C<Time::Moment> implements a C<TO_CBOR> method that stores the stringified
+representation of the instance as standard date/time string using tag C<0>.
+
+See L<RFC 7049 Section 2.4.1|http://tools.ietf.org/html/rfc7049#section-2.4.1> 
+and L<CBOR Tags|http://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml>.
 
 =head1 DIAGNOSTICS
 
