@@ -688,11 +688,13 @@ produces an equivalent string representation:
 
 =head2 Storable
 
-The internal representation of a C<Time::Moment> is a string of 16 bytes that 
-contains MAGIC (2 bytes), time zone offset from UTC (2 bytes), the number of 
-days from Rata Die (4 bytes) followed by nanosecond of the second (4 bytes).
+The serialized representation of a C<Time::Moment> is a string of 16 bytes that 
+contains the MAGIC (2 bytes), time zone offset from UTC (2 bytes), the number 
+of days from Rata Die (4 bytes), second of the day (4 bytes) followed by 
+nanosecond of the second (4 bytes).
 
-The total size of the serialized C<Time::Moment> using C<nfreeze> is 30 bytes.
+The total size of the serialized C<Time::Moment> instance using C<nfreeze> is 
+30 bytes.
 
 =head2 JSON
 
@@ -702,11 +704,10 @@ representation of the instance.
 =head2 CBOR
 
 C<Time::Moment> implements a C<TO_CBOR> method that stores the stringified
-representation of the instance as standard date/time string using tag C<0>.
+representation of the instance as a I<standard date/time string> using tag C<0>.
 
-See L<CBOR::XS> and L<RFC 7049 Section 2.4.1|http://tools.ietf.org/html/rfc7049#section-2.4.1>.
-
-See C<eg/cbor.pl> for an example how to roundtrip instances of C<Time::Moment>.
+See L<CBOR::XS>, L<RFC 7049 Section 2.4.1|http://tools.ietf.org/html/rfc7049#section-2.4.1>
+and C<eg/cbor.pl> for an example how to roundtrip instances of C<Time::Moment>.
 
 =head1 DIAGNOSTICS
 
