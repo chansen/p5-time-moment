@@ -70,5 +70,21 @@ sub Time::Piece::__as_Time_Moment {
     return Time::Moment->from_epoch($tp->epoch, 0, int($tp->tzoffset / 60));
 }
 
+sub STORABLE_freeze {
+    my ($self, $cloning) = @_;
+    return if $cloning;
+    return pack 'nnNNN', 0x544D, $self->offset, $self->utc_rd_values;
+}
+
+sub STORABLE_thaw {
+    my ($self, $cloning, $packed) = @_;
+    return if $cloning;
+    (length($packed) == 16 && vec($packed, 0, 16) == 0x544D) # TM
+      or die(q/Cannot deserialize corrupted data/); # Don't replace die with Carp!
+    my ($offset, $rdn, $sod, $nos) = unpack 'xxnNNN', $packed;
+    my $seconds = ($rdn - 719163) * 86400 + $sod;
+    $$self = ${ ref($self)->from_epoch($seconds, $nos, $offset) };
+}
+
 1;
 
