@@ -4,7 +4,7 @@ use warnings;
 
 use Time::Moment qw[];
 use Time::HiRes  qw[];
-use CBOR::XS     qw[encode_cbor decode_cbor];
+use CBOR::XS     qw[encode_cbor];
 
 sub filter {
     my ($tag) = @_;
@@ -15,12 +15,13 @@ sub filter {
 }
 
 my $encoded = encode_cbor([
-    Time::Moment->now,
     # Tag 0 is standard date/time string; see Section 2.4.1
     CBOR::XS::tag(0, '2013-12-24T12:30:45.123456789+01:00'),
     # Tag 1 is epoch-based date/time; see Section 2.4.1
     CBOR::XS::tag(1, time),
     CBOR::XS::tag(1, Time::HiRes::time),
+    # Serializes as tag 0
+    Time::Moment->now,
 ]);
 
 my $decoded = CBOR::XS->new->filter(\&filter)->decode($encoded);
