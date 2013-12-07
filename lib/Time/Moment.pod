@@ -92,8 +92,12 @@ and time from the system clock in the UTC time zone.
 Constructs an instance of C<Time::Moment> from the given I<seconds> from the 
 epoch of 1970-01-01T00:00:00Z. The optional parameter I<nanosecond> specifies
 the nanosecond of the second [0, 999_999_999]. The optional parameter I<offset> 
-specifies the time zone offset from UTC in minutes [-1080, 1080].
+specifies the time zone offset from UTC in minutes [-1080, 1080]. 
 
+Fractional seconds is supported if the constructor is invoked with one 
+parameter:
+
+    $tm = Time::Moment->from_epoch(0.123456); # 1970-01-01T00:00:00.123456Z
 
 =head2 from_object
 
@@ -110,7 +114,6 @@ C<Time::Moment> provides coercion handlers for the following object types:
 =item L<DateTime>
 
     $tm = Time::Moment->from_object( DateTime->now );
-    $tm = Params::Coerce::coerce('Time::Moment', DateTime->now);
 
 The given C<DateTime> object must be within the supported date range and must 
 have a time zone or a time zone offset from UTC, coercing from the 'floating' 
@@ -119,14 +122,16 @@ time zone is not supported.
 =item L<Time::Piece>
 
     $tm = Time::Moment->from_object( Time::Piece::localtime() );
-    $tm = Params::Coerce::coerce('Time::Moment', Time::Piece::localtime());
 
 The given C<Time::Piece> object must be within the supported date range.
 
 =back
 
 The coercion scheme is extensible and implemented as documented in 
-L<Params::Coerce>.
+L<Params::Coerce>:
+
+    $tm = Params::Coerce::coerce('Time::Moment', Time::Piece::localtime());
+    $tm = Params::Coerce::coerce('Time::Moment', DateTime->now);
 
 =head2 from_string
 
@@ -673,6 +678,16 @@ using C<strftime>.
     $boolean = $tm1 >  $tm2;
     $boolean = $tm1 <= $tm2;
     $boolean = $tm1 >= $tm2;
+
+=head1 SERIALIZATION
+
+=head2 Storable
+
+=head2 JSON
+
+=head2 CBOR
+
+=head1 DIAGNOSTICS
 
 =over 4
 
