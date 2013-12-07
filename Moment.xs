@@ -117,6 +117,15 @@ THX_newSVmoment(pTHX_ const moment_t *m, HV *stash) {
     return sv;
 }
 
+static SV *
+THX_sv_set_moment(pTHX_ SV *sv, const moment_t *m) {
+    if (!SvROK(sv))
+        croak("panic: sv_set_moment called with nonreference");
+    sv_setpvn_mg(SvRV(sv), (const char *)m, sizeof(moment_t));
+    SvTEMP_off(sv);
+    return sv;
+}
+
 static bool
 THX_sv_isa_stash(pTHX_ SV *sv, const char *klass, HV *stash, size_t size) {
     SV *rv;
@@ -191,6 +200,9 @@ THX_sv_2moment_coerce_sv(pTHX_ SV *sv) {
 
 #define newSVmoment(m, stash) \
     THX_newSVmoment(aTHX_ m, stash)
+
+#define sv_set_moment(sv, m) \
+    THX_sv_set_moment(aTHX_ sv, m);
 
 #define sv_2moment_ptr(sv, name) \
     THX_sv_2moment_ptr(aTHX_ sv, name)
@@ -372,6 +384,10 @@ with_offset(self, offset)
     if (offset == moment_offset(self))
         XSRETURN(1);
     RETVAL = moment_with_offset(self, offset);
+    if (SvTEMP(ST(0))) {
+        sv_set_moment(ST(0), &RETVAL);
+        XSRETURN(1);
+    }
   OUTPUT:
     RETVAL
 
@@ -385,6 +401,10 @@ with_nanosecond(self, nanosecond)
     if (nanosecond == moment_nanosecond(self))
         XSRETURN(1);
     RETVAL = moment_with_nanosecond(self, nanosecond);
+    if (SvTEMP(ST(0))) {
+        sv_set_moment(ST(0), &RETVAL);
+        XSRETURN(1);
+    }
   OUTPUT:
     RETVAL
 
