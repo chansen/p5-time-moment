@@ -67,7 +67,8 @@ sub DateTime::__as_Time_Moment {
 
 sub Time::Piece::__as_Time_Moment {
     my ($tp) = @_;
-    return Time::Moment->from_epoch($tp->epoch, 0, int($tp->tzoffset / 60));
+    return Time::Moment->from_epoch($tp->epoch)
+                       ->with_offset(int($tp->tzoffset / 60));
 }
 
 sub STORABLE_freeze {

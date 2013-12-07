@@ -337,7 +337,7 @@ from_epoch(klass, seconds, nanosecond=0, offset=0)
     int64_t secs;
     NV frac;
   CODE:
-    if (nanosecond != 0 || SvIOK(seconds))
+    if (items != 2 || SvIOK(seconds))
         secs = SvI64V(seconds);
     else {
         frac = SvNV(seconds);
