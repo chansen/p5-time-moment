@@ -133,7 +133,8 @@ L<Params::Coerce>:
     $tm = Params::Coerce::coerce('Time::Moment', Time::Piece::localtime());
     $tm = Params::Coerce::coerce('Time::Moment', DateTime->now);
 
-C<Time::Moment> implements coercion handler from C<Time::Moment> to C<DateTime>:
+C<Time::Moment> also implements a coercion handler from C<Time::Moment> to 
+C<DateTime>:
 
     $dt = Params::Coerce::coerce('DateTime', Time::Moment->now);
 
@@ -647,7 +648,7 @@ The C<$string> will be in one of the following representations:
     YYYY-MM-DDThh:mm:ss.ffffff
     YYYY-MM-DDThh:mm:ss.fffffffff
 
-Followed by a zone designator in one of the following formats:
+Followed by a zone designator in one of the following representations:
 
     Z
     ±hh:mm
@@ -689,9 +690,9 @@ produces an equivalent string representation:
 =head2 Storable
 
 The serialized representation of a C<Time::Moment> is a string of 16 bytes that 
-contains the MAGIC (2 bytes), time zone offset from UTC (2 bytes), the number 
-of days from Rata Die (4 bytes), second of the day (4 bytes) followed by 
-nanosecond of the second (4 bytes).
+contains MAGIC (2 bytes), time zone offset from UTC (2 bytes), the number 
+of days from Rata Die (4 bytes), second of the day (4 bytes) and nanosecond of 
+the second (4 bytes).
 
 The total size of the serialized C<Time::Moment> instance using C<nfreeze> is 
 30 bytes.
