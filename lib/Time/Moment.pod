@@ -60,11 +60,15 @@ Time::Moment - Represents a date and time of day with an offset from UTC
 
 =head1 DESCRIPTION
 
-Represents a date and time of day with an offset from UTC in the ISO 8601 
-calendar system.
-
 B<IMPORTANT:> This is an early preview release available for testing and 
 feedback. The API is still subject to change.
+
+Time is measured in nanoseconds since 1970-01-01Z. In time values leap 
+seconds are ignored. It is assumed that there are exactly I<86,400,000,000> 
+nanoseconds per day. Time::Moment can represent all epoch integers from 
+C<-62,135,596,800> to C<2,534,02,300,799>; this range suffices to measure 
+times to nanosecond precision for any instant that is within 
+0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z.
 
 =head1 CONSTRUCTORS
 
