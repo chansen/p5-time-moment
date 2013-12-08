@@ -68,7 +68,7 @@ seconds are ignored. It is assumed that there are exactly I<86,400,000,000>
 nanoseconds per day. Time::Moment can represent all epoch integers from 
 C<-62,135,596,800> to C<2,534,02,300,799>; this range suffices to measure 
 times to nanosecond precision for any instant that is within 
-0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z.
+C<0001-01-01T00:00:00Z> to C<9999-12-31T23:59:59Z>.
 
 =head1 CONSTRUCTORS
 
