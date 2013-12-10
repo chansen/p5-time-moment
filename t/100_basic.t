@@ -238,7 +238,9 @@ my @Accessors = qw(
 foreach my $test (@tests) {
     my $name = $test->{string};
 
-    my $tm = Time::Moment->from_epoch(@$test{qw(epoch nanosecond offset)});
+    my $tm = Time::Moment->from_epoch(@$test{qw(epoch nanosecond)})
+                         ->with_offset($test->{offset});
+
     foreach my $accessor (@Accessors) {
         is($tm->$accessor, $test->{$accessor}, "${name} ->${accessor}");
     }

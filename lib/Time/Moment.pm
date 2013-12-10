@@ -26,8 +26,9 @@ sub now {
     my ($class) = @_;
 
     my ($sec, $usec) = Time::HiRes::gettimeofday();
-    my $off = int((timegm(localtime($sec)) - $sec) / 60);
-    return $class->from_epoch($sec, $usec * 1000, $off);
+    my $offset = int((timegm(localtime($sec)) - $sec) / 60);
+    return $class->from_epoch($sec, $usec * 1000)
+                 ->with_offset($offset);
 }
 
 sub now_utc {
@@ -61,8 +62,8 @@ sub DateTime::__as_Time_Moment {
       or Carp::croak(q/Cannot coerce an instance of DateTime in the 'floating' /
                     .q/time zone to an instance of Time::Moment/);
 
-    my $offset = int($dt->offset / 60);
-    return Time::Moment->from_epoch($dt->epoch, $dt->nanosecond, $offset);
+    return Time::Moment->from_epoch($dt->epoch, $dt->nanosecond)
+                       ->with_offset(int($dt->offset / 60));
 }
 
 sub Time::Piece::__as_Time_Moment {
@@ -84,7 +85,7 @@ sub STORABLE_thaw {
       or die(q/Cannot deserialize corrupted data/); # Don't replace die with Carp!
     my ($offset, $rdn, $sod, $nos) = unpack 'xxnNNN', $packed;
     my $seconds = ($rdn - 719163) * 86400 + $sod;
-    $$self = ${ ref($self)->from_epoch($seconds, $nos, $offset) };
+    $$self = ${ ref($self)->from_epoch($seconds, $nos)->with_offset($offset) };
 }
 
 sub TO_JSON {

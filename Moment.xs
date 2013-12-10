@@ -327,11 +327,10 @@ now(klass)
 #endif
 
 moment_t 
-from_epoch(klass, seconds, nanosecond=0, offset=0)
+from_epoch(klass, seconds, nanosecond=0)
     SV *klass
     SV *seconds
     IV nanosecond
-    IV offset
   PREINIT:
     dSTASH_CONSTRUCTOR_MOMENT(klass);
     int64_t secs;
@@ -347,7 +346,7 @@ from_epoch(klass, seconds, nanosecond=0, offset=0)
             frac = -frac;
         nanosecond = (IV)(frac * 1E9 + 0.5);
     }
-    RETVAL = moment_from_epoch(secs, nanosecond, offset);
+    RETVAL = moment_from_epoch(secs, nanosecond, 0);
   OUTPUT:
     RETVAL
 
