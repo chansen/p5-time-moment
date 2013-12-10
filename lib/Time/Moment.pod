@@ -49,6 +49,8 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     @values       = $tm->local_rd_values;
     $seconds      = $tm->local_rd_as_seconds;
     
+    $integer      = $tm1 <=> $tm2;
+    
     $boolean      = $tm1 == $tm2;
     $boolean      = $tm1 != $tm2;
     $boolean      = $tm1 <  $tm2;
@@ -63,9 +65,12 @@ Time::Moment - Represents a date and time of day with an offset from UTC
 B<IMPORTANT:> This is an early preview release available for testing and 
 feedback. The API is still subject to change.
 
-Time is measured in nanoseconds since C<1970-01-01Z>. In time values leap 
+C<Time::Moment> is an immutable object representing a date and time of day 
+with an offset from UTC in the ISO 8601 calendar system.
+
+Time is measured in nanoseconds since C<1970-01-01Z>. In C<Time:Moment> leap 
 seconds are ignored. It is assumed that there are exactly C<86,400,000,000> 
-nanoseconds per day. Time::Moment can represent all epoch integers from 
+nanoseconds per day. C<Time::Moment> can represent all epoch integers from 
 C<-62,135,596,800> to C<2,534,02,300,799>; this range suffices to measure 
 times to nanosecond precision for any instant that is within 
 C<0001-01-01T00:00:00Z> to C<9999-12-31T23:59:59Z>.
@@ -257,7 +262,7 @@ Returns the nanosecond of the second [0, 999_999_999].
 
     $epoch = $tm->epoch;
 
-Returns the number of seconds from the epoch of 1970-01-01T00:00:00Z.
+Returns the number of integral seconds from the epoch of 1970-01-01T00:00:00Z.
 
 =head2 offset
 
@@ -269,14 +274,15 @@ Returns the time zone offset from UTC in minutes [-1080, 1080].
 
     $tm2 = $tm1->with_offset($offset);
 
-Returns a copy of this time with the given time zone I<offset> from UTC 
-in minutes altered. The resulting time is at the same instant.
+Returns a copy of this instance with the given time zone I<offset> from UTC 
+in minutes [-1080, 1080] altered. The resulting time is at the same instant.
 
 =head2 with_nanosecond
 
     $tm2 = $tm1->with_nanosecond($nanosecond);
 
-Returns a copy of this time with the given I<nanosecond> altered.
+Returns a copy of this instance with the given I<nanosecond> [0, 999_999_999] 
+altered.
 
 =head2 is_before
 
@@ -583,6 +589,8 @@ Replaced by %.
 
 =back
 
+=head2
+
 =head2 utc_rd_values
 
     ($rd, $sod, $nanosecond) = $tm->utc_rd_values;
@@ -657,8 +665,8 @@ Followed by a zone designator in one of the following representations:
     Z
     ±hh:mm
 
-The shortest representation will be used. This representation is conformant 
-with ISO 8601 profiles, such as:
+The shortest representation will be used where the omitted parts are implied 
+to be zero. This representation is conformant with ISO 8601 profiles, such as:
 
 =over 4
 
@@ -680,14 +688,19 @@ produces an equivalent string representation:
     "$tm" eq $tm->to_string;
     "$tm" eq $tm->strftime("%FT%T%f%Z");
 
+The total length of the string representation will be between 20 and 35 
+characters (inclusive).
+
 =head2 comparison
 
-    $boolean = $tm1 == $tm2;
-    $boolean = $tm1 != $tm2;
-    $boolean = $tm1 <  $tm2;
-    $boolean = $tm1 >  $tm2;
-    $boolean = $tm1 <= $tm2;
-    $boolean = $tm1 >= $tm2;
+    $integer      = $tm1 <=> $tm2;
+    
+    $boolean      = $tm1 == $tm2;
+    $boolean      = $tm1 != $tm2;
+    $boolean      = $tm1 <  $tm2;
+    $boolean      = $tm1 >  $tm2;
+    $boolean      = $tm1 <= $tm2;
+    $boolean      = $tm1 >= $tm2;
 
 =head1 SERIALIZATION
 
@@ -703,12 +716,12 @@ The total size of the serialized C<Time::Moment> instance using C<nfreeze> is
 
 =head2 JSON
 
-C<Time::Moment> implements a C<TO_JSON> method that returns the stringified 
+C<Time::Moment> implements a C<TO_JSON> method that returns the L<stringified|/stringification>
 representation of the instance.
 
 =head2 CBOR
 
-C<Time::Moment> implements a C<TO_CBOR> method that stores the stringified
+C<Time::Moment> implements a C<TO_CBOR> method that stores the L<stringified|/stringification>
 representation of the instance as a I<standard date/time string> using tag C<0>.
 
 See L<CBOR::XS>, L<RFC 7049 Section 2.4.1|http://tools.ietf.org/html/rfc7049#section-2.4.1>
