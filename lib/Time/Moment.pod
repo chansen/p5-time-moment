@@ -659,11 +659,37 @@ Combinations of calendar date and local time and the difference from UTC
 
     Basic format:               Example:
     %Y%m%dT%H%M%S%z             20121224T153045+0100
+    %Y%m%dT%H%M%S%f%z           20121224T153045.500+0100
     %Y%m%dT%H%M%z               20121224T1530+0100      (reduced accuracy)
 
     Extended format:            Example:
     %Y-%m-%dT%H:%M:%S%Z         2012-12-24T15:30:45+01:00
+    %Y-%m-%dT%H:%M:%S%f%Z       2012-12-24T15:30:45.500+01:00
     %Y-%m-%dT%H:%M%Z            2012-12-24T15:30+01:00  (reduced accuracy)
+
+Combinations of ordinal date and local time and the difference from UTC
+
+    Basic format:               Example:
+    %Y%jT%H%M%S%z               2012359T153045+0100
+    %Y%jT%H%M%S%f%z             2012359T153045.500+0100
+    %Y%jT%H%M%z                 2012359T1530+0100       (reduced accuracy)
+
+    Extended format:            Example:
+    %Y-%jT%H:%M:%S%Z            2012-359T15:30:45+01:00
+    %Y-%jT%H:%M:%S%f%Z          2012-359T15:30:45.500+01:00
+    %Y-%jT%H:%M%Z               2012-359T15:30+01:00    (reduced accuracy)
+
+Combinations of week date and local time and the difference from UTC
+
+    Basic format:               Example:
+    %GW%V%uT%H%M%S%z            2012W521T153045+0100
+    %GW%V%uT%H%M%S%f%z          2012W521T153045.500+0100
+    %GW%V%uT%H%M%f%z            2012W521T1530+0100      (reduced accuracy)
+
+    Extended format:            Example:
+    %G-W%V-%uT%H:%M:%S%Z        2012-W52-1T15:30:45+01:00
+    %G-W%V-%uT%H:%M:%S%f%Z      2012-W52-1T15:30:45.500+01:00
+    %G-W%V-%uT%H:%M%Z           2012-W52-1T15:30+01:00  (reduced accuracy)
 
 =head4 RFC 1123 
 
