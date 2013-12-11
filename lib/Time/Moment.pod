@@ -691,10 +691,35 @@ Combinations of week date and local time and the difference from UTC
     %G-W%V-%uT%H:%M:%S%f%Z      2012-W52-1T15:30:45.500+01:00
     %G-W%V-%uT%H:%M%Z           2012-W52-1T15:30+01:00  (reduced accuracy)
 
-=head4 RFC 1123 
+=head4 RFC 1123 - Requirements for Internet Hosts -- Application and Support
+
+L<RFC 822|http://tools.ietf.org/html/rfc822#section-5> as updated by 
+L<RFC 1123|http://tools.ietf.org/html/rfc1123.
 
     Format:                     Example:
-    %a, %d %b %Y %T %z          Mon, 24 Dec 2012 15:30:45 +0100
+    %a, %d %b %Y %H:%M:%S %z    Mon, 24 Dec 2012 15:30:45 +0100
+
+=head4 RFC 2616 - HTTP/1.1
+
+L<RFC 2616|http://tools.ietf.org/html/rfc2616#section-3.3.1>.
+
+    Format:                     Example:
+    %a, %d %b %Y %H:%M:%S GMT   Mon, 24 Dec 2012 14:30:45 GMT
+
+An HTTP date value represents time as an instance of UTC:
+
+    $string = Time::Moment->now_utc->strftime("%a, %d %b %Y %H:%M:%S GMT");
+    $string = $tm->with_offset(0)->strftime("%a, %d %b %Y %H:%M:%S GMT");
+
+=head4 RFC 5322 - Internet Message Format
+
+L<RFC 5322|http://tools.ietf.org/html/rfc5322#section-3.3>.
+
+    Format:                     Example:
+    %a, %d %b %Y %H:%M:%S %z    Mon, 24 Dec 2012 15:30:45 +0100
+    %a, %d %b %Y %H:%M %z       Mon, 24 Dec 2012 15:30 +0100
+    %d %b %Y %H:%M:%S %z        24 Dec 2012 15:30:45 +0100
+    %d %b %Y %H:%M %z           24 Dec 2012 15:30 +0100
 
 =head2 utc_rd_values
 
