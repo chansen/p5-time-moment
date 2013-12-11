@@ -593,7 +593,7 @@ Replaced by %.
 
 B<Date>
 
-Calendar date - 24 December 2013
+Calendar date - 24 December 2012
 
     Basic format:               Example:
     %Y%m%d                      20121224
@@ -603,23 +603,23 @@ Calendar date - 24 December 2013
     %Y-%m-%d                    2012-12-24
     %Y-%m                       2012-12     (reduced accuracy)
 
-Ordinal date - 24 December 2013
+Ordinal date - 24 December 2012
 
     Basic format:               Example:
-    %Y%j                        2013358
+    %Y%j                        2012359
     
     Extended format:            Example:
-    %Y-%j                       2013-358
+    %Y-%j                       2012-359
 
-Week date - Tuesday, 24 December 2013
+Week date - Monday, 24 December 2012
 
     Basic format:               Example:
-    %GW%V%u                     2013W522
-    %GW%V                       2013W52     (reduced accuracy)
+    %GW%V%u                     2012W521
+    %GW%V                       2012W52     (reduced accuracy)
 
     Extended format:            Example:
-    %G-W%V-%u                   2013-W52-2
-    %G-W%V                      2013-W52    (reduced accuracy)
+    %G-W%V-%u                   2012-W52-1
+    %G-W%V                      2012-W52    (reduced accuracy)
 
 B<Time of day>
 
@@ -668,7 +668,7 @@ Combinations of calendar date and local time and the difference from UTC
 =head4 RFC 1123 
 
     Format:                     Example:
-    %a, %d %b %Y %T %z          Mon, 24 Dec 2012 15:30:00 +0100
+    %a, %d %b %Y %T %z          Mon, 24 Dec 2012 15:30:45 +0100
 
 =head2 utc_rd_values
 
