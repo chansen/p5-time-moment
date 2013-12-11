@@ -587,7 +587,88 @@ Replaced by %.
 
 =back
 
-=head2
+=head3 Example Formats
+
+=head4 ISO 8601
+
+B<Date>
+
+Calendar date - 24 December 2013
+
+    Basic format:               Example:
+    %Y%m%d                      20121224
+    %y%m                        201212      (reduced accuracy)
+
+    Extended format:            Example:
+    %Y-%m-%d                    2012-12-24
+    %Y-%m                       2012-12     (reduced accuracy)
+
+Ordinal date - 24 December 2013
+
+    Basic format:               Example:
+    %Y%j                        2013358
+    
+    Extended format:            Example:
+    %Y-%j                       2013-358
+
+Week date - Tuesday, 24 December 2013
+
+    Basic format:               Example:
+    %GW%V%u                     2013W522
+    %GW%V                       2013W52     (reduced accuracy)
+
+    Extended format:            Example:
+    %G-W%V-%u                   2013-W52-2
+    %G-W%V                      2013-W52    (reduced accuracy)
+
+B<Time of day>
+
+Local time - 30 minutes and 45 seconds past 15 hours
+
+    Basic format:               Example:
+    %H%M%S                      153045
+    %H%M                        1530        (reduced accuracy)
+
+    Extended format:            Example:
+    %H:%M:%S                    15:30:45
+    %H:%M                       15:30       (reduced accuracy)
+
+Local time with decimal fractions - 30 minutes and 45 and a half second 
+past 15 hours
+
+    Basic format:               Example:
+    %H%M%S%f                    153045.500
+    %H%M%S.%1N                  153045.5
+
+    Extended format:            Example:
+    %H:%M:%S%f                  15:30:45.500
+    %H:%M:%S.%1N                15:30:45.5
+
+Local time and the difference from UTC - 30 minutes and 45 seconds past 
+15 hours, one hour ahead of UTC
+
+    Basic format:               Example:
+    %H%M%S%z                    153045+0100
+
+    Extended format:            Example:
+    %H:%M:%S%Z                  15:30:45+01:00
+
+B<Date and time of day>
+
+Combinations of calendar date and local time and the difference from UTC
+
+    Basic format:               Example:
+    %Y%m%dT%H%M%S%z             20121224T153045+0100
+    %Y%m%dT%H%M%z               20121224T1530+0100      (reduced accuracy)
+
+    Extended format:            Example:
+    %Y-%m-%dT%H:%M:%S%Z         2012-12-24T15:30:45+01:00
+    %Y-%m-%dT%H:%M%Z            2012-12-24T15:30+01:00  (reduced accuracy)
+
+=head4 RFC 1123 
+
+    Format:                     Example:
+    %a, %d %b %Y %T %z          Mon, 24 Dec 2012 15:30:00 +0100
 
 =head2 utc_rd_values
 
@@ -680,11 +761,11 @@ to be zero. This representation is conformant with ISO 8601 profiles, such as:
 
 =back
 
-The C<to_string> method or the C<strftime> format string C<"%FT%T%f%Z"> 
+The C<to_string> method or the C<strftime> format string C<"%Y-%m-%dT%H:%M:%S%f%Z"> 
 produces an equivalent string representation:
 
     "$tm" eq $tm->to_string;
-    "$tm" eq $tm->strftime("%FT%T%f%Z");
+    "$tm" eq $tm->strftime("%Y-%m-%dT%H:%M:%S%f%Z");
 
 The total length of the string representation will be between 20 and 35 
 characters (inclusive).
