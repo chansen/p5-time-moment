@@ -596,139 +596,6 @@ Replaced by %.
 
 =back
 
-=head3 Example Formats
-
-=head4 ISO 8601
-
-B<Date>
-
-Calendar date - 24 December 2012
-
-    Basic format:               Example:
-    %Y%m%d                      20121224
-    %y%m                        201212      (reduced accuracy)
-
-    Extended format:            Example:
-    %Y-%m-%d                    2012-12-24
-    %Y-%m                       2012-12     (reduced accuracy)
-
-Ordinal date - 24 December 2012
-
-    Basic format:               Example:
-    %Y%j                        2012359
-    
-    Extended format:            Example:
-    %Y-%j                       2012-359
-
-Week date - Monday, 24 December 2012
-
-    Basic format:               Example:
-    %GW%V%u                     2012W521
-    %GW%V                       2012W52     (reduced accuracy)
-
-    Extended format:            Example:
-    %G-W%V-%u                   2012-W52-1
-    %G-W%V                      2012-W52    (reduced accuracy)
-
-B<Time of day>
-
-Local time - 30 minutes and 45 seconds past 15 hours
-
-    Basic format:               Example:
-    %H%M%S                      153045
-    %H%M                        1530        (reduced accuracy)
-
-    Extended format:            Example:
-    %H:%M:%S                    15:30:45
-    %H:%M                       15:30       (reduced accuracy)
-
-Local time with decimal fractions - 30 minutes and 45 and a half second 
-past 15 hours
-
-    Basic format:               Example:
-    %H%M%S%f                    153045.500
-    %H%M%S.%1N                  153045.5
-
-    Extended format:            Example:
-    %H:%M:%S%f                  15:30:45.500
-    %H:%M:%S.%1N                15:30:45.5
-
-Local time and the difference from UTC - 30 minutes and 45 seconds past 
-15 hours, one hour ahead of UTC
-
-    Basic format:               Example:
-    %H%M%S%z                    153045+0100
-
-    Extended format:            Example:
-    %H:%M:%S%Z                  15:30:45+01:00
-
-B<Date and time of day>
-
-Combinations of calendar date and local time and the difference from UTC
-
-    Basic format:               Example:
-    %Y%m%dT%H%M%S%z             20121224T153045+0100
-    %Y%m%dT%H%M%S%f%z           20121224T153045.500+0100
-    %Y%m%dT%H%M%z               20121224T1530+0100      (reduced accuracy)
-
-    Extended format:            Example:
-    %Y-%m-%dT%H:%M:%S%Z         2012-12-24T15:30:45+01:00
-    %Y-%m-%dT%H:%M:%S%f%Z       2012-12-24T15:30:45.500+01:00
-    %Y-%m-%dT%H:%M%Z            2012-12-24T15:30+01:00  (reduced accuracy)
-
-Combinations of ordinal date and local time and the difference from UTC
-
-    Basic format:               Example:
-    %Y%jT%H%M%S%z               2012359T153045+0100
-    %Y%jT%H%M%S%f%z             2012359T153045.500+0100
-    %Y%jT%H%M%z                 2012359T1530+0100       (reduced accuracy)
-
-    Extended format:            Example:
-    %Y-%jT%H:%M:%S%Z            2012-359T15:30:45+01:00
-    %Y-%jT%H:%M:%S%f%Z          2012-359T15:30:45.500+01:00
-    %Y-%jT%H:%M%Z               2012-359T15:30+01:00    (reduced accuracy)
-
-Combinations of week date and local time and the difference from UTC
-
-    Basic format:               Example:
-    %GW%V%uT%H%M%S%z            2012W521T153045+0100
-    %GW%V%uT%H%M%S%f%z          2012W521T153045.500+0100
-    %GW%V%uT%H%M%f%z            2012W521T1530+0100      (reduced accuracy)
-
-    Extended format:            Example:
-    %G-W%V-%uT%H:%M:%S%Z        2012-W52-1T15:30:45+01:00
-    %G-W%V-%uT%H:%M:%S%f%Z      2012-W52-1T15:30:45.500+01:00
-    %G-W%V-%uT%H:%M%Z           2012-W52-1T15:30+01:00  (reduced accuracy)
-
-=head4 RFC 1123 - Requirements for Internet Hosts -- Application and Support
-
-L<RFC 822|http://tools.ietf.org/html/rfc822#section-5> as updated by 
-L<RFC 1123|http://tools.ietf.org/html/rfc1123.
-
-    Format:                     Example:
-    %a, %d %b %Y %H:%M:%S %z    Mon, 24 Dec 2012 15:30:45 +0100
-
-=head4 RFC 2616 - HTTP/1.1
-
-L<RFC 2616|http://tools.ietf.org/html/rfc2616#section-3.3.1>.
-
-    Format:                     Example:
-    %a, %d %b %Y %H:%M:%S GMT   Mon, 24 Dec 2012 14:30:45 GMT
-
-An HTTP date value represents time as an instance of UTC:
-
-    $string = $tm->at_utc->strftime("%a, %d %b %Y %H:%M:%S GMT");
-
-=head4 RFC 5322 - Internet Message Format
-
-L<RFC 5322|http://tools.ietf.org/html/rfc5322#section-3.3>.
-
-    Format:                     Example:
-    %a, %d %b %Y %H:%M:%S %z    Mon, 24 Dec 2012 15:30:45 +0100
-    %a, %d %b %Y %H:%M %z       Mon, 24 Dec 2012 15:30 +0100
-    %d %b %Y %H:%M:%S %z        24 Dec 2012 15:30:45 +0100
-    %d %b %Y %H:%M %z           24 Dec 2012 15:30 +0100
-
 =head2 utc_rd_values
 
     ($rd, $sod, $nanosecond) = $tm->utc_rd_values;
@@ -864,6 +731,139 @@ representation of the instance as a I<standard date/time string> using tag C<0>.
 
 See L<CBOR::XS>, L<RFC 7049 Section 2.4.1|http://tools.ietf.org/html/rfc7049#section-2.4.1>
 and C<eg/cbor.pl> for an example how to roundtrip instances of C<Time::Moment>.
+
+=head1 EXAMPLE FORMAT STRINGS
+
+=head2 ISO 8601
+
+=head3 Date
+
+Calendar date - 24 December 2012
+
+    Basic format:               Example:
+    %Y%m%d                      20121224
+    %y%m                        201212      (reduced accuracy)
+
+    Extended format:            Example:
+    %Y-%m-%d                    2012-12-24
+    %Y-%m                       2012-12     (reduced accuracy)
+
+Ordinal date - 24 December 2012
+
+    Basic format:               Example:
+    %Y%j                        2012359
+    
+    Extended format:            Example:
+    %Y-%j                       2012-359
+
+Week date - Monday, 24 December 2012
+
+    Basic format:               Example:
+    %GW%V%u                     2012W521
+    %GW%V                       2012W52     (reduced accuracy)
+
+    Extended format:            Example:
+    %G-W%V-%u                   2012-W52-1
+    %G-W%V                      2012-W52    (reduced accuracy)
+
+=head3 Time of day
+
+Local time - 30 minutes and 45 seconds past 15 hours
+
+    Basic format:               Example:
+    %H%M%S                      153045
+    %H%M                        1530        (reduced accuracy)
+
+    Extended format:            Example:
+    %H:%M:%S                    15:30:45
+    %H:%M                       15:30       (reduced accuracy)
+
+Local time with decimal fractions - 30 minutes and 45 and a half second 
+past 15 hours
+
+    Basic format:               Example:
+    %H%M%S%f                    153045.500
+    %H%M%S.%1N                  153045.5
+
+    Extended format:            Example:
+    %H:%M:%S%f                  15:30:45.500
+    %H:%M:%S.%1N                15:30:45.5
+
+Local time and the difference from UTC - 30 minutes and 45 seconds past 
+15 hours, one hour ahead of UTC
+
+    Basic format:               Example:
+    %H%M%S%z                    153045+0100
+
+    Extended format:            Example:
+    %H:%M:%S%Z                  15:30:45+01:00
+
+=head3 Date and time of day
+
+Combinations of calendar date and local time and the difference from UTC
+
+    Basic format:               Example:
+    %Y%m%dT%H%M%S%z             20121224T153045+0100
+    %Y%m%dT%H%M%S%f%z           20121224T153045.500+0100
+    %Y%m%dT%H%M%z               20121224T1530+0100      (reduced accuracy)
+
+    Extended format:            Example:
+    %Y-%m-%dT%H:%M:%S%Z         2012-12-24T15:30:45+01:00
+    %Y-%m-%dT%H:%M:%S%f%Z       2012-12-24T15:30:45.500+01:00
+    %Y-%m-%dT%H:%M%Z            2012-12-24T15:30+01:00  (reduced accuracy)
+
+Combinations of ordinal date and local time and the difference from UTC
+
+    Basic format:               Example:
+    %Y%jT%H%M%S%z               2012359T153045+0100
+    %Y%jT%H%M%S%f%z             2012359T153045.500+0100
+    %Y%jT%H%M%z                 2012359T1530+0100       (reduced accuracy)
+
+    Extended format:            Example:
+    %Y-%jT%H:%M:%S%Z            2012-359T15:30:45+01:00
+    %Y-%jT%H:%M:%S%f%Z          2012-359T15:30:45.500+01:00
+    %Y-%jT%H:%M%Z               2012-359T15:30+01:00    (reduced accuracy)
+
+Combinations of week date and local time and the difference from UTC
+
+    Basic format:               Example:
+    %GW%V%uT%H%M%S%z            2012W521T153045+0100
+    %GW%V%uT%H%M%S%f%z          2012W521T153045.500+0100
+    %GW%V%uT%H%M%f%z            2012W521T1530+0100      (reduced accuracy)
+
+    Extended format:            Example:
+    %G-W%V-%uT%H:%M:%S%Z        2012-W52-1T15:30:45+01:00
+    %G-W%V-%uT%H:%M:%S%f%Z      2012-W52-1T15:30:45.500+01:00
+    %G-W%V-%uT%H:%M%Z           2012-W52-1T15:30+01:00  (reduced accuracy)
+
+=head2 RFC 1123 - Requirements for Internet Hosts -- Application and Support
+
+L<RFC 822|http://tools.ietf.org/html/rfc822#section-5> as updated by 
+L<RFC 1123|http://tools.ietf.org/html/rfc1123>.
+
+    Format:                     Example:
+    %a, %d %b %Y %H:%M:%S %z    Mon, 24 Dec 2012 15:30:45 +0100
+
+=head2 RFC 2616 - HTTP/1.1
+
+L<RFC 2616 3.3.1 Full Date|http://tools.ietf.org/html/rfc2616#section-3.3.1>.
+
+    Format:                     Example:
+    %a, %d %b %Y %H:%M:%S GMT   Mon, 24 Dec 2012 14:30:45 GMT
+
+An HTTP date value represents time as an instance of UTC:
+
+    $string = $tm->at_utc->strftime("%a, %d %b %Y %H:%M:%S GMT");
+
+=head2 RFC 5322 - Internet Message Format
+
+L<RFC 5322 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322#section-3.3>.
+
+    Format:                     Example:
+    %a, %d %b %Y %H:%M:%S %z    Mon, 24 Dec 2012 15:30:45 +0100
+    %a, %d %b %Y %H:%M %z       Mon, 24 Dec 2012 15:30 +0100
+    %d %b %Y %H:%M:%S %z        24 Dec 2012 15:30:45 +0100
+    %d %b %Y %H:%M %z           24 Dec 2012 15:30 +0100
 
 =head1 DIAGNOSTICS
 
