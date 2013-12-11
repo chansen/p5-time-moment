@@ -374,6 +374,22 @@ from_object(klass, object)
     XSRETURN_SV(sv_2moment_coerce_sv(object));
 
 moment_t
+at_utc(self)
+    const moment_t *self
+  PREINIT:
+    dSTASH_INVOCANT;
+  CODE:
+    if (0 == moment_offset(self))
+        XSRETURN(1);
+    RETVAL = moment_with_offset(self, 0);
+    if (SvTEMP(ST(0))) {
+        sv_set_moment(ST(0), &RETVAL);
+        XSRETURN(1);
+    }
+  OUTPUT:
+    RETVAL
+
+moment_t
 with_offset(self, offset)
     const moment_t *self
     IV offset
