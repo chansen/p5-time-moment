@@ -151,25 +151,41 @@ C<DateTime>:
     $tm = Time::Moment->from_string($string);
 
 Constructs an instance of C<Time::Moment> from the given I<string>. The string 
-must consist of a complete representation of a date and time of day followed 
-by a zone designator. The second part of the time of day representation may 
+must consist of a complete date representation and time of day followed by a 
+time zone designator. The second part of the time of day may be omitted or 
 have a decimal fraction.
 
-The following are examples of complete representations of date and time of day 
+The following are examples of complete date representations and time of day 
 representations:
-
-    Basic format:               Example:
-    YYYYMMDDThhmmssZ            20121224T121530Z
-    YYYYMMDDThhmmss±hhmm        20121224T121530+0100
-    YYYYMMDDThhmmss±hh          20121224T121530+01
     
-    Extended format:            Example:
-    YYYY-MM-DDThh:mm:ssZ        2012-12-24T12:15:30Z
-    YYYY-MM-DDThh:mm:ss±hh:mm   2012-12-24T12:15:30+01:00
-    YYYY-MM-DDThh:mm:ss±hh      2012-12-24T12:15:30+01
+    Basic format:                Example:
+    YYYYMMDDThhmmZ               20121224T1215Z            (reduced accuracy)
+    YYYYMMDDThhmm±hhmm           20121224T1215+0100        (reduced accuracy)
+    YYYYMMDDThhmm±hh             20121224T1215+01          (reduced accuracy)
+    
+    YYYYMMDDThhmmssZ             20121224T121530Z
+    YYYYMMDDThhmmss±hhmm         20121224T121530+0100
+    YYYYMMDDThhmmss±hh           20121224T121530+01
+    
+    YYYYMMDDThhmmss.fZ           20121224T121530.0Z
+    YYYYMMDDThhmmss.f±hhmm       20121224T121530.0+0100
+    YYYYMMDDThhmmss.f±hh         20121224T121530.0+01
+    
+    Extended format:             Example:
+    YYYY-MM-DDThh:mmZ            2012-12-24T12:15Z         (reduced accuracy)
+    YYYY-MM-DDThh:mm±hh:mm       2012-12-24T12:15+01:00    (reduced accuracy)
+    YYYY-MM-DDThh:mm±hh          2012-12-24T12:15+01       (reduced accuracy)
+    
+    YYYY-MM-DDThh:mm:ssZ         2012-12-24T12:15:30Z
+    YYYY-MM-DDThh:mm:ss±hh:mm    2012-12-24T12:15:30+01:00
+    YYYY-MM-DDThh:mm:ss±hh       2012-12-24T12:15:30+01
+    
+    YYYY-MM-DDThh:mm:ss.fZ       2012-12-24T12:15:30.0Z
+    YYYY-MM-DDThh:mm:ss.f±hh:mm  2012-12-24T12:15:30.0+01:00
+    YYYY-MM-DDThh:mm:ss.f±hh     2012-12-24T12:15:30.0+01
 
-Where complete representations using calendar dates are shown, ordinal dates or 
-week dates may be substituted.
+Where representations using calendar dates are shown, ordinal dates or week 
+dates may be substituted.
 
 =head1 METHODS
 
@@ -800,7 +816,7 @@ Local time and the difference from UTC - 30 minutes and 45 seconds past
 
 =head3 Date and time of day
 
-Combinations of calendar date and local time and the difference from UTC
+Combinations of calendar date and time of day
 
     Basic format:               Example:
     %Y%m%dT%H%M%S%z             20121224T153045+0100
@@ -812,7 +828,7 @@ Combinations of calendar date and local time and the difference from UTC
     %Y-%m-%dT%H:%M:%S%f%Z       2012-12-24T15:30:45.500+01:00
     %Y-%m-%dT%H:%M%Z            2012-12-24T15:30+01:00  (reduced accuracy)
 
-Combinations of ordinal date and local time and the difference from UTC
+Combinations of ordinal date and time of day
 
     Basic format:               Example:
     %Y%jT%H%M%S%z               2012359T153045+0100
@@ -824,7 +840,7 @@ Combinations of ordinal date and local time and the difference from UTC
     %Y-%jT%H:%M:%S%f%Z          2012-359T15:30:45.500+01:00
     %Y-%jT%H:%M%Z               2012-359T15:30+01:00    (reduced accuracy)
 
-Combinations of week date and local time and the difference from UTC
+Combinations of week date and time of day
 
     Basic format:               Example:
     %GW%V%uT%H%M%S%z            2012W521T153045+0100
@@ -836,7 +852,7 @@ Combinations of week date and local time and the difference from UTC
     %G-W%V-%uT%H:%M:%S%f%Z      2012-W52-1T15:30:45.500+01:00
     %G-W%V-%uT%H:%M%Z           2012-W52-1T15:30+01:00  (reduced accuracy)
 
-=head2 RFC 1123 - Requirements for Internet Hosts -- Application and Support
+=head2 RFC 1123 - Requirements for Internet Hosts
 
 L<RFC 822|http://tools.ietf.org/html/rfc822#section-5> as updated by 
 L<RFC 1123|http://tools.ietf.org/html/rfc1123>.
@@ -846,7 +862,7 @@ L<RFC 1123|http://tools.ietf.org/html/rfc1123>.
 
 =head2 RFC 2616 - HTTP/1.1
 
-L<RFC 2616 3.3.1 Full Date|http://tools.ietf.org/html/rfc2616#section-3.3.1>.
+L<RFC 2616 - 3.3.1 Full Date|http://tools.ietf.org/html/rfc2616#section-3.3.1>.
 
     Format:                     Example:
     %a, %d %b %Y %H:%M:%S GMT   Mon, 24 Dec 2012 14:30:45 GMT
@@ -857,7 +873,7 @@ An HTTP date value represents time as an instance of UTC:
 
 =head2 RFC 5322 - Internet Message Format
 
-L<RFC 5322 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322#section-3.3>.
+L<RFC 5322 - 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322#section-3.3>.
 
     Format:                     Example:
     %a, %d %b %Y %H:%M:%S %z    Mon, 24 Dec 2012 15:30:45 +0100
@@ -891,6 +907,8 @@ Seconds since the epoch of 1970-01-01T:00:00:00Z (0) is out of the range:
 =item B<(F)> A %s object can only be compared to another %s object ('%s', '%s')
 
 =back
+
+=head1 THREAD SAFETY
 
 =head1 SEE ALSO
 
