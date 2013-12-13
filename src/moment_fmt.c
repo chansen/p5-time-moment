@@ -141,7 +141,7 @@ THX_format_s(pTHX_ const moment_t *mt, SV *dsv) {
 }
 
 static void
-THX_format_z(pTHX_ const moment_t *mt, SV *dsv) {
+THX_format_z(pTHX_ const moment_t *mt, SV *dsv, int extended) {
     int offset, sign;
 
     offset = moment_offset(mt);
@@ -149,7 +149,10 @@ THX_format_z(pTHX_ const moment_t *mt, SV *dsv) {
         sign = '-', offset = -offset;
     else
         sign = '+';
-    sv_catpvf(dsv, "%c%04d", sign, (offset / 60) * 100 + (offset % 60));
+    if (extended)
+        sv_catpvf(dsv, "%c%02d:%02d", sign, offset / 60, offset % 60);
+    else
+        sv_catpvf(dsv, "%c%04d", sign, (offset / 60) * 100 + (offset % 60));
 }
 
 static void
@@ -173,7 +176,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
     const char *e, *p;
     SV *dsv;
     dt_t dt;
-    int year, month, day, width;
+    int year, month, day, width, zextd;
 
     dsv = sv_2mortal(newSV(16));
     SvCUR_set(dsv, 0);
@@ -192,6 +195,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
             break;
 
         width = -1;
+        zextd = 0;
         s = p;
 
       label:
@@ -328,7 +332,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                 sv_catpvf(dsv, "%04d", year);
                 break;
             case 'z':
-                THX_format_z(aTHX_ mt, dsv);
+                THX_format_z(aTHX_ mt, dsv, zextd);
                 break;
             case 'Z':
                 THX_format_Z(aTHX_ mt, dsv);
@@ -336,6 +340,12 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
             case '%':
                 sv_catpvn(dsv, "%", 1);
                 break;
+            case ':':
+                if (s + 1 <= e && s[1] == 'z') {
+                    zextd = 1;
+                    goto label;
+                }
+                goto unknown;
             case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
                 if (s + 1 <= e && (s[1] == 'f' || s[1] == 'N')) {
@@ -344,6 +354,7 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                 }
                 /* FALLTROUGH */
             default:
+            unknown:
                 sv_catpvn(dsv, p, s - p + 1);
                 break;
         }
