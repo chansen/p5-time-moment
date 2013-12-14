@@ -370,6 +370,7 @@ from_object(klass, object)
     SV *object
   PREINIT:
     dSTASH_CONSTRUCTOR_MOMENT(klass);
+    PERL_UNUSED_VAR(stash);
   CODE:
     XSRETURN_SV(sv_2moment_coerce_sv(object));
 
@@ -382,40 +383,6 @@ at_utc(self)
     if (0 == moment_offset(self))
         XSRETURN(1);
     RETVAL = moment_with_offset(self, 0);
-    if (SvTEMP(ST(0))) {
-        sv_set_moment(ST(0), &RETVAL);
-        XSRETURN(1);
-    }
-  OUTPUT:
-    RETVAL
-
-moment_t
-with_offset(self, offset)
-    const moment_t *self
-    IV offset
-  PREINIT:
-    dSTASH_INVOCANT;
-  CODE:
-    if (offset == moment_offset(self))
-        XSRETURN(1);
-    RETVAL = moment_with_offset(self, offset);
-    if (SvTEMP(ST(0))) {
-        sv_set_moment(ST(0), &RETVAL);
-        XSRETURN(1);
-    }
-  OUTPUT:
-    RETVAL
-
-moment_t
-with_nanosecond(self, nanosecond)
-    const moment_t *self
-    IV nanosecond
-  PREINIT:
-    dSTASH_INVOCANT;
-  CODE:
-    if (nanosecond == moment_nanosecond(self))
-        XSRETURN(1);
-    RETVAL = moment_with_nanosecond(self, nanosecond);
     if (SvTEMP(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);
@@ -466,6 +433,33 @@ minus_seconds(self, value)
     if (value == 0)
         XSRETURN(1);
     RETVAL = moment_minus_unit(self, (moment_unit_t)ix, value);
+    if (SvTEMP(ST(0))) {
+        sv_set_moment(ST(0), &RETVAL);
+        XSRETURN(1);
+    }
+  OUTPUT:
+    RETVAL
+
+moment_t
+with_year(self, value)
+    const moment_t *self
+    IV value
+  PREINIT:
+    dSTASH_INVOCANT;
+  ALIAS:
+    Time::Moment::with_year         =  MOMENT_COMPONENT_YEAR
+    Time::Moment::with_month        =  MOMENT_COMPONENT_MONTH
+    Time::Moment::with_day_of_year  =  MOMENT_COMPONENT_DAY_OF_YEAR
+    Time::Moment::with_day_of_month =  MOMENT_COMPONENT_DAY_OF_MONTH
+    Time::Moment::with_hour         =  MOMENT_COMPONENT_HOUR
+    Time::Moment::with_minute       =  MOMENT_COMPONENT_MINUTE
+    Time::Moment::with_second       =  MOMENT_COMPONENT_SECOND
+    Time::Moment::with_nanosecond   =  MOMENT_COMPONENT_NANOSECOND
+    Time::Moment::with_offset       =  MOMENT_COMPONENT_OFFSET
+  CODE:
+    RETVAL = moment_with_component(self, (moment_component_t)ix, value);
+    if (moment_compare_local(self, &RETVAL) == 0)
+        XSRETURN(1);
     if (SvTEMP(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);

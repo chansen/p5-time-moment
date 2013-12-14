@@ -8,7 +8,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     
     $tm = Time::Moment->now;
     $tm = Time::Moment->now_utc;
-    $tm = Time::Moment->from_epoch($seconds [, $nanosecond ]);
+    $tm = Time::Moment->from_epoch($seconds [, $nanosecond]);
     $tm = Time::Moment->from_object($object);
     $tm = Time::Moment->from_string($string);
     
@@ -32,6 +32,16 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $epoch        = $tm->epoch;
     $offset       = $tm->offset;                        # [-1080, 1080]
     
+    $tm2          = $tm1->with_year($year);
+    $tm2          = $tm1->with_month($month);
+    $tm2          = $tm1->with_day_of_year($day);
+    $tm2          = $tm1->with_day_of_month($day);
+    $tm2          = $tm1->with_hour($hour);
+    $tm2          = $tm1->with_minute($minute);
+    $tm2          = $tm1->with_second($second);
+    $tm2          = $tm1->with_nanosecond($nanosecond);
+    $tm2          = $tm1->with_offset($offset);
+    
     $tm2          = $tm1->plus_years($years);
     $tm2          = $tm1->plus_months($months);
     $tm2          = $tm1->plus_weeks($weeks);
@@ -39,7 +49,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->plus_hours($hours);
     $tm2          = $tm1->plus_minutes($minutes);
     $tm2          = $tm1->plus_seconds($seconds);
-
+    
     $tm2          = $tm1->minus_years($years);
     $tm2          = $tm1->minus_months($months);
     $tm2          = $tm1->minus_weeks($weeks);
@@ -49,8 +59,6 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->minus_seconds($seconds);
     
     $tm2          = $tm1->at_utc;
-    $tm2          = $tm1->with_offset($offset);
-    $tm2          = $tm1->with_nanosecond($nanosecond);
     
     $boolean      = $tm1->is_before($tm2);
     $boolean      = $tm1->is_after($tm2);
@@ -301,6 +309,71 @@ Returns the number of integral seconds from the epoch of 1970-01-01T00:00:00Z.
 
 Returns the time zone offset from UTC in minutes [-1080, 1080].
 
+=head2 with_year
+
+    $tm2 = $tm1->with_year($year);
+
+Returns a copy of this instance with the given I<year> [1, 9999] altered. The
+day of the month of the date is unchanged unless the day does not exist in the 
+month. In that case, the day is set to the last day of the month.
+
+=head2 with_month
+
+    $tm2 = $tm1->with_month($month);
+
+Returns a copy of this instance with the given I<month> of the year [1, 12] 
+altered. The day of the month of the date is unchanged unless the day does not 
+exist in the given month. In that case, the day is set to the last day of the 
+given month.
+
+=head2 with_day_of_month
+
+    $tm2 = $tm1->with_day_of_month($day);
+
+Returns a copy of this instance with the given I<day> of the month altered. 
+The day must be valid for the year and month, otherwise an exception is raised.
+
+=head2 with_day_of_year
+
+    $tm2 = $tm1->with_day_of_year($day);
+
+Returns a copy of this instance with the given I<day> of the year altered. 
+The day must be valid for the year, otherwise an exception is raised.
+
+=head2 with_hour
+
+    $tm2 = $tm1->with_hour($hour);
+
+Returns a copy of this instance with the given I<hour> of day [0, 23] altered.
+
+=head2 with_minute
+
+    $tm2 = $tm1->with_minute($minute);
+
+Returns a copy of this instance with the given I<minute> of hour [0, 59] 
+altered.
+
+=head2 with_second
+
+    $tm2 = $tm1->with_second($second);
+
+Returns a copy of this instance with the given I<second> of minute [0, 59] 
+altered.
+
+=head2 with_nanosecond
+
+    $tm2 = $tm1->with_nanosecond($nanosecond);
+
+Returns a copy of this instance with the given I<nanosecond> of second 
+[0, 999_999_999] altered.
+
+=head2 with_offset
+
+    $tm2 = $tm1->with_offset($offset);
+
+Returns a copy of this instance with the given time zone I<offset> from UTC 
+in minutes [-1080, 1080] altered. The resulting time is at the same instant.
+
 =head2 plus_years
 
     $tm2 = $tm1->plus_years($years);
@@ -403,23 +476,7 @@ Returns a copy of this instance with the given number of seconds subtracted.
 
     $tm2 = $tm1->at_utc;
 
-Returns a copy of this instance with the time zone set to UTC. Equivalent to:
-
-    $tm2 = $tm1->with_offset(0);
-
-=head2 with_offset
-
-    $tm2 = $tm1->with_offset($offset);
-
-Returns a copy of this instance with the given time zone I<offset> from UTC 
-in minutes [-1080, 1080] altered. The resulting time is at the same instant.
-
-=head2 with_nanosecond
-
-    $tm2 = $tm1->with_nanosecond($nanosecond);
-
-Returns a copy of this instance with the given I<nanosecond> [0, 999_999_999] 
-altered.
+Returns a copy of this instance with the time zone set to UTC.
 
 =head2 is_before
 

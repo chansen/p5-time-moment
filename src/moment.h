@@ -21,6 +21,7 @@
 #  endif
 #endif
 
+#define SECS_PER_WEEK       604800
 #define SECS_PER_DAY        86400
 #define SECS_PER_HOUR       3600
 #define SECS_PER_MIN        60
@@ -66,11 +67,24 @@ typedef enum {
     MOMENT_UNIT_NANOSECONDS,
 } moment_unit_t;
 
+typedef enum {
+    MOMENT_COMPONENT_YEAR=0,
+    MOMENT_COMPONENT_MONTH,
+    MOMENT_COMPONENT_DAY_OF_YEAR,
+    MOMENT_COMPONENT_DAY_OF_MONTH,
+    MOMENT_COMPONENT_HOUR,
+    MOMENT_COMPONENT_MINUTE,
+    MOMENT_COMPONENT_SECOND,
+    MOMENT_COMPONENT_NANOSECOND,
+    MOMENT_COMPONENT_OFFSET,
+} moment_component_t;
+
 moment_t    THX_moment_from_epoch(pTHX_ int64_t sec, IV usec, IV offset);
 moment_t    THX_moment_with_offset(pTHX_ const moment_t *mt, IV offset);
 moment_t    THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec);
 moment_t    THX_moment_plus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
 moment_t    THX_moment_minus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
+moment_t    THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t u, IV v);
 
 int64_t     moment_epoch(const moment_t *mt);
 
@@ -83,6 +97,7 @@ void        moment_to_utc_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *no
 void        moment_to_local_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos);
 
 IV          moment_compare(const moment_t *m1, const moment_t *m2);
+IV          moment_compare_local(const moment_t *m1, const moment_t *m2);
 
 int         moment_year(const moment_t *mt);
 int         moment_quarter(const moment_t *mt);
@@ -98,7 +113,6 @@ int         moment_second(const moment_t *mt);
 int         moment_millisecond(const moment_t *mt);
 int         moment_microsecond(const moment_t *mt);
 int         moment_nanosecond(const moment_t *mt);
-
 int         moment_offset(const moment_t *mt);
 
 #define moment_from_epoch(sec, nsec, offset) \
@@ -115,6 +129,9 @@ int         moment_offset(const moment_t *mt);
 
 #define moment_minus_unit(self, unit, v) \
     THX_moment_minus_unit(aTHX_ self, unit, v)
+
+#define moment_with_component(self, component, v) \
+    THX_moment_with_component(aTHX_ self, component, v)
 
 #endif
 
