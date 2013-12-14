@@ -1,6 +1,7 @@
 #include "moment.h"
 #include "dt_core.h"
 #include "dt_accessor.h"
+#include "dt_arithmetic.h"
 
 int64_t
 moment_utc_rd_seconds(const moment_t *mt) {
@@ -61,6 +62,54 @@ THX_check_nanosecond(pTHX_ IV v) {
         croak("Parameter 'nanosecond' is out of the range [0, 999_999_999]");
 }
 
+static void
+THX_moment_check_range(pTHX_ int64_t v) {
+    if (v < MIN_RANGE || v > MAX_RANGE)
+        croak("Time::Moment is out of supported time range");
+}
+
+static void
+THX_check_unit_years(pTHX_ int64_t v) {
+    if (v < MIN_UNIT_YEARS || v > MAX_UNIT_YEARS)
+        croak("Parameter 'years' is out of supported range");
+}
+
+static void
+THX_check_unit_months(pTHX_ int64_t v) {
+    if (v < MIN_UNIT_MONTHS || v > MAX_UNIT_MONTHS)
+        croak("Parameter 'months' is out of supported range");
+}
+
+static void
+THX_check_unit_weeks(pTHX_ int64_t v) {
+    if (v < MIN_UNIT_WEEKS || v > MAX_UNIT_WEEKS)
+        croak("Parameter 'weeks' is out of supported range");
+}
+
+static void
+THX_check_unit_days(pTHX_ int64_t v) {
+    if (v < MIN_UNIT_DAYS || v > MAX_UNIT_DAYS)
+        croak("Parameter 'days' is out of supported range");
+}
+
+static void
+THX_check_unit_hours(pTHX_ int64_t v) {
+    if (v < MIN_UNIT_HOURS || v > MAX_UNIT_HOURS)
+        croak("Parameter 'hours' is out of supported range");
+}
+
+static void
+THX_check_unit_minutes(pTHX_ int64_t v) {
+    if (v < MIN_UNIT_MINUTES || v > MAX_UNIT_MINUTES)
+        croak("Parameter 'minutes' is out of supported range");
+}
+
+static void
+THX_check_unit_seconds(pTHX_ int64_t v) {
+    if (v < MIN_UNIT_SECONDS || v > MAX_UNIT_SECONDS)
+        croak("Parameter 'seconds' is out of supported range");
+}
+
 moment_t
 THX_moment_from_epoch(pTHX_ int64_t sec, IV nsec, IV offset) {
     moment_t r;
@@ -94,6 +143,89 @@ THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec) {
     r.nsec   = nsec;
     r.offset = mt->offset;
     return r;
+}
+
+static moment_t
+THX_moment_plus_months(pTHX_ const moment_t *mt, int64_t v) {
+    int64_t sod, rdn;
+    moment_t r;
+    
+    THX_check_unit_months(aTHX_ v);
+    sod = moment_local_rd_seconds(mt) % SECS_PER_DAY;
+    rdn = dt_rdn(dt_add_months(moment_local_dt(mt), (int)v, DT_LIMIT));
+    r.sec    = sod + rdn * SECS_PER_DAY;
+    r.nsec   = mt->nsec;
+    r.offset = mt->offset;
+    THX_moment_check_range(aTHX_ r.sec);
+    return r;
+}
+
+static moment_t
+THX_moment_plus_seconds(pTHX_ const moment_t *mt, int64_t v) {
+    moment_t r;
+
+    THX_check_unit_seconds(aTHX_ v);
+    r.sec    = mt->sec + v;
+    r.nsec   = mt->nsec;
+    r.offset = mt->offset;
+    THX_moment_check_range(aTHX_ r.sec);
+    return r;
+}
+
+moment_t
+THX_moment_plus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v) {
+    switch (u) {
+        case MOMENT_UNIT_YEARS:
+            THX_check_unit_years(aTHX_ v);
+            return THX_moment_plus_months(aTHX_ mt, v * 12);
+        case MOMENT_UNIT_MONTHS:
+            THX_check_unit_months(aTHX_ v);
+            return THX_moment_plus_months(aTHX_ mt, v);
+        case MOMENT_UNIT_WEEKS:
+            THX_check_unit_weeks(aTHX_ v);
+            return THX_moment_plus_seconds(aTHX_ mt, v * 604800);
+        case MOMENT_UNIT_DAYS:
+            THX_check_unit_days(aTHX_ v);
+            return THX_moment_plus_seconds(aTHX_ mt, v * 86400);
+        case MOMENT_UNIT_HOURS:
+            THX_check_unit_hours(aTHX_ v);
+            return THX_moment_plus_seconds(aTHX_ mt, v * 3600);
+        case MOMENT_UNIT_MINUTES:
+            THX_check_unit_minutes(aTHX_ v);
+            return THX_moment_plus_seconds(aTHX_ mt, v * 60);
+        case MOMENT_UNIT_SECONDS:
+            THX_check_unit_seconds(aTHX_ v);
+            return THX_moment_plus_seconds(aTHX_ mt, v);
+    }
+    croak("panic: unknown unit THX_moment_plus_unit(%d)", (int)u);
+}
+
+moment_t
+THX_moment_minus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v) {
+    switch (u) {
+        case MOMENT_UNIT_YEARS:
+            THX_check_unit_years(aTHX_ v);
+            return THX_moment_plus_months(aTHX_ mt, -v * 12);
+        case MOMENT_UNIT_MONTHS:
+            THX_check_unit_months(aTHX_ v);
+            return THX_moment_plus_months(aTHX_ mt, -v);
+        case MOMENT_UNIT_WEEKS:
+            THX_check_unit_weeks(aTHX_ v);
+            return THX_moment_plus_seconds(aTHX_ mt, -v * 604800);
+        case MOMENT_UNIT_DAYS:
+            THX_check_unit_days(aTHX_ v);
+            return THX_moment_plus_seconds(aTHX_ mt, -v * 86400);
+        case MOMENT_UNIT_HOURS:
+            THX_check_unit_hours(aTHX_ v);
+            return THX_moment_plus_seconds(aTHX_ mt, -v * 3600);
+        case MOMENT_UNIT_MINUTES:
+            THX_check_unit_minutes(aTHX_ v);
+            return THX_moment_plus_seconds(aTHX_ mt, -v * 60);
+        case MOMENT_UNIT_SECONDS:
+            THX_check_unit_seconds(aTHX_ v);
+            return THX_moment_plus_seconds(aTHX_ mt, -v);
+    }
+    croak("panic: unknown unit THX_moment_minus_unit(%d)", (int)u);
 }
 
 IV

@@ -423,6 +423,56 @@ with_nanosecond(self, nanosecond)
   OUTPUT:
     RETVAL
 
+moment_t
+plus_seconds(self, value)
+    const moment_t *self
+    I64V value
+  PREINIT:
+    dSTASH_INVOCANT;
+  ALIAS:
+    Time::Moment::plus_years       =  MOMENT_UNIT_YEARS
+    Time::Moment::plus_months      =  MOMENT_UNIT_MONTHS
+    Time::Moment::plus_weeks       =  MOMENT_UNIT_WEEKS
+    Time::Moment::plus_days        =  MOMENT_UNIT_DAYS
+    Time::Moment::plus_hours       =  MOMENT_UNIT_HOURS
+    Time::Moment::plus_minutes     =  MOMENT_UNIT_MINUTES
+    Time::Moment::plus_seconds     =  MOMENT_UNIT_SECONDS
+  CODE:
+    if (value == 0)
+        XSRETURN(1);
+    RETVAL = moment_plus_unit(self, (moment_unit_t)ix, value);
+    if (SvTEMP(ST(0))) {
+        sv_set_moment(ST(0), &RETVAL);
+        XSRETURN(1);
+    }
+  OUTPUT:
+    RETVAL
+
+moment_t
+minus_seconds(self, value)
+    const moment_t *self
+    I64V value
+  PREINIT:
+    dSTASH_INVOCANT;
+  ALIAS:
+    Time::Moment::minus_years       =  MOMENT_UNIT_YEARS
+    Time::Moment::minus_months      =  MOMENT_UNIT_MONTHS
+    Time::Moment::minus_weeks       =  MOMENT_UNIT_WEEKS
+    Time::Moment::minus_days        =  MOMENT_UNIT_DAYS
+    Time::Moment::minus_hours       =  MOMENT_UNIT_HOURS
+    Time::Moment::minus_minutes     =  MOMENT_UNIT_MINUTES
+    Time::Moment::minus_seconds     =  MOMENT_UNIT_SECONDS
+  CODE:
+    if (value == 0)
+        XSRETURN(1);
+    RETVAL = moment_minus_unit(self, (moment_unit_t)ix, value);
+    if (SvTEMP(ST(0))) {
+        sv_set_moment(ST(0), &RETVAL);
+        XSRETURN(1);
+    }
+  OUTPUT:
+    RETVAL
+
 void
 year(self)
     const moment_t *self

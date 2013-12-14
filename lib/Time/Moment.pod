@@ -32,6 +32,22 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $epoch        = $tm->epoch;
     $offset       = $tm->offset;                        # [-1080, 1080]
     
+    $tm2          = $tm1->plus_years($years);
+    $tm2          = $tm1->plus_months($months);
+    $tm2          = $tm1->plus_weeks($weeks);
+    $tm2          = $tm1->plus_days($days);
+    $tm2          = $tm1->plus_hours($hours);
+    $tm2          = $tm1->plus_minutes($minutes);
+    $tm2          = $tm1->plus_seconds($seconds);
+
+    $tm2          = $tm1->minus_years($years);
+    $tm2          = $tm1->minus_months($months);
+    $tm2          = $tm1->minus_weeks($weeks);
+    $tm2          = $tm1->minus_days($days);
+    $tm2          = $tm1->minus_hours($hours);
+    $tm2          = $tm1->minus_minutes($minutes);
+    $tm2          = $tm1->minus_seconds($seconds);
+    
     $tm2          = $tm1->at_utc;
     $tm2          = $tm1->with_offset($offset);
     $tm2          = $tm1->with_nanosecond($nanosecond);
@@ -284,6 +300,104 @@ Returns the number of integral seconds from the epoch of 1970-01-01T00:00:00Z.
     $offset = $tm->offset;
 
 Returns the time zone offset from UTC in minutes [-1080, 1080].
+
+=head2 plus_years
+
+    $tm2 = $tm1->plus_years($years);
+
+Returns a copy of this instance with the given number of years added. The day 
+of the month of the date is unchanged unless the day does not exist in the 
+resulting month. In that case, the day is set to the last day of the resulting 
+month. For example, 2012-02-29 plus one year results in 2013-02-28.
+
+=head2 plus_months
+
+    $tm2 = $tm1->plus_months($months);
+
+Returns a copy of this instance with the given number of months added. The day 
+of the month of the date is unchanged unless the day does not exist in the 
+resulting month. In that case, the day is set to the last day of the resulting 
+month. For example, 2013-01-31 plus one month results in 2013-02-28; 
+2013-02-28 plus one month results in 2013-03-28.
+
+=head2 plus_weeks
+
+    $tm2 = $tm1->plus_weeks($weeks);
+
+Returns a copy of this instance with the given number of weeks added.
+
+=head2 plus_days
+
+    $tm2 = $tm1->plus_days($days);
+
+Returns a copy of this instance with the given number of days added.
+
+=head2 plus_hours
+
+    $tm2 = $tm1->plus_hours($hours);
+
+Returns a copy of this instance with the given number of hours added.
+
+=head2 plus_minutes
+
+    $tm2 = $tm1->plus_minutes($minutes);
+
+Returns a copy of this instance with the given number of minutes added.
+
+=head2 plus_seconds
+
+    $tm2 = $tm1->plus_seconds($seconds);
+
+Returns a copy of this instance with the given number of seconds added.
+
+=head2 minus_years
+
+    $tm2 = $tm1->minus_years($years);
+
+Returns a copy of this instance with the given number of years subtracted. 
+The day of the month of the date is unchanged unless the day does not exist in 
+the resulting month. In that case, the day is set to the last day of the 
+resulting month. For example, 2012-02-29 minus one year results in 2011-02-28.
+
+=head2 minus_months
+
+    $tm2 = $tm1->minus_months($months);
+
+Returns a copy of this instance with the given number of months subtracted. The 
+day of the month of the date is unchanged unless the day does not exist in the 
+resulting month. In that case, the day is set to the last day of the resulting 
+month. For example, 2013-03-31 minus one month results in 2013-02-28; 
+2013-02-28 minus one month results in 2013-01-28.
+
+=head2 minus_weeks
+
+    $tm2 = $tm1->minus_weeks($weeks);
+
+Returns a copy of this instance with the given number of weeks subtracted.
+
+=head2 minus_days
+
+    $tm2 = $tm1->minus_days($days);
+
+Returns a copy of this instance with the given number of days subtracted.
+
+=head2 minus_hours
+
+    $tm2 = $tm1->minus_hours($hours);
+
+Returns a copy of this instance with the given number of hours subtracted.
+
+=head2 minus_minutes
+
+    $tm2 = $tm1->minus_minutes($minutes);
+
+Returns a copy of this instance with the given number of minutes subtracted.
+
+=head2 minus_seconds
+
+    $tm2 = $tm1->minus_seconds($seconds);
+
+Returns a copy of this instance with the given number of seconds subtracted.
 
 =head2 at_utc
 
