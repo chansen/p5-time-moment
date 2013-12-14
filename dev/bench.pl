@@ -79,6 +79,42 @@ use POSIX         qw[];
 }
 
 {
+    print "\nBenchmarking arithmetic: +10 days -10 days\n";
+    my $dt = DateTime->now;
+    my $tm = Time::Moment->now_utc;
+    my $tp = Time::Piece::gmtime();
+    Benchmark::cmpthese( -10, {
+        'DateTime' => sub {
+            my $r = $dt->add(days => 10)->subtract(days => 10);
+        },
+        'Time::Moment' => sub {
+            my $r = $tm->plus_days(10)->minus_days(10);
+        },
+        'Time::Piece' => sub {
+            my $r = $tp->add(86400 * 10)->add(-86400 * 10);
+        },
+    });
+}
+
+{
+    print "\nBenchmarking: at end of current month\n";
+    my $dt = DateTime->now;
+    my $tm = Time::Moment->now_utc;
+    Benchmark::cmpthese( -10, {
+        'DateTime' => sub {
+            $dt = $dt->set_day(1)
+                     ->add(months => 1)
+                     ->subtract(days => 1);
+        },
+        'Time::Moment' => sub {
+            $tm = $tm->with_day_of_month(1)
+                     ->plus_months(1)
+                     ->minus_days(1);
+        },
+    });
+}
+
+{
     print "\nBenchmarking strftime: ->strftime('%FT%T')\n";
     my $dt = DateTime->now;
     my $tm = Time::Moment->now;
