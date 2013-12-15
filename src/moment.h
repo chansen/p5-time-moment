@@ -25,6 +25,7 @@
 #define SECS_PER_DAY        86400
 #define SECS_PER_HOUR       3600
 #define SECS_PER_MIN        60
+#define SECS_PER_NANO       1000000000
 
 #define MIN_UNIT_YEARS      INT64_C(-10000)
 #define MAX_UNIT_YEARS      INT64_C(10000)

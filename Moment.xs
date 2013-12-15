@@ -404,6 +404,7 @@ plus_seconds(self, value)
     Time::Moment::plus_hours       =  MOMENT_UNIT_HOURS
     Time::Moment::plus_minutes     =  MOMENT_UNIT_MINUTES
     Time::Moment::plus_seconds     =  MOMENT_UNIT_SECONDS
+    Time::Moment::plus_nanoseconds =  MOMENT_UNIT_NANOSECONDS
   CODE:
     if (value == 0)
         XSRETURN(1);
@@ -429,6 +430,7 @@ minus_seconds(self, value)
     Time::Moment::minus_hours       =  MOMENT_UNIT_HOURS
     Time::Moment::minus_minutes     =  MOMENT_UNIT_MINUTES
     Time::Moment::minus_seconds     =  MOMENT_UNIT_SECONDS
+    Time::Moment::minus_nanoseconds =  MOMENT_UNIT_NANOSECONDS
   CODE:
     if (value == 0)
         XSRETURN(1);
