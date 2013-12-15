@@ -1,3 +1,10 @@
+0.11 2013-12-15
+  - Added support for date/time arithmethics
+  - Added support for altering the components of date/time
+  - Changed ->from_epoch to only accept seconds and nanosecond parameters
+  - Added POS section with example format strings
+  - Documentation improvements
+
 0.10 2013-12-07
   - Added support for fractional seconds in the constructor ->from_epoch
   - Added serialization support for:
