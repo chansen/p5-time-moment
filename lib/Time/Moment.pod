@@ -213,7 +213,7 @@ representations:
 Where representations using calendar dates are shown, ordinal dates or week 
 dates may be substituted.
 
-=head1 METHODS
+=head1 INSTANCE METHODS
 
 =head2 year
 
@@ -332,15 +332,16 @@ given month.
 
     $tm2 = $tm1->with_day_of_month($day);
 
-Returns a copy of this instance with the given I<day> of the month altered. 
-The day must be valid for the year and month, otherwise an exception is raised.
+Returns a copy of this instance with the given I<day> of the month [1, 31] 
+altered. The day must be valid for the year and month, otherwise an exception 
+is raised.
 
 =head2 with_day_of_year
 
     $tm2 = $tm1->with_day_of_year($day);
 
-Returns a copy of this instance with the given I<day> of the year altered. 
-The day must be valid for the year, otherwise an exception is raised.
+Returns a copy of this instance with the given I<day> of the year [1, 366] 
+altered. The day must be valid for the year, otherwise an exception is raised.
 
 =head2 with_hour
 
@@ -816,7 +817,7 @@ The second of the day [0, 86_399].
 
 =item C<$nanosecond>
 
-The nano of the second [0, 999_999_999].
+The nanosecond of the second [0, 999_999_999].
 
 =back
 
@@ -844,7 +845,7 @@ The second of the day [0, 86_399].
 
 =item C<$nanosecond>
 
-The nano of the second [0, 999_999_999].
+The nanosecond of the second [0, 999_999_999].
 
 =back
 
@@ -1075,20 +1076,22 @@ L<RFC 5322 - 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322
 
 Method called with wrong number of arguments.
 
-=item B<(F)> Parameter 'seconds' is out of supported range
+=item B<(F)> Parameter 'seconds' is out of range
 
 Seconds since the epoch of 1970-01-01T:00:00:00Z (0) is out of the range:
 
     [ -62135596800 (0001-01-01T00:00:00Z),
       253402300799 (9999-12-31T23:59:59Z) ]
 
-=item B<(F)> Parameter 'nanosecond' is out of the range [0, 999_999_999]
+=item B<(F)> Parameter '%s' is out of the range [%d, %d]
 
-=item B<(F)> Parameter 'offset' is out of the range [-1080, 1080]
+=item B<(F)> Parameter '%s' is out of range
 
 =item B<(F)> Cannot coerce object of type %s to Time::Moment
 
 =item B<(F)> Cannot parse the given string
+
+=item B<(F)> %s is not an instance of Time::Moment
 
 =item B<(F)> A %s object can only be compared to another %s object ('%s', '%s')
 
