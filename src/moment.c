@@ -90,55 +90,55 @@ THX_check_offset(pTHX_ IV v) {
 static void
 THX_check_seconds(pTHX_ int64_t v) {
     if (!VALID_EPOCH_SEC(v))
-        croak("Parameter 'seconds' is out of supported range");
+        croak("Parameter 'seconds' is out of range");
 }
 
 static void
 THX_moment_check_self(pTHX_ const moment_t *mt) {
     if (mt->sec < MIN_RANGE || mt->sec > MAX_RANGE)
-        croak("Time::Moment is out of supported time range");
+        croak("Time::Moment is out of range");
 }
 
 static void
 THX_check_unit_years(pTHX_ int64_t v) {
     if (v < MIN_UNIT_YEARS || v > MAX_UNIT_YEARS)
-        croak("Parameter 'years' is out of supported range");
+        croak("Parameter 'years' is out of range");
 }
 
 static void
 THX_check_unit_months(pTHX_ int64_t v) {
     if (v < MIN_UNIT_MONTHS || v > MAX_UNIT_MONTHS)
-        croak("Parameter 'months' is out of supported range");
+        croak("Parameter 'months' is out of range");
 }
 
 static void
 THX_check_unit_weeks(pTHX_ int64_t v) {
     if (v < MIN_UNIT_WEEKS || v > MAX_UNIT_WEEKS)
-        croak("Parameter 'weeks' is out of supported range");
+        croak("Parameter 'weeks' is out of range");
 }
 
 static void
 THX_check_unit_days(pTHX_ int64_t v) {
     if (v < MIN_UNIT_DAYS || v > MAX_UNIT_DAYS)
-        croak("Parameter 'days' is out of supported range");
+        croak("Parameter 'days' is out of range");
 }
 
 static void
 THX_check_unit_hours(pTHX_ int64_t v) {
     if (v < MIN_UNIT_HOURS || v > MAX_UNIT_HOURS)
-        croak("Parameter 'hours' is out of supported range");
+        croak("Parameter 'hours' is out of range");
 }
 
 static void
 THX_check_unit_minutes(pTHX_ int64_t v) {
     if (v < MIN_UNIT_MINUTES || v > MAX_UNIT_MINUTES)
-        croak("Parameter 'minutes' is out of supported range");
+        croak("Parameter 'minutes' is out of range");
 }
 
 static void
 THX_check_unit_seconds(pTHX_ int64_t v) {
     if (v < MIN_UNIT_SECONDS || v > MAX_UNIT_SECONDS)
-        croak("Parameter 'seconds' is out of supported range");
+        croak("Parameter 'seconds' is out of range");
 }
 
 moment_t
