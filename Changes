@@ -1,8 +1,8 @@
 0.11 2013-12-15
   - Added support for date/time arithmethics
-  - Added support for altering the components of date/time
+  - Added support for altering the components of the date/time
   - Changed ->from_epoch to only accept seconds and nanosecond parameters
-  - Added POS section with example format strings
+  - Added POD section with example format strings
   - Documentation improvements
 
 0.10 2013-12-07
@@ -23,7 +23,7 @@
   - The extended %f conversion specification now accepts an optional maximum 
     field width
   - Documented remaining methods and overloaded operators
-  - Added the new constructor to dev/bench.pl
+  - Added the now_utc constructor to dev/bench.pl
 
 0.08 2013-12-04
   - Changed resolution from microsecond to nanosecond
