@@ -154,6 +154,32 @@ THX_moment_from_epoch(pTHX_ int64_t sec, IV nsec, IV offset) {
     return r;
 }
 
+moment_t
+THX_moment_new(pTHX_ IV Y, IV M, IV D, IV h, IV m, IV s, IV ns, IV offset) {
+    moment_t r;
+    int64_t rdn, sod;
+
+    THX_check_year(aTHX_ Y);
+    THX_check_month(aTHX_ M);
+    if (D < 1 || D > 28) {
+        int dim = dt_days_in_month(Y, M);
+        if (D < 1 || D > dim)
+            croak("Parameter 'day' is out of the range [1, %d]", dim);
+    }
+    THX_check_hour(aTHX_ h);
+    THX_check_minute(aTHX_ m);
+    THX_check_second(aTHX_ s);
+    THX_check_nanosecond(aTHX_ ns);
+    THX_check_offset(aTHX_ offset);
+
+    rdn = dt_rdn(dt_from_ymd(Y, M, D));
+    sod = h * 3600 + m * 60 + s;
+    r.sec    = rdn * SECS_PER_DAY + sod;
+    r.nsec   = ns;
+    r.offset = offset;
+    return r;
+}
+
 static moment_t
 THX_moment_with_yd(pTHX_ const moment_t *mt, int y, int d) {
     moment_t r;

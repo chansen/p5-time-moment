@@ -80,14 +80,15 @@ typedef enum {
     MOMENT_COMPONENT_OFFSET,
 } moment_component_t;
 
+moment_t    THX_moment_new(pTHX_ IV Y, IV M, IV D, IV h, IV m, IV s, IV ns, IV offset);
 moment_t    THX_moment_from_epoch(pTHX_ int64_t sec, IV usec, IV offset);
+
+moment_t    THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t u, IV v);
 moment_t    THX_moment_with_offset(pTHX_ const moment_t *mt, IV offset);
 moment_t    THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec);
+
 moment_t    THX_moment_plus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
 moment_t    THX_moment_minus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
-moment_t    THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t u, IV v);
-
-int64_t     moment_epoch(const moment_t *mt);
 
 int64_t     moment_utc_rd_seconds(const moment_t *mt);
 int64_t     moment_local_rd_seconds(const moment_t *mt);
@@ -115,6 +116,10 @@ int         moment_millisecond(const moment_t *mt);
 int         moment_microsecond(const moment_t *mt);
 int         moment_nanosecond(const moment_t *mt);
 int         moment_offset(const moment_t *mt);
+int64_t     moment_epoch(const moment_t *mt);
+
+#define moment_new(Y, M, D, h, m, s, ns, offset) \
+    THX_moment_new(aTHX_ Y, M, D, h, m, s, ns, offset)
 
 #define moment_from_epoch(sec, nsec, offset) \
     THX_moment_from_epoch(aTHX_ sec, nsec, offset)
