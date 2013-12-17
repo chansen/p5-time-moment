@@ -9,7 +9,38 @@ use Time::Piece   qw[];
 use POSIX         qw[];
 
 {
-    print "Benchmarking constructor: ->now()\n";
+    print "Benchmarking constructor: ->new()\n";
+    my $zone = DateTime::TimeZone->new(name => 'UTC');
+    Benchmark::cmpthese( -10, {
+        'DateTime' => sub {
+            my $dt = DateTime->new(
+                year       => 2012,
+                month      => 12,
+                day        => 24,
+                hour       => 15,
+                minute     => 30,
+                second     => 45,
+                nanosecond => 123456789,
+                time_zone  => $zone,
+            );
+        },
+        'Time::Moment' => sub {
+            my $tm = Time::Moment->new(
+                year       => 2012,
+                month      => 12,
+                day        => 24,
+                hour       => 15,
+                minute     => 30,
+                second     => 45,
+                nanosecond => 123456789,
+                offset     => 0
+            );
+        },
+    });
+}
+
+{
+    print "\nBenchmarking constructor: ->now()\n";
     my $zone = DateTime::TimeZone->new(name => 'local');
     Benchmark::cmpthese( -10, {
         'DateTime' => sub {
