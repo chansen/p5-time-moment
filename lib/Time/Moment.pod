@@ -6,6 +6,16 @@ Time::Moment - Represents a date and time of day with an offset from UTC
 
 =head1 SYNOPSIS
     
+    $tm = Time::Moment->new(
+        year       => 2012,
+        month      => 12,
+        day        => 24,
+        hour       => 15,
+        minute     => 30,
+        second     => 45,
+        nanosecond => 123456789,
+        offset     => 0,
+    );
     $tm = Time::Moment->now;
     $tm = Time::Moment->now_utc;
     $tm = Time::Moment->from_epoch($seconds [, $nanosecond]);
@@ -104,6 +114,60 @@ C<0001-01-01T00:00:00Z> to C<9999-12-31T23:59:59Z>.
 
 =head1 CONSTRUCTORS
 
+=head2 new
+
+    $tm = Time::Moment->new(
+        year       => 2012,
+        month      => 12,
+        day        => 24,
+        hour       => 15,
+        minute     => 30,
+        second     => 45,
+        nanosecond => 123456789,
+        offset     => 0,
+    );
+
+Constructs an instance of C<Time::Moment> from the given components.
+
+B<Parameters:>
+
+=over 4
+
+=item year
+
+The year [1, 9999].
+
+=item month
+
+The month of the year [1, 12].
+
+=item day
+
+The day of the month [1, 31]. The day must be valid for the year and month, 
+otherwise an exception is raised.
+
+=item hour
+
+The hour of the day [0, 23].
+
+=item minute
+
+The minute of the hour [0, 59].
+
+=item second
+
+The second of the minute [0, 59].
+
+=item nanosecond
+
+The nanosecond of the second [0, 999_999_999].
+
+=item offset
+
+The time zone offset from UTC in minutes [-1080, 1080].
+
+=back
+
 =head2 now
 
     $tm = Time::Moment->now;
@@ -179,7 +243,9 @@ C<DateTime>:
 Constructs an instance of C<Time::Moment> from the given I<string>. The string 
 must consist of a complete date representation and time of day followed by a 
 time zone designator. The second part of the time of day may be omitted or 
-have a decimal fraction.
+have a decimal fraction. The decimal sign can be either the comma (C<,>) or 
+the full stop (C<.>). A decimal fraction must have at least one digit and may
+have a total of nine digits.
 
 The following are examples of complete date representations and time of day 
 representations:
