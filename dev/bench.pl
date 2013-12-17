@@ -167,6 +167,38 @@ use POSIX         qw[];
     });
 }
 
+{
+    print "\nBenchmarking sort: 1000 instants\n";
+
+    my @epochs = map { 
+        int(rand(365.2425 * 50) * 86400 + rand(86400))
+    } (1..1000);
+
+    my @dt = map {
+        DateTime->from_epoch(epoch => $_)
+    } @epochs;
+
+    my @tm = map {
+        Time::Moment->from_epoch($_)
+    } @epochs;
+
+    my @tp = map {
+        scalar Time::Piece::gmtime($_);
+    } @epochs;
+
+    Benchmark::cmpthese( -10, {
+        'DateTime' => sub {
+            my @sorted = sort { $a->compare($b) } @dt;
+        },
+        'Time::Moment' => sub {
+            my @sorted = sort { $a->compare($b) } @tm;
+        },
+        'Time::Piece' => sub {
+            my @sorted = sort { $a->compare($b) } @tp;
+        },
+    });
+}
+
 eval {
     require DateTime::Format::ISO8601;
     require DateTime::Format::RFC3339;
