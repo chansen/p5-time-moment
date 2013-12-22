@@ -9,6 +9,8 @@ BEGIN {
         'Module::Install::XSUtil'        => '0.36',
         'Module::Install::ReadmeFromPod' => '0',
         'Test::More'                     => '0.88',
+        'Test::Requires'                 => '0',
+        'Test::Fatal'                    => '0',
     );
 
     my @missing;
@@ -35,11 +37,13 @@ repository     'https://github.com/chansen/p5-time-moment';
 bugtracker     'https://github.com/chansen/p5-time-moment/issues';
 readme_from    'lib/Time/Moment.pod';
 
-requires       'Carp'        => '0';
-requires       'XSLoader'    => '0';
-requires       'Time::HiRes' => '0';
+requires       'Carp'           => '0';
+requires       'XSLoader'       => '0';
+requires       'Time::HiRes'    => '0';
 
-test_requires  'Test::More'  => '0.88';
+test_requires  'Test::More'     => '0.88';
+test_requires  'Test::Fatal'    => '0';
+test_requires  'Test::Requires' => '0';
 
 cc_warnings;
 cc_include_paths 'src';
