@@ -11,5 +11,7 @@ before_install:
   - "cpanm Module::Install::XSUtil"
   - "cpanm Module::Install::ReadmeFromPod"
   - "cpanm Test::More"
+  - "cpanm Test::Fatal"
+  - "cpanm Test::Requires"
 script: "perl Makefile.PL; make test"
 
