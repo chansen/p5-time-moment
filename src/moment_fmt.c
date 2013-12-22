@@ -2,6 +2,13 @@
 #include "dt_core.h"
 #include "dt_accessor.h"
 
+typedef enum {
+    PAD_DEFAULT,
+    PAD_NONE,
+    PAD_ZERO,
+    PAD_SPACE,
+} pad_t;
+
 static const char *aDoW[] = {
     "Mon",
     "Tue",
@@ -90,9 +97,67 @@ moment_hour_meridiem(const moment_t *mt) {
     return Meridiem[moment_hour(mt) / 12];
 }
 
+static bool
+supports_padding_flag(const char c) {
+    switch (c) {
+        case 'C':
+        case 'd':
+        case 'e':
+        case 'g':
+        case 'G':
+        case 'H':
+        case 'I':
+        case 'j':
+        case 'k':
+        case 'l':
+        case 'm':
+        case 'M':
+        case 'S':
+        case 'U':
+        case 'V':
+        case 'W':
+        case 'y':
+        case 'Y':
+            return TRUE;
+    }
+    return FALSE;
+}
+
+static void
+THX_format_num(pTHX_ SV *dsv, size_t width, pad_t want, pad_t def, unsigned int v) {
+    char buf[20], *p, *e, *d, c;
+    size_t nlen, plen, dlen;
+
+    p = e = buf + sizeof(buf);
+    do {
+        *--p = '0' + (v % 10);
+    } while (v /= 10);
+
+    if (want == PAD_DEFAULT)
+        want = def;
+
+    if      (want == PAD_ZERO)  c = '0';
+    else if (want == PAD_SPACE) c = ' ';
+    else                        width = 0;
+
+    nlen = e - p;
+    plen = (width > nlen) ? width - nlen : 0;
+    dlen = nlen + plen;
+    (void)SvGROW(dsv, SvCUR(dsv) + dlen + 1);
+    d = SvPVX(dsv) + SvCUR(dsv);
+    if (plen) {
+        memset(d, c, plen);
+        d += plen;
+    }
+    memcpy(d, p, nlen);
+    SvCUR_set(dsv, SvCUR(dsv) + dlen);
+    *SvEND(dsv) = '\0';
+}
+
+
 #define CHR(n, d) (char)('0' + ((n) / (d)) % 10)
 static void
-THX_format_f(pTHX_ const moment_t *mt, SV *dsv, int len) {
+THX_format_f(pTHX_ SV *dsv, const moment_t *mt, int len) {
     char buf[9];
     int ns;
 
@@ -120,7 +185,7 @@ THX_format_f(pTHX_ const moment_t *mt, SV *dsv, int len) {
 #undef CHR
 
 static void
-THX_format_s(pTHX_ const moment_t *mt, SV *dsv) {
+THX_format_s(pTHX_ SV *dsv, const moment_t *mt) {
     char buf[30], *p, *e;
     int64_t v;
 
@@ -141,7 +206,7 @@ THX_format_s(pTHX_ const moment_t *mt, SV *dsv) {
 }
 
 static void
-THX_format_z(pTHX_ const moment_t *mt, SV *dsv, int extended) {
+THX_format_z(pTHX_ SV *dsv, const moment_t *mt, int extended) {
     int offset, sign;
 
     offset = moment_offset(mt);
@@ -156,7 +221,7 @@ THX_format_z(pTHX_ const moment_t *mt, SV *dsv, int extended) {
 }
 
 static void
-THX_format_Z(pTHX_ const moment_t *mt, SV *dsv) {
+THX_format_Z(pTHX_ SV *dsv, const moment_t *mt) {
     int offset, sign;
 
     offset = moment_offset(mt);
@@ -171,11 +236,28 @@ THX_format_Z(pTHX_ const moment_t *mt, SV *dsv) {
     }
 }
 
+#define format_num(dsv, width, wanted, def, num) \
+    THX_format_num(aTHX_ dsv, width, wanted, def, num)
+
+#define format_f(dsv, mt, len) \
+    THX_format_f(aTHX_ dsv, mt, len)
+
+#define format_s(dsv, mt) \
+    THX_format_s(aTHX_ dsv, mt)
+
+#define format_z(dsv, mt, extended) \
+    THX_format_z(aTHX_ dsv, mt, extended)
+
+#define format_Z(dsv, mt) \
+    THX_format_Z(aTHX_ dsv, mt)
+
 SV *
 THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
     const char *e, *p;
+    char c;
     SV *dsv;
     dt_t dt;
+    pad_t pad;
     int year, month, day, width, zextd;
 
     dsv = sv_2mortal(newSV(16));
@@ -194,13 +276,13 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
         if (p == e)
             break;
 
+        pad = PAD_DEFAULT;
         width = -1;
         zextd = 0;
-        s = p;
+        s = p + 1;
 
       label:
-        ++s;
-        switch (*s) {
+        switch (c = *s++) {
             case 'a': /* locale's abbreviated day of the week name */
                 sv_catpv(dsv, aDoW[dt_dow(dt) - 1]);
                 break;
@@ -225,59 +307,59 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                          year);
                 break;
             case 'C':
-                sv_catpvf(dsv, "%02d", year / 100);
+                format_num(dsv, 2, pad, PAD_ZERO, year / 100);
                 break;
             case 'd':
-                sv_catpvf(dsv, "%02d", day);
+                format_num(dsv, 2, pad, PAD_ZERO, day);
                 break;
             case 'x': /* locale's time representation (C locale: %m/%d/%y) */
             case 'D':
                 sv_catpvf(dsv, "%02d/%02d/%02d", month, day, year % 100);
                 break;
             case 'e':
-                sv_catpvf(dsv, "%2d", day);
+                format_num(dsv, 2, pad, PAD_SPACE, day);
                 break;
             case 'f': /* extended conversion specification */
                 if (moment_nanosecond(mt)) {
                     sv_catpvn(dsv, ".", 1);
-                    THX_format_f(aTHX_ mt, dsv, width);
+                    format_f(dsv, mt, width);
                 }
                 break;
             case 'F':
                 sv_catpvf(dsv, "%04d-%02d-%02d", year, month, day);
                 break;
             case 'g':
-                sv_catpvf(dsv, "%02d", dt_yow(dt) % 100);
+                format_num(dsv, 2, pad, PAD_ZERO, dt_yow(dt) % 100);
                 break;
             case 'G':
-                sv_catpvf(dsv, "%d", dt_yow(dt));
+                format_num(dsv, 4, pad, PAD_ZERO, dt_yow(dt));
                 break;
             case 'H':
-                sv_catpvf(dsv, "%02d", moment_hour(mt));
+                format_num(dsv, 2, pad, PAD_ZERO, moment_hour(mt));
                 break;
             case 'I':
-                sv_catpvf(dsv, "%02d", moment_hour_12(mt));
+                format_num(dsv, 2, pad, PAD_ZERO, moment_hour_12(mt));
                 break;
             case 'j':
-                sv_catpvf(dsv, "%03d", dt_doy(dt));
+                format_num(dsv, 3, pad, PAD_ZERO, dt_doy(dt));
                 break;
             case 'k': /* extended conversion specification */
-                sv_catpvf(dsv, "%2d", moment_hour(mt));
+                format_num(dsv, 2, pad, PAD_SPACE, moment_hour(mt));
                 break;
             case 'l': /* extended conversion specification */
-                sv_catpvf(dsv, "%2d", moment_hour_12(mt));
+                format_num(dsv, 2, pad, PAD_SPACE, moment_hour_12(mt));
                 break;
             case 'm':
-                sv_catpvf(dsv, "%02d", month);
+                format_num(dsv, 2, pad, PAD_ZERO, month);
                 break;
             case 'M':
-                sv_catpvf(dsv, "%02d", moment_minute(mt));
+                format_num(dsv, 2, pad, PAD_ZERO, moment_minute(mt));
                 break;
             case 'n':
                 sv_catpvn(dsv, "\n", 1);
                 break;
             case 'N': /* extended conversion specification */
-                THX_format_f(aTHX_ mt, dsv, width);
+                format_f(dsv, mt, width);
                 break;
             case 'p': /* locale's equivalent of either a.m. or p.m (C locale: AM or PM) */
                 sv_catpv(dsv, moment_hour_meridiem(mt));
@@ -295,10 +377,10 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                           moment_minute(mt));
                 break;
             case 's': /* extended conversion specification */
-                THX_format_s(aTHX_ mt, dsv);
+                format_s(dsv, mt);
                 break;
             case 'S':
-                sv_catpvf(dsv, "%02d", moment_second(mt));
+                format_num(dsv, 2, pad, PAD_ZERO, moment_second(mt));
                 break;
             case 't':
                 sv_catpvn(dsv, "\t", 1);
@@ -314,51 +396,66 @@ THX_moment_strftime(pTHX_ const moment_t *mt, const char *s, STRLEN len) {
                 sv_catpvf(dsv, "%d", dt_dow(dt));
                 break;
             case 'U':
-                sv_catpvf(dsv, "%02d", dt_week_number_sun(dt));
+                format_num(dsv, 2, pad, PAD_ZERO, dt_week_number_sun(dt));
                 break;
             case 'V':
-                sv_catpvf(dsv, "%02d", dt_woy(dt));
+                format_num(dsv, 2, pad, PAD_ZERO, dt_woy(dt));
                 break;
             case 'w':
                 sv_catpvf(dsv, "%d", dt_dow(dt) % 7);
                 break;
             case 'W':
-                sv_catpvf(dsv, "%02d", dt_week_number_mon(dt));
+                format_num(dsv, 2, pad, PAD_ZERO, dt_week_number_mon(dt));
                 break;
             case 'y':
-                sv_catpvf(dsv, "%02d", year % 100);
+                format_num(dsv, 2, pad, PAD_ZERO, year % 100);
                 break;
             case 'Y':
-                sv_catpvf(dsv, "%04d", year);
+                format_num(dsv, 4, pad, PAD_ZERO, year);
                 break;
             case 'z':
-                THX_format_z(aTHX_ mt, dsv, zextd);
+                format_z(dsv, mt, zextd);
                 break;
             case 'Z':
-                THX_format_Z(aTHX_ mt, dsv);
+                format_Z(dsv, mt);
                 break;
             case '%':
                 sv_catpvn(dsv, "%", 1);
                 break;
             case ':':
-                if (s + 1 <= e && s[1] == 'z') {
+                if (s < e && *s == 'z') {
                     zextd = 1;
+                    goto label;
+                }
+                goto unknown;
+            case '_':
+                if (s < e && supports_padding_flag(*s)) {
+                    pad = PAD_SPACE;
+                    goto label;
+                }
+                goto unknown;
+            case '-':
+                if (s < e && supports_padding_flag(*s)) {
+                    pad = PAD_NONE;
                     goto label;
                 }
                 goto unknown;
             case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
-                if (s + 1 <= e && (s[1] == 'f' || s[1] == 'N')) {
-                    width = *s - '0';
+                if (s < e && (*s == 'f' || *s == 'N')) {
+                    width = c - '0';
+                    goto label;
+                }
+                if (s < e && c == '0' && supports_padding_flag(*s)) {
+                    pad = PAD_ZERO;
                     goto label;
                 }
                 /* FALLTROUGH */
             default:
             unknown:
-                sv_catpvn(dsv, p, s - p + 1);
+                sv_catpvn(dsv, p, s - p);
                 break;
         }
-        s++;
     }
     return dsv;
 }
