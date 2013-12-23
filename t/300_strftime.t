@@ -182,5 +182,105 @@ BEGIN {
     }
 }
 
+{
+    my @times = map {
+        Time::Moment->new(year => 1, month => 1, day => $_)
+    } (1..7);
+
+    my @DayShort = qw(
+        Mon
+        Tue
+        Wed
+        Thu
+        Fri
+        Sat
+        Sun
+    );
+
+    my @DayFull = qw(
+        Monday
+        Tuesday
+        Wednesday
+        Thursday
+        Friday
+        Saturday
+        Sunday
+    );
+
+    for (my $i = 0; $i < @times; $i++) {
+        my $tm = $times[$i];
+        is($tm->strftime('%a'), $DayShort[$i], "$tm '%a'");
+        is($tm->strftime('%A'), $DayFull[$i],  "$tm '%A'");
+    }
+}
+
+{
+    my @times = map {
+        Time::Moment->new(year => 1, month => $_, day => 1)
+    } (1..12);
+
+    my @MonthShort = qw(
+        Jan
+        Feb
+        Mar
+        Apr
+        May
+        Jun
+        Jul
+        Aug
+        Sep
+        Oct
+        Nov
+        Dec
+    );
+
+    my @MonthFull = qw(
+        January
+        February
+        March
+        April
+        May
+        June
+        July
+        August
+        September
+        October
+        November
+        December
+    );
+
+    for (my $i = 0; $i < @times; $i++) {
+        my $tm = $times[$i];
+        is($tm->strftime('%h'), $MonthShort[$i], "$tm '%h'");
+        is($tm->strftime('%b'), $MonthShort[$i], "$tm '%b'");
+        is($tm->strftime('%B'), $MonthFull[$i],  "$tm '%B'");
+    }
+}
+
+{
+    my @hours   = (0, 3, 6, 9, 12, 15, 17);
+    my @minutes = (0, 1, 15, 30, 45, 59);
+    my @sign    = qw(- +);
+
+    foreach my $h (@hours) {
+        foreach my $m (@minutes) {
+            my $n = $h * 60 + $m;
+            foreach my $off ($n == 0 ? ($n) : ($n, -$n)) {
+                my $tm = Time::Moment->new(year => 2000, offset => $off);
+                my $exp;
+
+                $exp = sprintf '%s%02d%02d',  $sign[$off >= 0], $h, $m;
+                is($tm->strftime('%z'),  $exp, "$tm '%z'"); 
+
+                $exp = sprintf '%s%02d:%02d', $sign[$off >= 0], $h, $m;
+                is($tm->strftime('%:z'), $exp, "$tm '%:z'");
+
+                $exp = $off == 0 ? 'Z' : $exp;
+                is($tm->strftime('%Z'),  $exp, "$tm '%Z'");
+            }
+        }
+    }
+}
+
 done_testing();
 
