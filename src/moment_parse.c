@@ -45,6 +45,9 @@ static const int pow_10[] = {
     1000000000,
 };
 
+#define ACCEPT_Z 1
+#define ACCEPT_z 2
+
 /*
  *  fffffffff
  */
@@ -120,7 +123,7 @@ parse_time_basic(const char *str, size_t len, int *sp, int *fp) {
  */
 
 static size_t
-parse_zone_basic(const char *str, size_t len, int *op) {
+parse_zone_basic(const char *str, size_t len, unsigned int accept, int *op) {
     const unsigned char *p;
     int o, h, m, sign;
     size_t n;
@@ -130,7 +133,15 @@ parse_zone_basic(const char *str, size_t len, int *op) {
 
     p = (const unsigned char *)str;
     switch (*p) {
+        case 'z':
+            if ((accept & ACCEPT_z) != ACCEPT_z)
+                return 0;
+            o = 0;
+            n = 1;
+            goto offset;
         case 'Z':
+            if ((accept & ACCEPT_Z) != ACCEPT_Z)
+                return 0;
             o = 0;
             n = 1;
             goto offset;
@@ -237,7 +248,7 @@ parse_time_extended(const char *str, size_t len, int *sp, int *fp) {
  */
 
 static size_t
-parse_zone_extended(const char *str, size_t len, int *op) {
+parse_zone_extended(const char *str, size_t len, unsigned int accept, int *op) {
     const unsigned char *p;
     int o, h, m, sign;
     size_t n;
@@ -247,7 +258,15 @@ parse_zone_extended(const char *str, size_t len, int *op) {
 
     p = (const unsigned char *)str;
     switch (*p) {
+        case 'z':
+            if ((accept & ACCEPT_z) != ACCEPT_z)
+                return 0;
+            o = 0;
+            n = 1;
+            goto offset;
         case 'Z':
+            if ((accept & ACCEPT_Z) != ACCEPT_Z)
+                return 0;
             o = 0;
             n = 1;
             goto offset;
@@ -291,38 +310,71 @@ parse_zone_extended(const char *str, size_t len, int *op) {
 }
 
 static int
-parse_string(const char *str, size_t len, int64_t *sp, IV *fp, IV *op) {
+parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV *op) {
     size_t n;
     dt_t dt;
-    int sod, frac, off;
-    bool ext;
+    int s, sod, frac, off;
+    bool extended;
+    unsigned int accept;
+
+    accept = ACCEPT_Z;
 
     if (!(n = dt_parse_string(str, len, &dt)))
         return 1;
 
-    ext = str[4] == '-';
-    if (n == len || !(str[n] == 'T' || str[n] == ' '))
+    if (n == len)
         return 1;
 
-    ++n;
+    /* 
+     * 0123456789
+     * 2012-12-14 
+     */
+    extended = str[4] == '-';
+    if (lenient) /* only calendar date and time of day in extended format */
+        lenient = (extended && str[7] == '-');
+    if (lenient)
+        accept |= ACCEPT_z;
+    switch (s = str[n]) {
+        case 'T':
+            break;
+        case 't':
+        case ' ':
+            if (lenient)
+                break;
+            /* FALLTROUGH */
+        default:
+            return 1;
+    }
+
+    n++;
     str += n;
     len -= n;
 
-    if (ext)
+    if (extended)
         n = parse_time_extended(str, len, &sod, &frac);
     else
         n = parse_time_basic(str, len, &sod, &frac);
 
-    if (!n)
+    if (!n || n == len)
+        return 1;
+
+    if (lenient && s == ' ' && str[n] == ' ')
+        accept = 0, n++;
+
+    if (n == len)
         return 1;
 
     str += n;
     len -= n;
 
-    if (ext)
-        n = parse_zone_extended(str, len, &off);
-    else
-        n = parse_zone_basic(str, len, &off);
+    if (extended) {
+        n = parse_zone_extended(str, len, accept, &off);
+        if (!n && lenient)
+            n = parse_zone_basic(str, len, accept, &off);
+    }
+    else {
+        n = parse_zone_basic(str, len, accept, &off);
+    }
 
     if (!n || n != len)
         return 1;
@@ -334,11 +386,11 @@ parse_string(const char *str, size_t len, int64_t *sp, IV *fp, IV *op) {
 }
 
 moment_t
-THX_moment_from_string(pTHX_ const char *str, STRLEN len) {
+THX_moment_from_string(pTHX_ const char *str, STRLEN len, bool lenient) {
     int64_t sec;
     IV frac, offset;
 
-    if (parse_string(str, len, &sec, &frac, &offset))
+    if (parse_string(str, len, lenient, &sec, &frac, &offset))
         croak("Cannot parse the given string");
 
     return moment_from_epoch(sec, frac, offset);

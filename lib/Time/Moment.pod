@@ -239,13 +239,14 @@ C<DateTime>:
 =head2 from_string
 
     $tm = Time::Moment->from_string($string);
+    $tm = Time::Moment->from_string($string, $lenient = false);
 
 Constructs an instance of C<Time::Moment> from the given I<string>. The string 
 must consist of a complete date representation and time of day followed by a 
 time zone designator. The second part of the time of day may be omitted or 
-have a decimal fraction. The decimal sign can be either the comma (",") or 
-the full stop ("."). A decimal fraction must have at least one digit and may
-have a total of nine digits.
+have a decimal fraction. The decimal sign can be either the comma [,] or the 
+full stop [.]. A decimal fraction must have at least one digit and may have a 
+total of nine digits.
 
 The following are examples of complete date representations and time of day 
 representations:
@@ -277,7 +278,49 @@ representations:
     YYYY-MM-DDThh:mm±hh           2012-12-24T12:15+01       (reduced accuracy)
 
 Where representations using calendar dates are shown, ordinal dates or week 
-dates may be substituted.
+dates may be substituted. This ISO 8601 profile correspond to a subset of 
+ISO 8601:2004 4.3 Date and time of day.
+
+If the optional boolean parameter I<lenient> is true the following examples
+is also accepted where the date is a complete calendar date and time of day 
+in extended format:
+
+    YYYY-MM-DD hh:mm:ssZ          2012-12-24 12:15:30Z
+    YYYY-MM-DD hh:mm:ssz          2012-12-24 12:15:30z
+    YYYY-MM-DD hh:mm:ss±hhmm      2012-12-24 12:15:30+0100
+    YYYY-MM-DD hh:mm:ss±hh:mm     2012-12-24 12:15:30+01:00
+    YYYY-MM-DD hh:mm:ss±hh        2012-12-24 12:15:30+01
+    
+    YYYY-MM-DD hh:mm:ss.ssZ       2012-12-24 12:15:30.500Z
+    YYYY-MM-DD hh:mm:ss.ssz       2012-12-24 12:15:30.500z
+    YYYY-MM-DD hh:mm:ss.ss±hhmm   2012-12-24 12:15:30.500+0100
+    YYYY-MM-DD hh:mm:ss.ss±hh:mm  2012-12-24 12:15:30.500+01:00
+    YYYY-MM-DD hh:mm:ss.ss±hh     2012-12-24 12:15:30.500+01
+    
+    YYYY-MM-DD hh:mmZ             2012-12-24 12:15Z
+    YYYY-MM-DD hh:mmz             2012-12-24 12:15z
+    YYYY-MM-DD hh:mm±hhmm         2012-12-24 12:15+0100
+    YYYY-MM-DD hh:mm±hh:mm        2012-12-24 12:15+01:00
+    YYYY-MM-DD hh:mm±hh           2012-12-24 12:15+01
+    
+    YYYY-MM-DD hh:mm:ss ±hh:mm    2012-12-24 12:15:30 +01:00
+    YYYY-MM-DD hh:mm:ss ±hhmm     2012-12-24 12:15:30 +0100
+    YYYY-MM-DD hh:mm:ss ±hh       2012-12-24 12:15:30 +01
+    
+    YYYY-MM-DD hh:mm:ss.ss ±hhmm  2012-12-24 12:15:30.500 +0100
+    YYYY-MM-DD hh:mm:ss.ss ±hh:mm 2012-12-24 12:15:30.500 +01:00
+    YYYY-MM-DD hh:mm:ss.ss ±hh    2012-12-24 12:15:30.500 +01
+    
+    YYYY-MM-DD hh:mm ±hh:mm       2012-12-24 12:15 +01:00
+    YYYY-MM-DD hh:mm ±hhmm        2012-12-24 12:15 +0100
+    YYYY-MM-DD hh:mm ±hh          2012-12-24 12:15 +01
+
+The time designator [T] may be in lower case [t] or replaced with a single 
+space. A single space is also accepted between the time of day and the zone 
+designator if the time designator is replaced with a single space. The zone 
+designator may be in basic format even though the calendar date and time of 
+day is in extended format. The UTC designator [Z] may also be in lower case 
+[z].
 
 =head1 INSTANCE METHODS
 
@@ -593,7 +636,7 @@ than zero if this time is after the other time.
 =head2 to_string
 
     $string = $tm->to_string;
-    $string = $tm->to_string($reduced);
+    $string = $tm->to_string($reduced = false);
 
 Returns a string representation of the instance. If the optional boolean 
 parameter I<reduced> is true a shorter representation is attempted.

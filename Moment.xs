@@ -428,16 +428,17 @@ from_epoch(klass, seconds, nanosecond=0)
     RETVAL
 
 moment_t
-from_string(klass, string)
+from_string(klass, string, lenient=FALSE)
     SV *klass
     SV *string
+    bool lenient
   PREINIT:
     dSTASH_CONSTRUCTOR_MOMENT(klass);
     STRLEN len;
     const char *str;
   CODE:
     str = SvPV_const(string, len);
-    RETVAL = moment_from_string(str, len);
+    RETVAL = moment_from_string(str, len, lenient);
   OUTPUT:
     RETVAL
 
