@@ -313,7 +313,7 @@ static int
 parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV *op) {
     size_t n;
     dt_t dt;
-    int s, sod, frac, off;
+    int td, sod, frac, off;
     bool extended;
     unsigned int accept;
 
@@ -334,7 +334,7 @@ parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV 
         lenient = (extended && str[7] == '-');
     if (lenient)
         accept |= ACCEPT_z;
-    switch (s = str[n]) {
+    switch (td = str[n]) {
         case 'T':
             break;
         case 't':
@@ -358,11 +358,8 @@ parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV 
     if (!n || n == len)
         return 1;
 
-    if (lenient && s == ' ' && str[n] == ' ')
+    if (lenient && td == ' ' && str[n] == ' ')
         accept = 0, n++;
-
-    if (n == len)
-        return 1;
 
     str += n;
     len -= n;
