@@ -45,9 +45,6 @@ static const int pow_10[] = {
     1000000000,
 };
 
-#define ACCEPT_Z 1
-#define ACCEPT_z 2
-
 /*
  *  fffffffff
  */
@@ -123,7 +120,7 @@ parse_time_basic(const char *str, size_t len, int *sp, int *fp) {
  */
 
 static size_t
-parse_zone_basic(const char *str, size_t len, unsigned int accept, int *op) {
+parse_zone_basic(const char *str, size_t len, int *op) {
     const unsigned char *p;
     int o, h, m, sign;
     size_t n;
@@ -133,15 +130,7 @@ parse_zone_basic(const char *str, size_t len, unsigned int accept, int *op) {
 
     p = (const unsigned char *)str;
     switch (*p) {
-        case 'z':
-            if ((accept & ACCEPT_z) != ACCEPT_z)
-                return 0;
-            o = 0;
-            n = 1;
-            goto offset;
         case 'Z':
-            if ((accept & ACCEPT_Z) != ACCEPT_Z)
-                return 0;
             o = 0;
             n = 1;
             goto offset;
@@ -248,7 +237,7 @@ parse_time_extended(const char *str, size_t len, int *sp, int *fp) {
  */
 
 static size_t
-parse_zone_extended(const char *str, size_t len, unsigned int accept, int *op) {
+parse_zone_extended(const char *str, size_t len, int *op) {
     const unsigned char *p;
     int o, h, m, sign;
     size_t n;
@@ -258,15 +247,7 @@ parse_zone_extended(const char *str, size_t len, unsigned int accept, int *op) {
 
     p = (const unsigned char *)str;
     switch (*p) {
-        case 'z':
-            if ((accept & ACCEPT_z) != ACCEPT_z)
-                return 0;
-            o = 0;
-            n = 1;
-            goto offset;
         case 'Z':
-            if ((accept & ACCEPT_Z) != ACCEPT_Z)
-                return 0;
             o = 0;
             n = 1;
             goto offset;
@@ -309,15 +290,89 @@ parse_zone_extended(const char *str, size_t len, unsigned int accept, int *op) {
     return n;
 }
 
+/*
+ *  Z
+ *  z
+ *  ±hh
+ *  ±hhmm
+ *  ±hh:mm
+ */
+
+static size_t
+parse_zone_lenient(const char *str, size_t len, bool accept_zulu, int *op) {
+    const unsigned char *p;
+    int o, h, m, sign;
+    size_t n;
+
+    if (len < 1)
+        return 0;
+
+    p = (const unsigned char *)str;
+    switch (*p) {
+        case 'z':
+        case 'Z':
+            if (!accept_zulu)
+                return 0;
+            o = 0;
+            n = 1;
+            goto offset;
+        case '+':
+            sign = 1;
+            break;
+        case '-':
+            sign = -1;
+            break;
+        default:
+            return 0;
+    }
+
+    if (len < 3)
+        return 0;
+
+    n = count_digits(p, 1, len);
+    m = 0;
+    switch (n) {
+        case 2: /* ±hh */
+            h = parse_number(p, 1, 2);
+            n = 3;
+            break;
+        case 4: /* ±hhmm */
+            h = parse_number(p, 1, 2);
+            m = parse_number(p, 3, 2);
+            n = 5;
+            goto hm;
+        default:
+            return 0;
+    }
+    
+    if (len < 4 || p[3] != ':')
+        goto hm;
+
+    if (count_digits(p, 4, len) != 2)
+        return 0;
+
+    m = parse_number(p, 4, 2);
+    n = 6;
+
+ hm:
+    if (h > 18 || m > 59)
+        return 0;
+    o = sign * (h * 60 + m);
+
+ offset:
+    if (op)
+        *op = o;
+    return n;
+}
+
 static int
 parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV *op) {
     size_t n;
     dt_t dt;
     int td, sod, frac, off;
-    bool extended;
-    unsigned int accept;
+    bool extended, accept_zulu;
 
-    accept = ACCEPT_Z;
+    accept_zulu = 1;
 
     if (!(n = dt_parse_string(str, len, &dt)))
         return 1;
@@ -332,9 +387,7 @@ parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV 
     extended = str[4] == '-';
     if (lenient) /* only calendar date and time of day in extended format */
         lenient = (extended && str[7] == '-');
-    if (lenient)
-        accept |= ACCEPT_z;
-    switch (td = str[n]) {
+    switch (td = str[n++]) {
         case 'T':
             break;
         case 't':
@@ -346,7 +399,6 @@ parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV 
             return 1;
     }
 
-    n++;
     str += n;
     len -= n;
 
@@ -359,18 +411,19 @@ parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV 
         return 1;
 
     if (lenient && td == ' ' && str[n] == ' ')
-        accept = 0, n++;
+        accept_zulu = 0, n++;
 
     str += n;
     len -= n;
 
     if (extended) {
-        n = parse_zone_extended(str, len, accept, &off);
-        if (!n && lenient)
-            n = parse_zone_basic(str, len, accept, &off);
+        if (lenient)
+            n = parse_zone_lenient(str, len, accept_zulu, &off);
+        else 
+            n = parse_zone_extended(str, len, &off);
     }
     else {
-        n = parse_zone_basic(str, len, accept, &off);
+        n = parse_zone_basic(str, len, &off);
     }
 
     if (!n || n != len)
