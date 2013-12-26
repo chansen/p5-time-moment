@@ -142,8 +142,10 @@ sub TRUE () { !!1 }
         }
         {
             my $tm;
-            my $name = "->from_string($string, TRUE)";
-            lives_ok { $tm = Time::Moment->from_string($string, TRUE) } $name;
+            my $name = "->from_string($string, lenient => TRUE)";
+            lives_ok { 
+                $tm = Time::Moment->from_string($string, lenient => TRUE);
+            } $name;
             is($tm->epoch, $exp->epoch, "$name->epoch");
         }
     }
