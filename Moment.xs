@@ -446,11 +446,12 @@ from_string(klass, string, ...)
     if ((items % 2) != 0)
         croak("Odd number of elements in named parameters");
 
+    lenient = FALSE;
     for (i = 2; i < items; i += 2) {
         str = SvPV_const(ST(i), len);
         switch (moment_param(str, len)) {
             case MOMENT_PARAM_LENIENT:
-                lenient = cBOOL(SvTRUE((ST(i+1)))); 
+                lenient = cBOOL(SvTRUE((ST(i+1))));
                 break;
             default: 
                 croak("Unrecognised parameter: '%s'", str);
