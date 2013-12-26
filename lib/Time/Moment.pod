@@ -239,7 +239,7 @@ C<DateTime>:
 =head2 from_string
 
     $tm = Time::Moment->from_string($string);
-    $tm = Time::Moment->from_string($string, [lenient => false ]);
+    $tm = Time::Moment->from_string($string [, lenient => false]);
 
 Constructs an instance of C<Time::Moment> from the given I<string>. The string 
 must consist of a complete date representation and time of day followed by a 
