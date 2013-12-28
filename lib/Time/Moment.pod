@@ -1053,7 +1053,7 @@ and C<eg/cbor.pl> for an example how to roundtrip instances of C<Time::Moment>.
 
 C<Time::Moment> implements a C<FREEZE> method that returns the L<stringified|/stringification>
 representation of the instance and a C<THAW> method according to the protocol defined in 
-L<Types::Serializer>.
+L<Types::Serialiser>.
 
 =head1 EXAMPLE FORMAT STRINGS
 
