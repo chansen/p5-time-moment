@@ -1,3 +1,13 @@
+0.12 2013-12-29
+  - Implemented support for lenient parsing in ->from_string, should be capable
+    of parsing most ISO 8601 profiles, including ISO 9075.
+  - Implemented support for generic FREEZE / THAW serialization, upcomming Sereal
+    will support these callbacks.
+  - Implemented ->new
+  - Refactored test suite and added more tests
+  - Implemented support for GNU's '_', '-' and '0' flags in ->strftime()
+  - Added eg/strftime.pl
+
 0.11 2013-12-15
   - Added support for date/time arithmethics
   - Added support for altering the components of the date/time
