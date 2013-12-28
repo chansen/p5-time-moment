@@ -1034,7 +1034,7 @@ of days from Rata Die (4 bytes), second of the day (4 bytes) and nanosecond of
 the second (4 bytes).
 
 The total size of the serialized C<Time::Moment> instance using C<nfreeze> is 
-30 bytes.
+34 bytes.
 
 =head2 JSON
 
