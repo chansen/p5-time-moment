@@ -1049,6 +1049,12 @@ representation of the instance as a I<standard date/time string> using tag C<0>.
 See L<CBOR::XS>, L<RFC 7049 Section 2.4.1|http://tools.ietf.org/html/rfc7049#section-2.4.1>
 and C<eg/cbor.pl> for an example how to roundtrip instances of C<Time::Moment>.
 
+=head2 FREEZE / THAW
+
+C<Time::Moment> implements a C<FREEZE> method that returns the L<stringified|/stringification>
+representation of the instance and a C<THAW> method according to the protocol defined in 
+L<Types::Serializer>.
+
 =head1 EXAMPLE FORMAT STRINGS
 
 =head2 ISO 8601 - Data elements and interchange formats

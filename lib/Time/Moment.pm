@@ -97,5 +97,15 @@ sub TO_CBOR {
     return CBOR::XS::tag(0, $_[0]->to_string);
 }
 
+sub FREEZE {
+    my ($self, $serialiser) = @_;
+    return $self->to_string;
+}
+
+sub THAW {
+    my ($class, $serialiser, $string) = @_;
+    return $class->from_string($string);
+}
+
 1;
 
