@@ -98,12 +98,11 @@ sub TO_CBOR {
 }
 
 sub FREEZE {
-    my ($self, $serialiser) = @_;
-    return $self->to_string;
+    return $_[0]->to_string;
 }
 
 sub THAW {
-    my ($class, $serialiser, $string) = @_;
+    my ($class, undef, $string) = @_;
     return $class->from_string($string);
 }
 
