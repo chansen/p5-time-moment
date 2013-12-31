@@ -188,23 +188,5 @@ BEGIN {
     }
 }
 
-=begin
-{
-    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789Z");
-    for my $offset (-1, -30, -60, 0, 1, 30, 60) {
-        my $got = $tm->with_offset($offset);
-        is($got->year,             2012, "$tm->with_offset($offset)->year");
-        is($got->month,              12, "$tm->with_offset($offset)->month");
-        is($got->day_of_month,       24, "$tm->with_offset($offset)->day_of_month");
-        is($got->hour,               12, "$tm->with_offset($offset)->hour");
-        is($got->minute,             30, "$tm->with_offset($offset)->minute");
-        is($got->second,             45, "$tm->with_offset($offset)->second");
-        is($got->millisecond,       123, "$tm->with_offset($offset)->millisecond");
-        is($got->microsecond,    123456, "$tm->with_offset($offset)->microsecond");
-        is($got->nanosecond,  123456789, "$tm->with_offset($offset)->nanosecond");
-    }
-}
-=cut
-
 done_testing();
 
