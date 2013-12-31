@@ -480,7 +480,7 @@ at_utc(self)
   CODE:
     if (0 == moment_offset(self))
         XSRETURN(1);
-    RETVAL = moment_with_offset(self, 0);
+    RETVAL = moment_with_offset_same_instant(self, 0);
     if (SvTEMP(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);
@@ -555,11 +555,38 @@ with_year(self, value)
     Time::Moment::with_minute       =  MOMENT_COMPONENT_MINUTE
     Time::Moment::with_second       =  MOMENT_COMPONENT_SECOND
     Time::Moment::with_nanosecond   =  MOMENT_COMPONENT_NANOSECOND
-    Time::Moment::with_offset       =  MOMENT_COMPONENT_OFFSET
   CODE:
     RETVAL = moment_with_component(self, (moment_component_t)ix, value);
     if (moment_compare_local(self, &RETVAL) == 0)
         XSRETURN(1);
+    if (SvTEMP(ST(0))) {
+        sv_set_moment(ST(0), &RETVAL);
+        XSRETURN(1);
+    }
+  OUTPUT:
+    RETVAL
+
+moment_t
+with_offset_same_instant(self, offset)
+    const moment_t *self
+    IV offset
+  PREINIT:
+    dSTASH_INVOCANT;
+  ALIAS:
+    Time::Moment::with_offset              = 0
+    Time::Moment::with_offset_same_instant = 0
+    Time::Moment::with_offset_same_local   = 1
+  CODE:
+    if (ix == 0) {
+        RETVAL = moment_with_offset_same_instant(self, offset);
+        if (moment_compare_local(self, &RETVAL) == 0)
+            XSRETURN(1);
+    }
+    else {
+        RETVAL = moment_with_offset_same_local(self, offset);
+        if (moment_compare(self, &RETVAL) == 0)
+            XSRETURN(1);
+    }
     if (SvTEMP(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);

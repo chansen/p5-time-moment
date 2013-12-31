@@ -309,11 +309,22 @@ THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec) {
 }
 
 moment_t
-THX_moment_with_offset(pTHX_ const moment_t *mt, IV offset) {
+THX_moment_with_offset_same_instant(pTHX_ const moment_t *mt, IV offset) {
     moment_t r;
 
     THX_check_offset(aTHX_ offset);
     r.sec    = moment_utc_rd_seconds(mt) + offset * SECS_PER_MIN;
+    r.nsec   = mt->nsec;
+    r.offset = offset;
+    return r;
+}
+
+moment_t
+THX_moment_with_offset_same_local(pTHX_ const moment_t *mt, IV offset) {
+    moment_t r;
+
+    THX_check_offset(aTHX_ offset);
+    r.sec    = mt->sec;
     r.nsec   = mt->nsec;
     r.offset = offset;
     return r;
@@ -455,8 +466,6 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
             return THX_moment_with_second(aTHX_ mt, v);
         case MOMENT_COMPONENT_NANOSECOND:
             return THX_moment_with_nanosecond(aTHX_ mt, v);
-        case MOMENT_COMPONENT_OFFSET:
-            return THX_moment_with_offset(aTHX_ mt, v);
     }
     croak("panic: THX_moment_with_component() called with unknown component (%d)", (int)c);
 }
