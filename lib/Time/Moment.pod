@@ -50,7 +50,9 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->with_minute($minute);
     $tm2          = $tm1->with_second($second);
     $tm2          = $tm1->with_nanosecond($nanosecond);
-    $tm2          = $tm1->with_offset($offset);
+    
+    $tm2          = $tm1->with_offset_same_instant($offset);
+    $tm2          = $tm1->with_offset_same_local($offset);
     
     $tm2          = $tm1->plus_years($years);
     $tm2          = $tm1->plus_months($months);
@@ -479,12 +481,27 @@ altered.
 Returns a copy of this instance with the given I<nanosecond> of second 
 [0, 999_999_999] altered.
 
-=head2 with_offset
+=head2 with_offset_same_instant
 
-    $tm2 = $tm1->with_offset($offset);
+    $tm2 = $tm1->with_offset_same_instant($offset);
 
 Returns a copy of this instance with the given time zone I<offset> from UTC 
 in minutes [-1080, 1080] altered. The resulting time is at the same instant.
+
+    $tm1 = Time::Moment->from_string('2012-12-24T15:30:45+01');
+    $tm2 = $tm1->with_offset_same_instant(0);
+    say $tm2; # 2012-12-24T14:30:45Z
+
+=head2 with_offset_same_local
+
+    $tm2 = $tm1->with_offset_same_local($offset);
+
+Returns a copy of this instance with the given time zone I<offset> from UTC 
+in minutes [-1080, 1080] altered. The resulting time has the same local time.
+
+    $tm1 = Time::Moment->from_string('2012-12-24T15:30:45+01');
+    $tm2 = $tm1->with_offset_same_local(0);
+    say $tm2; # 2012-12-24T15:30:45Z
 
 =head2 plus_years
 
