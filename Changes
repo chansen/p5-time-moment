@@ -1,6 +1,7 @@
 0.12 2013-12-29
   - Implemented support for lenient parsing in ->from_string, should be capable
-    of parsing most ISO 8601 profiles, including ISO 9075.
+    of parsing most ISO 8601 profiles, including non conformant ISO 8601 
+    representations such as ISO 9075.
   - Implemented support for generic FREEZE / THAW serialization, upcomming Sereal
     will support these callbacks.
   - Implemented ->new
