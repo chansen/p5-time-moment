@@ -322,7 +322,8 @@ space. A single space is also accepted between the time of day and the zone
 designator if the time designator is replaced with a single space. The zone 
 designator may be in basic format even though the calendar date and time of 
 day is in extended format. The UTC designator [Z] may also be in lower case 
-[z].
+[z]. Usage of these string representations is strongly discouraged because 
+they do not conform to the ISO 8601 standard.
 
 =head1 INSTANCE METHODS
 
@@ -1221,6 +1222,24 @@ L<RFC 5322 - 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322
     %a, %d %b %Y %H:%M %z       Mon, 24 Dec 2012 15:30 +0100
     %d %b %Y %H:%M:%S %z        24 Dec 2012 15:30:45 +0100
     %d %b %Y %H:%M %z           24 Dec 2012 15:30 +0100
+
+=head1 TIME ZONES
+
+=head2 Converting UTC to designated time zone
+
+    $tm     = Time::Moment->now;
+    $zone   = DateTime::TimeZone->new(name => 'America/New_York');
+    $offset = int($zone->offset_for_datetime($tm) / 60);
+    
+    say $tm->with_offset_same_instant($offset);
+
+=head2 Converting local time to designated time zone
+
+    $tm     = Time::Moment->now;
+    $zone   = DateTime::TimeZone->new(name => 'America/New_York');
+    $offset = int($zone->offset_for_local_datetime($tm) / 60);
+    
+    say $tm->with_offset_same_local($offset);
 
 =head1 DIAGNOSTICS
 
