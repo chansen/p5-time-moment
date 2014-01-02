@@ -1225,7 +1225,7 @@ L<RFC 5322 - 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322
 
 =head1 TIME ZONES
 
-=head2 Converting UTC to designated time zone
+=head2 Converting from UTC to designated time zone
 
     $tm     = Time::Moment->now;
     $zone   = DateTime::TimeZone->new(name => 'America/New_York');
@@ -1233,13 +1233,40 @@ L<RFC 5322 - 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322
     
     say $tm->with_offset_same_instant($offset);
 
-=head2 Converting local time to designated time zone
+=head2 Converting from local time to designated time zone
 
     $tm     = Time::Moment->now;
     $zone   = DateTime::TimeZone->new(name => 'America/New_York');
     $offset = int($zone->offset_for_local_datetime($tm) / 60);
     
     say $tm->with_offset_same_local($offset);
+
+=head2 Example
+
+The time zone Europe/Brussels has 01:00 UTC as standard time, and 02:00 UTC 
+as daylight savings time, with transition dates according to the 
+L<European Summer Time|http://en.wikipedia.org/wiki/Summer_Time_in_Europe>. 
+European Summer Time begins (clocks go forward) at 01:00 UTC on the last 
+Sunday in March, in 2014 the date is March 30.
+
+    $zone = DateTime::TimeZone->new(name => 'Europe/Brussels');
+    $tm1  = Time::Moment->from_string('2014-03-29T12:00+01');
+    $tm2  = $tm1->plus_hours(24);
+    
+    sub convert_from_local {
+        my ($tm, $zone) = @_;
+        my $offset = int($zone->offset_for_local_datetime($tm) / 60);
+        return $tm->with_offset_same_local($offset);
+    }
+    
+    sub convert_from_utc {
+        my ($tm, $zone) = @_;
+        my $offset = int($zone->offset_for_datetime($tm) / 60);
+        return $tm->with_offset_same_instant($offset);
+    }
+    
+    say convert_from_local($tm2, $zone); # 2014-03-30T12:00:00+02:00
+    say convert_from_utc($tm2, $zone);   # 2014-03-30T13:00:00+02:00
 
 =head1 DIAGNOSTICS
 
