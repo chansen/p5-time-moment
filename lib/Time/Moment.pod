@@ -1243,15 +1243,17 @@ L<RFC 5322 - 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322
 
 =head2 Example
 
-The time zone Europe/Brussels has 01:00 UTC as standard time, and 02:00 UTC 
-as daylight savings time, with transition dates according to the 
+The time zone I<Europe/Brussels> has 01:00 UTC as standard time, and 02:00 
+UTC as daylight savings time, with transition dates according to the 
 L<European Summer Time|http://en.wikipedia.org/wiki/Summer_Time_in_Europe>. 
 European Summer Time begins (clocks go forward) at 01:00 UTC on the last 
-Sunday in March, in 2014 the date is March 30.
+Sunday in March, in 2014 the transition date is March 30.
 
-    $zone = DateTime::TimeZone->new(name => 'Europe/Brussels');
-    $tm1  = Time::Moment->from_string('2014-03-29T12:00+01');
-    $tm2  = $tm1->plus_hours(24);
+    sub convert_from_utc {
+        my ($tm, $zone) = @_;
+        my $offset = int($zone->offset_for_datetime($tm) / 60);
+        return $tm->with_offset_same_instant($offset);
+    }
     
     sub convert_from_local {
         my ($tm, $zone) = @_;
@@ -1259,14 +1261,51 @@ Sunday in March, in 2014 the date is March 30.
         return $tm->with_offset_same_local($offset);
     }
     
-    sub convert_from_utc {
-        my ($tm, $zone) = @_;
-        my $offset = int($zone->offset_for_datetime($tm) / 60);
-        return $tm->with_offset_same_instant($offset);
-    }
+    $zone = DateTime::TimeZone->new(name => 'Europe/Brussels');
     
-    say convert_from_local($tm2, $zone); # 2014-03-30T12:00:00+02:00
+    $tm1 = Time::Moment->from_string('2014-03-29T12:00:00+01:00');
+    $tm2 = $tm1->plus_hours(24);
     say convert_from_utc($tm2, $zone);   # 2014-03-30T13:00:00+02:00
+    say convert_from_local($tm2, $zone); # 2014-03-30T12:00:00+02:00
+
+During the transition from standard time to daylight savings time, the 
+local time interval between 02:00:00 and 02:59:59 does not exist. Local 
+time values in that interval are invalid. C<DateTime::TimeZone> raises 
+an exception when attempting to convert non-existing local time.
+
+    $tm1 = Time::Moment->from_string('2014-03-29T22:00:00+01:00');
+    
+    $tm2 = $tm1->plus_hours(4);
+    say convert_from_utc($tm2, $zone);   # 2014-03-30T03:00:00+02:00
+    say convert_from_local($tm2, $zone); # raises an exception
+    
+    $tm2 = $tm1->plus_hours(5);
+    say convert_from_utc($tm2, $zone);   # 2014-03-30T04:00:00+02:00
+    say convert_from_local($tm2, $zone); # 2014-03-30T03:00:00+02:00
+
+European Summer Time ends (clocks go backward) at 01:00 UTC on the last 
+Sunday in October, in 2014 the transition date is October 26.
+
+    $tm1 = Time::Moment->from_string('2014-10-25T12:00:00+02:00');
+    $tm2 = $tm1->plus_hours(24);
+    say convert_from_utc($tm2, $zone);   # 2014-10-26T11:00:00+01:00
+    say convert_from_local($tm2, $zone); # 2014-10-26T12:00:00+01:00
+
+During the transition from daylight savings time to standard time, the
+local time interval between 02:00:00 and 02:59:59 is repeated. Local 
+time values in that interval is ambiguous because they occur twice.
+When C<DateTime::TimeZone> converts an ambiguous local time it returns 
+the numerically lowest offset (usually the standard one).
+
+    $tm1 = Time::Moment->from_string('2014-10-25T22:00:00+02:00');
+    
+    $tm2 = $tm1->plus_hours(4);
+    say convert_from_utc($tm2, $zone);   # 2014-10-26T02:00:00+02:00
+    say convert_from_local($tm2, $zone); # 2014-10-26T02:00:00+01:00
+    
+    $tm2 = $tm1->plus_hours(5);
+    say convert_from_utc($tm2, $zone);   # 2014-10-26T02:00:00+01:00
+    say convert_from_local($tm2, $zone); # 2014-10-26T03:00:00+01:00
 
 =head1 DIAGNOSTICS
 
