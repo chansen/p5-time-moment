@@ -1298,7 +1298,7 @@ Sunday in October, in 2014 the transition date is October 26.
 
 During the transition from daylight savings time to standard time, the
 local time interval between 02:00:00 and 02:59:59 is repeated. Local 
-time values in that interval is ambiguous because they occur twice.
+time values in that interval are ambiguous because they occur twice.
 When C<DateTime::TimeZone> converts an ambiguous local time it returns 
 the numerically lowest offset (usually the standard one).
 
