@@ -1,3 +1,11 @@
+0.13 2014-01-04
+  - Implemented ->with_offset_same_local()
+  - Renamed the method ->with_offset to ->with_offset_same_instant, the old 
+    method name is aliased.
+  - Added a new section to the documentation "TIME ZONES" which shows how to
+    convert between time zones using DateTime::TimeZone.
+  - Added more tests
+
 0.12 2013-12-29
   - Implemented support for lenient parsing in ->from_string, should be capable
     of parsing most ISO 8601 profiles, including non conformant ISO 8601 
