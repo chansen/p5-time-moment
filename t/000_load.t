@@ -9,10 +9,10 @@ BEGIN {
     use_ok('Time::Moment');
 }
 
-my $extra = do {
-    my $bool = ($Config{d_gettimeod} ? 'true' : 'false');
-    "(HAS_GETTIMEOFDAY: $bool)";
-};
+my @has = qw(d_gettimeod d_localtime_r);
+foreach my $var (@has) {
+    $var .= '=' . ($Config{$var} ? 'true' : 'false')
+}
 
-diag("Time::Moment $Time::Moment::VERSION, Perl $], $^X $extra");
+diag("Time::Moment $Time::Moment::VERSION, Perl $], $^X (@has)");
 
