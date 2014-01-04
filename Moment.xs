@@ -312,14 +312,25 @@ XS(XS_Time_Moment_ncmp) {
 static moment_t
 THX_moment_now(pTHX_ bool utc) {
     struct timeval tv;
-    struct tm *tm;
     IV off, sec;
 
     gettimeofday(&tv, NULL);
     if (utc)
         off = 0;
     else {
-        tm = localtime(&tv.tv_sec);
+        const time_t when = tv.tv_sec;
+        struct tm *tm;
+#ifdef HAS_LOCALTIME_R
+        struct tm tmbuf;
+#ifdef LOCALTIME_R_NEEDS_TZSET
+        tzset();
+#endif
+        tm = localtime_r(&when, &tmbuf);
+#else
+        tm = localtime(&when);
+#endif
+        if (tm == NULL)
+            croak("localtime() failed: %s", Strerror(errno));
 
         sec = ((1461 * (tm->tm_year - 1) >> 2) + tm->tm_yday - 25202) * 86400
             + tm->tm_hour * 3600 + tm->tm_min * 60 + tm->tm_sec;
