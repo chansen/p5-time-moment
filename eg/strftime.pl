@@ -54,7 +54,7 @@ sub output {
     my @basic = qw(
         %GW%V%uT%H%M%S%z
         %GW%V%uT%H%M%S%f%z
-        %GW%V%uT%H%M%f%z
+        %GW%V%uT%H%M%z
     );
     my @extended = qw(
         %G-W%V-%uT%H:%M:%S%Z
