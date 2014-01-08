@@ -1061,17 +1061,22 @@ representation of the instance.
 
 =head2 CBOR
 
-C<Time::Moment> implements a C<TO_CBOR> method that stores the L<stringified|/stringification>
-representation of the instance as a I<standard date/time string> using tag C<0>.
+C<Time::Moment> implements a C<TO_CBOR> method that returns the L<stringified|/stringification>
+representation of the instance using tag C<0> (I<standard date/time string>).
 
 See L<CBOR::XS>, L<RFC 7049 Section 2.4.1|http://tools.ietf.org/html/rfc7049#section-2.4.1>
 and C<eg/cbor.pl> for an example how to roundtrip instances of C<Time::Moment>.
 
-=head2 FREEZE / THAW
+=head2 Sereal
+
+L<Sereal> version 2.030 or later implements support for the generic serialization 
+protocol C<FREEZE/THAW>.
+
+=head2 FREEZE/THAW
 
 C<Time::Moment> implements a C<FREEZE> method that returns the L<stringified|/stringification>
-representation of the instance and a C<THAW> method according to the protocol defined in 
-L<Types::Serialiser>.
+representation of the instance and a C<THAW> method according to the serialization 
+protocol specified in L<Types::Serialiser>.
 
 =head1 EXAMPLE FORMAT STRINGS
 
