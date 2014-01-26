@@ -1,3 +1,10 @@
+0.14 2014-01-26
+  - Changed now() to use the reentrant localtime_r() if provided by libc
+  - Added support for the literal strings 'UTC' and 'GMT' as UTC designator
+    in from_string() when lenient is true.
+  - Sereal is now a supported serializer, documented and tested. Added an 
+    examample of usage, eg/sereal.pl
+
 0.13 2014-01-04
   - Implemented ->with_offset_same_local()
   - Renamed the method ->with_offset to ->with_offset_same_instant, the old 
