@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 Christian Hansen <chansen@cpan.org>
+ * Copyright (c) 2012-2014 Christian Hansen <chansen@cpan.org>
  * <https://github.com/chansen/c-dt>
  * All rights reserved.
  * 
@@ -32,7 +32,16 @@
 extern "C" {
 #endif
 
-size_t  dt_parse_string    (const char *str, size_t len, dt_t *dtp);
+size_t dt_parse_iso_date          (const char *str, size_t len, dt_t *dt);
+
+size_t dt_parse_iso_time          (const char *str, size_t len, int *sod, int *nsec);
+size_t dt_parse_iso_time_basic    (const char *str, size_t len, int *sod, int *nsec);
+size_t dt_parse_iso_time_extended (const char *str, size_t len, int *sod, int *nsec);
+
+size_t dt_parse_iso_zone          (const char *str, size_t len, int *offset);
+size_t dt_parse_iso_zone_basic    (const char *str, size_t len, int *offset);
+size_t dt_parse_iso_zone_extended (const char *str, size_t len, int *offset);
+size_t dt_parse_iso_zone_lenient  (const char *str, size_t len, int *offset);
 
 #ifdef __cplusplus
 }
