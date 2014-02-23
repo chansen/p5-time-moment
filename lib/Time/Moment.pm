@@ -107,5 +107,8 @@ sub THAW {
     return $class->from_string($string);
 }
 
+# Alias
+*with_offset = \&with_offset_same_instant;
+
 1;
 

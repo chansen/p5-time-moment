@@ -584,7 +584,6 @@ with_offset_same_instant(self, offset)
   PREINIT:
     dSTASH_INVOCANT;
   ALIAS:
-    Time::Moment::with_offset              = 0
     Time::Moment::with_offset_same_instant = 0
     Time::Moment::with_offset_same_local   = 1
   CODE:
