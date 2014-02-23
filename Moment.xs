@@ -18,6 +18,7 @@ typedef enum {
     MOMENT_PARAM_NANOSECOND,
     MOMENT_PARAM_OFFSET,
     MOMENT_PARAM_LENIENT,
+    MOMENT_PARAM_REDUCED,
 } moment_param_t;
 
 typedef int64_t I64V;
@@ -96,6 +97,8 @@ moment_param(const char *s, const STRLEN len) {
         case 7:
             if (memEQ(s, "lenient", 7))
                 return MOMENT_PARAM_LENIENT;
+            if (memEQ(s, "reduced", 7))
+                return MOMENT_PARAM_REDUCED;
             break;
         case 10:
             if (memEQ(s, "nanosecond", 10))
@@ -741,9 +744,27 @@ strftime(self, format)
     XSRETURN_SV(ret);
 
 void
-to_string(self, reduced=FALSE)
+to_string(self, ...)
     const moment_t *self
-    bool reduced
+  PREINIT:
+    bool reduced;
+    STRLEN len;
+    const char *str;
+    I32 i;
   PPCODE:
+    if (((items - 1) % 2) != 0)
+        croak("Odd number of elements in named parameters");
+
+    reduced = FALSE;
+    for (i = 1; i < items; i += 2) {
+        str = SvPV_const(ST(i), len);
+        switch (moment_param(str, len)) {
+            case MOMENT_PARAM_REDUCED:
+                reduced = cBOOL(SvTRUE((ST(i+1))));
+                break;
+            default: 
+                croak("Unrecognised parameter: '%s'", str);
+        }
+    }
     XSRETURN_SV(moment_to_string(self, reduced));
 

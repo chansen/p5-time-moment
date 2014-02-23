@@ -663,14 +663,14 @@ than zero if this time is after the other time.
 =head2 to_string
 
     $string = $tm->to_string;
-    $string = $tm->to_string($reduced = false);
+    $string = $tm->to_string([reduced => false]);
 
 Returns a string representation of the instance. If the optional boolean 
 parameter I<reduced> is true a shorter representation is attempted.
 
 The string will be in one of the following representations:
 
-    YYYY-MM-DDThh:mm                (only if $reduced = true)
+    YYYY-MM-DDThh:mm                (only if reduced => true)
     YYYY-MM-DDThh:mm:ss
     YYYY-MM-DDThh:mm:ss.fff
     YYYY-MM-DDThh:mm:ss.ffffff
@@ -679,7 +679,7 @@ The string will be in one of the following representations:
 Followed by a zone designator in one of the following representations:
 
     Z
-    ±hh                             (only if $reduced = true)
+    ±hh                             (only if reduced => true)
     ±hh:mm
 
 The shortest representation will be used where the omitted parts are implied 
@@ -942,15 +942,15 @@ Replaced by %.
 
 =head2 length_of_year
 
-Returns the length of the year in days.
+Returns the length of the year in days [1, 366].
 
 =head2 length_of_quarter
 
-Returns the length of the quarter of the year in days.
+Returns the length of the quarter of the year in days [1, 92].
 
 =head2 length_of_month
 
-Returns the length of the month of the year in days.
+Returns the length of the month of the year in days [1, 31].
 
 =head2 utc_rd_values
 

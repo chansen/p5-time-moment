@@ -259,7 +259,7 @@ foreach my $test (@tests) {
 
     is($tm, $test->{string}, "{$name} expected stringified representation");
     is($tm->to_string, $test->{string}, "{$name} ->to_string representation");
-    is($tm->to_string(1), $test->{to_string_reduced}, "{$name} ->to_string(1) representation");
+    is($tm->to_string(reduced => 1), $test->{to_string_reduced}, "{$name} ->to_string(reduced => 1) representation");
 }
 
 done_testing();
