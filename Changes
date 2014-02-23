@@ -1,3 +1,13 @@
+0.15 2014-02-23
+  - Changed API in to_string() to use named parameters instead of boolean to
+    make the API more consistent.
+  - Added three new methods:
+        - length_of_year()
+        - length_of_quarter()
+        - length_of_month()
+  - Corrected typedef declaration in dt_config.h, should now hopefully
+    compile correctly on Windows when using MSC.
+
 0.14 2014-01-26
   - Changed now() to use the reentrant localtime_r() if provided by libc
   - Added support for the literal strings 'UTC' and 'GMT' as UTC designator
