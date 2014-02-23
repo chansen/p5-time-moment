@@ -942,15 +942,15 @@ Replaced by %.
 
 =head2 length_of_year
 
-Returns the length of the year in days [1, 366].
+Returns the length of the year in days [365, 366].
 
 =head2 length_of_quarter
 
-Returns the length of the quarter of the year in days [1, 92].
+Returns the length of the quarter of the year in days [90, 92].
 
 =head2 length_of_month
 
-Returns the length of the month of the year in days [1, 31].
+Returns the length of the month of the year in days [28, 31].
 
 =head2 utc_rd_values
 
