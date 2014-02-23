@@ -118,6 +118,10 @@ int         moment_nanosecond(const moment_t *mt);
 int         moment_offset(const moment_t *mt);
 int64_t     moment_epoch(const moment_t *mt);
 
+int         moment_length_of_year(const moment_t *mt);
+int         moment_length_of_quarter(const moment_t *mt);
+int         moment_length_of_month(const moment_t *mt);
+
 #define moment_new(Y, M, D, h, m, s, ns, offset) \
     THX_moment_new(aTHX_ Y, M, D, h, m, s, ns, offset)
 

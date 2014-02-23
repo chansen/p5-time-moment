@@ -83,6 +83,10 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $string       = $tm->to_string;
     $string       = $tm->strftime($format);
     
+    $days         = $tm->length_of_year;
+    $days         = $tm->length_of_quarter;
+    $days         = $tm->length_of_month;
+    
     @values       = $tm->utc_rd_values;
     $seconds      = $tm->utc_rd_as_seconds;
     @values       = $tm->local_rd_values;
@@ -935,6 +939,18 @@ designator (±hh:mm or Z).
 Replaced by %.
 
 =back
+
+=head2 length_of_year
+
+Returns the length of the year in days.
+
+=head2 length_of_quarter
+
+Returns the length of the quarter of the year in days.
+
+=head2 length_of_month
+
+Returns the length of the month of the year in days.
 
 =head2 utc_rd_values
 

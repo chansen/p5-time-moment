@@ -3,6 +3,7 @@
 #include "dt_accessor.h"
 #include "dt_arithmetic.h"
 #include "dt_util.h"
+#include "dt_length.h"
 
 int64_t
 moment_utc_rd_seconds(const moment_t *mt) {
@@ -579,4 +580,20 @@ int
 moment_offset(const moment_t *mt) {
     return mt->offset;
 }
+
+int
+moment_length_of_year(const moment_t *mt) {
+    return dt_length_of_year(moment_local_dt(mt));
+}
+
+int
+moment_length_of_quarter(const moment_t *mt) {
+    return dt_length_of_quarter(moment_local_dt(mt));
+}
+
+int
+moment_length_of_month(const moment_t *mt) {
+    return dt_length_of_month(moment_local_dt(mt));
+}
+
 

@@ -647,6 +647,23 @@ year(self)
     XSRETURN_IV(v);
 
 void
+length_of_year(self)
+    const moment_t *self
+  ALIAS:
+    Time::Moment::length_of_year    =  0
+    Time::Moment::length_of_quarter =  1
+    Time::Moment::length_of_month   =  2
+  PREINIT:
+    IV v = 0;
+  PPCODE:
+    switch (ix) {
+        case 0: v = moment_length_of_year(self);    break;
+        case 1: v = moment_length_of_quarter(self); break;
+        case 2: v = moment_length_of_month(self);   break;
+    }
+    XSRETURN_IV(v);
+
+void
 epoch(self)
     const moment_t *self
   ALIAS:
