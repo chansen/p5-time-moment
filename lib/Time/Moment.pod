@@ -64,6 +64,8 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->plus_hours($hours);
     $tm2          = $tm1->plus_minutes($minutes);
     $tm2          = $tm1->plus_seconds($seconds);
+    $tm2          = $tm1->plus_milliseconds($nanoseconds);
+    $tm2          = $tm1->plus_microseconds($nanoseconds);
     $tm2          = $tm1->plus_nanoseconds($nanoseconds);
     
     $tm2          = $tm1->minus_years($years);
@@ -73,6 +75,8 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->minus_hours($hours);
     $tm2          = $tm1->minus_minutes($minutes);
     $tm2          = $tm1->minus_seconds($seconds);
+    $tm2          = $tm1->minus_milliseconds($milliseconds);
+    $tm2          = $tm1->minus_microseconds($microseconds);
     $tm2          = $tm1->minus_nanoseconds($nanoseconds);
     
     $tm2          = $tm1->at_utc;
@@ -587,6 +591,24 @@ Returns a copy of this instance with the given number of minutes added.
 
 Returns a copy of this instance with the given number of seconds added.
 
+=head2 plus_milliseconds
+
+    $tm2 = $tm1->plus_milliseconds($milliseconds);
+
+Returns a copy of this instance with the given number of milliseconds added.
+
+=head2 plus_microseconds
+
+    $tm2 = $tm1->plus_microseconds($microseconds);
+
+Returns a copy of this instance with the given number of microseconds added.
+
+=head2 plus_nanoseconds
+
+    $tm2 = $tm1->plus_nanoseconds($nanoeconds);
+
+Returns a copy of this instance with the given number of nanoseconds added.
+
 =head2 plus_nanoseconds
 
     $tm2 = $tm1->plus_nanoseconds($nanoeconds);
@@ -641,6 +663,20 @@ Returns a copy of this instance with the given number of minutes subtracted.
     $tm2 = $tm1->minus_seconds($seconds);
 
 Returns a copy of this instance with the given number of seconds subtracted.
+
+=head2 minus_milliseconds
+
+    $tm2 = $tm1->minus_milliseconds($milliseconds);
+
+Returns a copy of this instance with the given number of milliseconds 
+subtracted.
+
+=head2 minus_microseconds
+
+    $tm2 = $tm1->minus_microseconds($microseconds);
+
+Returns a copy of this instance with the given number of microseconds 
+subtracted.
 
 =head2 minus_nanoseconds
 

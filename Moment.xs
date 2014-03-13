@@ -509,14 +509,16 @@ plus_seconds(self, value)
   PREINIT:
     dSTASH_INVOCANT;
   ALIAS:
-    Time::Moment::plus_years       =  MOMENT_UNIT_YEARS
-    Time::Moment::plus_months      =  MOMENT_UNIT_MONTHS
-    Time::Moment::plus_weeks       =  MOMENT_UNIT_WEEKS
-    Time::Moment::plus_days        =  MOMENT_UNIT_DAYS
-    Time::Moment::plus_hours       =  MOMENT_UNIT_HOURS
-    Time::Moment::plus_minutes     =  MOMENT_UNIT_MINUTES
-    Time::Moment::plus_seconds     =  MOMENT_UNIT_SECONDS
-    Time::Moment::plus_nanoseconds =  MOMENT_UNIT_NANOSECONDS
+    Time::Moment::plus_years        =  MOMENT_UNIT_YEARS
+    Time::Moment::plus_months       =  MOMENT_UNIT_MONTHS
+    Time::Moment::plus_weeks        =  MOMENT_UNIT_WEEKS
+    Time::Moment::plus_days         =  MOMENT_UNIT_DAYS
+    Time::Moment::plus_hours        =  MOMENT_UNIT_HOURS
+    Time::Moment::plus_minutes      =  MOMENT_UNIT_MINUTES
+    Time::Moment::plus_seconds      =  MOMENT_UNIT_SECONDS
+    Time::Moment::plus_milliseconds =  MOMENT_UNIT_MILLISECONDS
+    Time::Moment::plus_microseconds =  MOMENT_UNIT_MICROSECONDS
+    Time::Moment::plus_nanoseconds  =  MOMENT_UNIT_NANOSECONDS
   CODE:
     if (value == 0)
         XSRETURN(1);
@@ -535,14 +537,16 @@ minus_seconds(self, value)
   PREINIT:
     dSTASH_INVOCANT;
   ALIAS:
-    Time::Moment::minus_years       =  MOMENT_UNIT_YEARS
-    Time::Moment::minus_months      =  MOMENT_UNIT_MONTHS
-    Time::Moment::minus_weeks       =  MOMENT_UNIT_WEEKS
-    Time::Moment::minus_days        =  MOMENT_UNIT_DAYS
-    Time::Moment::minus_hours       =  MOMENT_UNIT_HOURS
-    Time::Moment::minus_minutes     =  MOMENT_UNIT_MINUTES
-    Time::Moment::minus_seconds     =  MOMENT_UNIT_SECONDS
-    Time::Moment::minus_nanoseconds =  MOMENT_UNIT_NANOSECONDS
+    Time::Moment::minus_years        =  MOMENT_UNIT_YEARS
+    Time::Moment::minus_months       =  MOMENT_UNIT_MONTHS
+    Time::Moment::minus_weeks        =  MOMENT_UNIT_WEEKS
+    Time::Moment::minus_days         =  MOMENT_UNIT_DAYS
+    Time::Moment::minus_hours        =  MOMENT_UNIT_HOURS
+    Time::Moment::minus_minutes      =  MOMENT_UNIT_MINUTES
+    Time::Moment::minus_seconds      =  MOMENT_UNIT_SECONDS
+    Time::Moment::minus_milliseconds =  MOMENT_UNIT_MILLISECONDS
+    Time::Moment::minus_microseconds =  MOMENT_UNIT_MICROSECONDS
+    Time::Moment::minus_nanoseconds  =  MOMENT_UNIT_NANOSECONDS
   CODE:
     if (value == 0)
         XSRETURN(1);

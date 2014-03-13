@@ -154,6 +154,18 @@ THX_check_unit_seconds(pTHX_ int64_t v) {
         croak("Parameter 'seconds' is out of range");
 }
 
+static void
+THX_check_unit_milliseconds(pTHX_ int64_t v) {
+    if (v < MIN_UNIT_MILLISECONDS || v > MAX_UNIT_MILLISECONDS)
+        croak("Parameter 'milliseconds' is out of range");
+}
+
+static void
+THX_check_unit_microseconds(pTHX_ int64_t v) {
+    if (v < MIN_UNIT_MICROSECONDS || v > MAX_UNIT_MICROSECONDS)
+        croak("Parameter 'microseconds' is out of range");
+}
+
 moment_t
 THX_moment_from_epoch(pTHX_ int64_t sec, IV nsec, IV offset) {
     moment_t r;
@@ -420,19 +432,14 @@ THX_moment_plus_seconds(pTHX_ const moment_t *mt, int64_t v) {
 }
 
 static moment_t
-THX_moment_do_nanoseconds(pTHX_ const moment_t *mt, int64_t v, bool plus) {
-    int64_t sec;
-    int32_t nsec;
+THX_moment_plus_time(pTHX_ const moment_t *mt, int64_t sec, int64_t nsec, int sign) {
     moment_t r;
 
-    if (plus) {
-        sec  = mt->sec  +  v / SECS_PER_NANO;
-        nsec = mt->nsec + (v % SECS_PER_NANO);
-    }
-    else {
-        sec  = mt->sec  -  v / SECS_PER_NANO;
-        nsec = mt->nsec - (v % SECS_PER_NANO);
-    }
+    sec  = sec + (nsec / SECS_PER_NANO);
+    nsec = nsec % SECS_PER_NANO;
+
+    sec  = mt->sec + sec * sign;
+    nsec = mt->nsec + nsec * sign;
 
     if (nsec < 0) {
         nsec += SECS_PER_NANO;
@@ -442,6 +449,7 @@ THX_moment_do_nanoseconds(pTHX_ const moment_t *mt, int64_t v, bool plus) {
         nsec -= SECS_PER_NANO;
         sec++;
     }
+
     r.sec    = sec;
     r.nsec   = nsec;
     r.offset = mt->offset;
@@ -473,8 +481,14 @@ THX_moment_plus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v) {
         case MOMENT_UNIT_SECONDS:
             THX_check_unit_seconds(aTHX_ v);
             return THX_moment_plus_seconds(aTHX_ mt, v);
+        case MOMENT_UNIT_MILLISECONDS:
+            THX_check_unit_milliseconds(aTHX_ v);
+            return THX_moment_plus_time(aTHX_ mt, v / 1000, (v % 1000) * 1000000, 1);
+        case MOMENT_UNIT_MICROSECONDS:
+            THX_check_unit_microseconds(aTHX_ v);
+            return THX_moment_plus_time(aTHX_ mt, v / 1000000, (v % 1000000) * 1000, 1);
         case MOMENT_UNIT_NANOSECONDS:
-            return THX_moment_do_nanoseconds(aTHX_ mt, v, TRUE);
+            return THX_moment_plus_time(aTHX_ mt, 0, v, 1);
     }
     croak("panic: THX_moment_plus_unit() called with unknown unit (%d)", (int)u);
 }
@@ -503,8 +517,14 @@ THX_moment_minus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v) {
         case MOMENT_UNIT_SECONDS:
             THX_check_unit_seconds(aTHX_ v);
             return THX_moment_plus_seconds(aTHX_ mt, -v);
+        case MOMENT_UNIT_MILLISECONDS:
+            THX_check_unit_milliseconds(aTHX_ v);
+            return THX_moment_plus_time(aTHX_ mt, v / 1000, (v % 1000) * 1000000, -1);
+        case MOMENT_UNIT_MICROSECONDS:
+            THX_check_unit_microseconds(aTHX_ v);
+            return THX_moment_plus_time(aTHX_ mt, v / 1000000, (v % 1000000) * 1000, -1);
         case MOMENT_UNIT_NANOSECONDS:
-            return THX_moment_do_nanoseconds(aTHX_ mt, v, FALSE);
+            return THX_moment_plus_time(aTHX_ mt, 0, v, -1);
     }
     croak("panic: THX_moment_minus_unit() called with unknown unit (%d)", (int)u);
 }
