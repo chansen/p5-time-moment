@@ -73,6 +73,21 @@ BEGIN {
 
 {
     my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789Z");
+    for my $day (1..92) {
+        my $got = $tm->with_day_of_quarter($day);
+        is($got->year,             2012, "$tm->with_day_of_quarter($day)->year");
+        is($got->day_of_quarter,   $day, "$tm->with_day_of_quarter($day)->day_of_quarter");
+        is($got->hour,               12, "$tm->with_day_of_quarter($day)->hour");
+        is($got->minute,             30, "$tm->with_day_of_quarter($day)->minute");
+        is($got->second,             45, "$tm->with_day_of_quarter($day)->second");
+        is($got->millisecond,       123, "$tm->with_day_of_quarter($day)->millisecond");
+        is($got->microsecond,    123456, "$tm->with_day_of_quarter($day)->microsecond");
+        is($got->nanosecond,  123456789, "$tm->with_day_of_quarter($day)->nanosecond");
+    }
+}
+
+{
+    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789Z");
     for my $hour (0..23) {
         my $got = $tm->with_hour($hour);
         is($got->year,             2012, "$tm->with_hour($hour)->year");

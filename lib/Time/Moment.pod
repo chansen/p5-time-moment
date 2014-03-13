@@ -45,6 +45,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->with_year($year);
     $tm2          = $tm1->with_month($month);
     $tm2          = $tm1->with_day_of_year($day);
+    $tm2          = $tm1->with_day_of_quarter($day);
     $tm2          = $tm1->with_day_of_month($day);
     $tm2          = $tm1->with_hour($hour);
     $tm2          = $tm1->with_minute($minute);
@@ -449,6 +450,21 @@ altered. The day of the month of the date is unchanged unless the day does not
 exist in the given month. In that case, the day is set to the last day of the 
 given month.
 
+=head2 with_day_of_year
+
+    $tm2 = $tm1->with_day_of_year($day);
+
+Returns a copy of this instance with the given I<day> of the year [1, 366] 
+altered. The day must be valid for the year, otherwise an exception is raised.
+
+=head2 with_day_of_quarter
+
+    $tm2 = $tm1->with_day_of_quarter($day);
+
+Returns a copy of this instance with the given I<day> of the quarter [1, 92] 
+altered. The day must be valid for the year and quarter, otherwise an 
+exception is raised.
+
 =head2 with_day_of_month
 
     $tm2 = $tm1->with_day_of_month($day);
@@ -456,13 +472,6 @@ given month.
 Returns a copy of this instance with the given I<day> of the month [1, 31] 
 altered. The day must be valid for the year and month, otherwise an exception 
 is raised.
-
-=head2 with_day_of_year
-
-    $tm2 = $tm1->with_day_of_year($day);
-
-Returns a copy of this instance with the given I<day> of the year [1, 366] 
-altered. The day must be valid for the year, otherwise an exception is raised.
 
 =head2 with_hour
 

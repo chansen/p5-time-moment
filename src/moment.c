@@ -210,6 +210,20 @@ THX_moment_with_ymd(pTHX_ const moment_t *mt, int y, int m, int d) {
 }
 
 static moment_t
+THX_moment_with_yqd(pTHX_ const moment_t *mt, int y, int q, int d) {
+    moment_t r;
+    int64_t sod, rdn;
+
+    sod = moment_local_rd_seconds(mt) % SECS_PER_DAY;
+    rdn = dt_rdn(dt_from_yqd(y, q, d));
+    r.sec    = sod + rdn * SECS_PER_DAY;
+    r.nsec   = mt->nsec;
+    r.offset = mt->offset;
+    THX_moment_check_self(aTHX_ &r);
+    return r;
+}
+
+static moment_t
 THX_moment_with_year(pTHX_ const moment_t *mt, IV v) {
     int y, m, d;
 
@@ -250,6 +264,19 @@ THX_moment_with_day_of_month(pTHX_ const moment_t *mt, IV v) {
             croak("Parameter 'day' is out of the range [1, %d]", dim);
     }
     return THX_moment_with_ymd(aTHX_ mt, y, m, (int)v);
+}
+
+static moment_t
+THX_moment_with_day_of_quarter(pTHX_ const moment_t *mt, IV v) {
+    int y, q;
+
+    dt_to_yqd(moment_local_dt(mt), &y, &q, NULL);
+    if (v < 1 || v > 90) {
+        int diq = dt_days_in_quarter(y, q);
+        if (v < 1 || v > diq)
+            croak("Parameter 'day' is out of the range [1, %d]", diq);
+    }
+    return THX_moment_with_yqd(aTHX_ mt, y, q, (int)v);
 }
 
 static moment_t
@@ -457,6 +484,8 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
             return THX_moment_with_month(aTHX_ mt, v);
         case MOMENT_COMPONENT_DAY_OF_MONTH:
             return THX_moment_with_day_of_month(aTHX_ mt, v);
+        case MOMENT_COMPONENT_DAY_OF_QUARTER:
+            return THX_moment_with_day_of_quarter(aTHX_ mt, v);
         case MOMENT_COMPONENT_DAY_OF_YEAR:
             return THX_moment_with_day_of_year(aTHX_ mt, v);
         case MOMENT_COMPONENT_HOUR:

@@ -561,14 +561,15 @@ with_year(self, value)
   PREINIT:
     dSTASH_INVOCANT;
   ALIAS:
-    Time::Moment::with_year         =  MOMENT_COMPONENT_YEAR
-    Time::Moment::with_month        =  MOMENT_COMPONENT_MONTH
-    Time::Moment::with_day_of_year  =  MOMENT_COMPONENT_DAY_OF_YEAR
-    Time::Moment::with_day_of_month =  MOMENT_COMPONENT_DAY_OF_MONTH
-    Time::Moment::with_hour         =  MOMENT_COMPONENT_HOUR
-    Time::Moment::with_minute       =  MOMENT_COMPONENT_MINUTE
-    Time::Moment::with_second       =  MOMENT_COMPONENT_SECOND
-    Time::Moment::with_nanosecond   =  MOMENT_COMPONENT_NANOSECOND
+    Time::Moment::with_year           =  MOMENT_COMPONENT_YEAR
+    Time::Moment::with_month          =  MOMENT_COMPONENT_MONTH
+    Time::Moment::with_day_of_year    =  MOMENT_COMPONENT_DAY_OF_YEAR
+    Time::Moment::with_day_of_quarter =  MOMENT_COMPONENT_DAY_OF_QUARTER
+    Time::Moment::with_day_of_month   =  MOMENT_COMPONENT_DAY_OF_MONTH
+    Time::Moment::with_hour           =  MOMENT_COMPONENT_HOUR
+    Time::Moment::with_minute         =  MOMENT_COMPONENT_MINUTE
+    Time::Moment::with_second         =  MOMENT_COMPONENT_SECOND
+    Time::Moment::with_nanosecond     =  MOMENT_COMPONENT_NANOSECOND
   CODE:
     RETVAL = moment_with_component(self, (moment_component_t)ix, value);
     if (moment_compare_local(self, &RETVAL) == 0)
