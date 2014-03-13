@@ -64,8 +64,8 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->plus_hours($hours);
     $tm2          = $tm1->plus_minutes($minutes);
     $tm2          = $tm1->plus_seconds($seconds);
-    $tm2          = $tm1->plus_milliseconds($nanoseconds);
-    $tm2          = $tm1->plus_microseconds($nanoseconds);
+    $tm2          = $tm1->plus_milliseconds($milliseconds);
+    $tm2          = $tm1->plus_microseconds($microseconds);
     $tm2          = $tm1->plus_nanoseconds($nanoseconds);
     
     $tm2          = $tm1->minus_years($years);
