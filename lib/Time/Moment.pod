@@ -225,7 +225,7 @@ time zone is not supported.
 
 =item L<Time::Piece>
 
-    $tm = Time::Moment->from_object( Time::Piece::localtime() );
+    $tm = Time::Moment->from_object( scalar Time::Piece::localtime() );
 
 The given C<Time::Piece> object must be within the supported date range.
 
@@ -234,7 +234,7 @@ The given C<Time::Piece> object must be within the supported date range.
 The coercion scheme is extensible and implemented as documented in 
 L<Params::Coerce>:
 
-    $tm = Params::Coerce::coerce('Time::Moment', Time::Piece::localtime());
+    $tm = Params::Coerce::coerce('Time::Moment', scalar Time::Piece::localtime());
     $tm = Params::Coerce::coerce('Time::Moment', DateTime->now);
 
 C<Time::Moment> also implements a coercion handler from C<Time::Moment> to 
