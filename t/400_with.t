@@ -190,16 +190,58 @@ BEGIN {
 
 {
     my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
+    for my $millisecond (0, 123, 456, 999) {
+        my $microsecond = $millisecond * 1000;
+        my $nanosecond  = $millisecond * 1000000;
+        my $got = $tm->with_millisecond($millisecond);
+        is($got->year,                2012, "$tm->with_millisecond($millisecond)->year");
+        is($got->month,                 12, "$tm->with_millisecond($millisecond)->month");
+        is($got->day_of_month,          24, "$tm->with_millisecond($millisecond)->day_of_month");
+        is($got->hour,                  12, "$tm->with_millisecond($millisecond)->hour");
+        is($got->minute,                30, "$tm->with_millisecond($millisecond)->minute");
+        is($got->second,                45, "$tm->with_millisecond($millisecond)->second");
+        is($got->millisecond, $millisecond, "$tm->with_millisecond($millisecond)->millisecond");
+        is($got->microsecond, $microsecond, "$tm->with_millisecond($millisecond)->microsecond");
+        is($got->nanosecond,   $nanosecond, "$tm->with_millisecond($millisecond)->nanosecond");
+        is($got->offset,          12*60+34, "$tm->with_millisecond($millisecond)->offset");
+    }
+}
+
+{
+    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
+    for my $microsecond (0, 123, 456, 123456, 999999) {
+        my $millisecond = int($microsecond / 1000);
+        my $nanosecond  = $microsecond * 1000;
+        my $got = $tm->with_microsecond($microsecond);
+        is($got->year,                2012, "$tm->with_microsecond($microsecond)->year");
+        is($got->month,                 12, "$tm->with_microsecond($microsecond)->month");
+        is($got->day_of_month,          24, "$tm->with_microsecond($microsecond)->day_of_month");
+        is($got->hour,                  12, "$tm->with_microsecond($microsecond)->hour");
+        is($got->minute,                30, "$tm->with_microsecond($microsecond)->minute");
+        is($got->second,                45, "$tm->with_microsecond($microsecond)->second");
+        is($got->millisecond, $millisecond, "$tm->with_microsecond($microsecond)->millisecond");
+        is($got->microsecond, $microsecond, "$tm->with_microsecond($microsecond)->microsecond");
+        is($got->nanosecond,   $nanosecond, "$tm->with_microsecond($microsecond)->nanosecond");
+        is($got->offset,          12*60+34, "$tm->with_microsecond($microsecond)->offset");
+    }
+}
+
+{
+    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
     for my $nanosecond (0, 123, 456, 123456, 123456789) {
+        my $millisecond = int($nanosecond / 1000_000);
+        my $microsecond = int($nanosecond / 1000);
         my $got = $tm->with_nanosecond($nanosecond);
-        is($got->year,               2012, "$tm->with_nanosecond($nanosecond)->year");
-        is($got->month,                12, "$tm->with_nanosecond($nanosecond)->month");
-        is($got->day_of_month,         24, "$tm->with_nanosecond($nanosecond)->day_of_month");
-        is($got->hour,                 12, "$tm->with_nanosecond($nanosecond)->hour");
-        is($got->minute,               30, "$tm->with_nanosecond($nanosecond)->minute");
-        is($got->second,               45, "$tm->with_nanosecond($nanosecond)->second");
-        is($got->nanosecond,  $nanosecond, "$tm->with_nanosecond($nanosecond)->nanosecond");
-        is($got->offset,         12*60+34, "$tm->with_nanosecond($nanosecond)->offset");
+        is($got->year,                2012, "$tm->with_nanosecond($nanosecond)->year");
+        is($got->month,                 12, "$tm->with_nanosecond($nanosecond)->month");
+        is($got->day_of_month,          24, "$tm->with_nanosecond($nanosecond)->day_of_month");
+        is($got->hour,                  12, "$tm->with_nanosecond($nanosecond)->hour");
+        is($got->minute,                30, "$tm->with_nanosecond($nanosecond)->minute");
+        is($got->second,                45, "$tm->with_nanosecond($nanosecond)->second");
+        is($got->millisecond, $millisecond, "$tm->with_nanosecond($nanosecond)->millisecond");
+        is($got->microsecond, $microsecond, "$tm->with_nanosecond($nanosecond)->microsecond");
+        is($got->nanosecond,   $nanosecond, "$tm->with_nanosecond($nanosecond)->nanosecond");
+        is($got->offset,          12*60+34, "$tm->with_nanosecond($nanosecond)->offset");
     }
 }
 

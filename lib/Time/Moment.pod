@@ -50,6 +50,8 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->with_hour($hour);
     $tm2          = $tm1->with_minute($minute);
     $tm2          = $tm1->with_second($second);
+    $tm2          = $tm1->with_millisecond($millisecond);
+    $tm2          = $tm1->with_microsecond($microsecond);
     $tm2          = $tm1->with_nanosecond($nanosecond);
     
     $tm2          = $tm1->with_offset_same_instant($offset);
@@ -493,11 +495,25 @@ altered.
 Returns a copy of this instance with the given I<second> of minute [0, 59] 
 altered.
 
+=head2 with_millisecond
+
+    $tm2 = $tm1->with_millisecond($millisecond);
+
+Returns a copy of this instance with the given I<millisecond> of the second 
+[0, 999] altered.
+
+=head2 with_microsecond
+
+    $tm2 = $tm1->with_microsecond($microsecond);
+
+Returns a copy of this instance with the given I<microsecond> of the second 
+[0, 999_999] altered.
+
 =head2 with_nanosecond
 
     $tm2 = $tm1->with_nanosecond($nanosecond);
 
-Returns a copy of this instance with the given I<nanosecond> of second 
+Returns a copy of this instance with the given I<nanosecond> of the second 
 [0, 999_999_999] altered.
 
 =head2 with_offset_same_instant

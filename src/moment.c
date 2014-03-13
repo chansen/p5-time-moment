@@ -77,6 +77,18 @@ THX_check_second(pTHX_ IV v) {
 }
 
 static void
+THX_check_millisecond(pTHX_ IV v) {
+    if (v < 0 || v > 999)
+        croak("Parameter 'millisecond' is out of the range [0, 999]");
+}
+
+static void
+THX_check_microsecond(pTHX_ IV v) {
+    if (v < 0 || v > 999999)
+        croak("Parameter 'microsecond' is out of the range [0, 999_999]");
+}
+
+static void
 THX_check_nanosecond(pTHX_ IV v) {
     if (v < 0 || v > 999999999)
         croak("Parameter 'nanosecond' is out of the range [0, 999_999_999]");
@@ -326,6 +338,28 @@ THX_moment_with_second(pTHX_ const moment_t *mt, IV v) {
 }
 
 moment_t
+THX_moment_with_millisecond(pTHX_ const moment_t *mt, IV msec) {
+    moment_t r;
+
+    THX_check_millisecond(aTHX_ msec);
+    r.sec    = mt->sec;
+    r.nsec   = msec * 1000000;
+    r.offset = mt->offset;
+    return r;
+}
+
+moment_t
+THX_moment_with_microsecond(pTHX_ const moment_t *mt, IV usec) {
+    moment_t r;
+
+    THX_check_microsecond(aTHX_ usec);
+    r.sec    = mt->sec;
+    r.nsec   = usec * 1000;
+    r.offset = mt->offset;
+    return r;
+}
+
+moment_t
 THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec) {
     moment_t r;
 
@@ -494,6 +528,10 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
             return THX_moment_with_minute(aTHX_ mt, v);
         case MOMENT_COMPONENT_SECOND:
             return THX_moment_with_second(aTHX_ mt, v);
+        case MOMENT_COMPONENT_MILLISECOND:
+            return THX_moment_with_millisecond(aTHX_ mt, v);
+        case MOMENT_COMPONENT_MICROSECOND:
+            return THX_moment_with_microsecond(aTHX_ mt, v);
         case MOMENT_COMPONENT_NANOSECOND:
             return THX_moment_with_nanosecond(aTHX_ mt, v);
     }
