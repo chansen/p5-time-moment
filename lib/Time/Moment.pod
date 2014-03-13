@@ -609,12 +609,6 @@ Returns a copy of this instance with the given number of microseconds added.
 
 Returns a copy of this instance with the given number of nanoseconds added.
 
-=head2 plus_nanoseconds
-
-    $tm2 = $tm1->plus_nanoseconds($nanoeconds);
-
-Returns a copy of this instance with the given number of nanoseconds added.
-
 =head2 minus_years
 
     $tm2 = $tm1->minus_years($years);
@@ -1431,7 +1425,13 @@ Seconds since the epoch of 1970-01-01T:00:00:00Z (0) is out of the range:
 
 =head1 THREAD SAFETY
 
+C<Time::Moment> is thread safe.
+
 =head1 SEE ALSO
+
+L<DateTime>
+
+L<Time::Piece>
 
 =head1 SUPPORT
 
