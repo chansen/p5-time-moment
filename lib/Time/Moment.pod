@@ -83,9 +83,9 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $string       = $tm->to_string;
     $string       = $tm->strftime($format);
     
-    $days         = $tm->length_of_year;
-    $days         = $tm->length_of_quarter;
-    $days         = $tm->length_of_month;
+    $integer      = $tm->length_of_year;                # [365, 366]
+    $integer      = $tm->length_of_quarter;             # [90, 92]
+    $integer      = $tm->length_of_month;               # [28, 31]
     
     @values       = $tm->utc_rd_values;
     $seconds      = $tm->utc_rd_as_seconds;
@@ -942,13 +942,19 @@ Replaced by %.
 
 =head2 length_of_year
 
+    $integer = $tm->length_of_year;
+
 Returns the length of the year in days [365, 366].
 
 =head2 length_of_quarter
 
+    $integer = $tm->length_of_quarter;
+
 Returns the length of the quarter of the year in days [90, 92].
 
 =head2 length_of_month
+
+    $integer = $tm->length_of_month;
 
 Returns the length of the month of the year in days [28, 31].
 
