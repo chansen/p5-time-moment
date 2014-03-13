@@ -10,16 +10,16 @@ moment_utc_rd_seconds(const moment_t *mt) {
     return (mt->sec - mt->offset * SECS_PER_MIN);
 }
 
-IV
+int
 moment_utc_rd(const moment_t *mt) {
-    return (moment_utc_rd_seconds(mt) / SECS_PER_DAY);
+    return (int)(moment_utc_rd_seconds(mt) / SECS_PER_DAY);
 }
 
 void
 moment_to_utc_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos) {
     const int64_t sec = moment_utc_rd_seconds(mt);
-    *rdn = sec / SECS_PER_DAY;
-    *sod = sec % SECS_PER_DAY;
+    *rdn = (IV)(sec / SECS_PER_DAY);
+    *sod = (IV)(sec % SECS_PER_DAY);
     *nos = mt->nsec;
 }
 
@@ -28,9 +28,9 @@ moment_local_rd_seconds(const moment_t *mt) {
     return mt->sec;
 }
 
-IV
+int
 moment_local_rd(const moment_t *mt) {
-    return (moment_local_rd_seconds(mt) / SECS_PER_DAY);
+    return (int)(moment_local_rd_seconds(mt) / SECS_PER_DAY);
 }
 
 dt_t
@@ -41,8 +41,8 @@ moment_local_dt(const moment_t *mt) {
 void
 moment_to_local_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos) {
     const int64_t sec = moment_local_rd_seconds(mt);
-    *rdn = sec / SECS_PER_DAY;
-    *sod = sec % SECS_PER_DAY;
+    *rdn = (IV)(sec / SECS_PER_DAY);
+    *sod = (IV)(sec % SECS_PER_DAY);
     *nos = mt->nsec;
 }
 
@@ -538,7 +538,7 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
     croak("panic: THX_moment_with_component() called with unknown component (%d)", (int)c);
 }
 
-IV
+int
 moment_compare(const moment_t *m1, const moment_t *m2) {
     const int64_t s1 = moment_utc_rd_seconds(m1);
     const int64_t s2 = moment_utc_rd_seconds(m2);
@@ -553,7 +553,7 @@ moment_compare(const moment_t *m1, const moment_t *m2) {
     return 0;
 }
 
-IV
+int
 moment_compare_local(const moment_t *m1, const moment_t *m2) {
     const int64_t s1 = moment_local_rd_seconds(m1);
     const int64_t s2 = moment_local_rd_seconds(m2);
@@ -615,17 +615,17 @@ moment_day_of_week(const moment_t *mt) {
 
 int
 moment_hour(const moment_t *mt) {
-    return (moment_local_rd_seconds(mt) / SECS_PER_HOUR) % 24;
+    return (int)((moment_local_rd_seconds(mt) / SECS_PER_HOUR) % 24);
 }
 
 int
 moment_minute(const moment_t *mt) {
-    return (moment_local_rd_seconds(mt) / SECS_PER_MIN) % 60;
+    return (int)((moment_local_rd_seconds(mt) / SECS_PER_MIN) % 60);
 }
 
 int
 moment_second(const moment_t *mt) {
-    return (moment_local_rd_seconds(mt)) % 60;
+    return (int)(moment_local_rd_seconds(mt) % 60);
 }
 
 int
