@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Test::More;
-use Test::Requires { Sereal => '2.030' };
+use Test::Requires { Sereal => '2.060' };
 use t::Util        qw[throws_ok lives_ok];
 
 BEGIN {

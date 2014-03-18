@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Test::More;
-use Test::Requires qw[CBOR::XS];
+use Test::Requires { 'CBOR::XS' => '1.25' };
 use t::Util        qw[throws_ok lives_ok];
 
 BEGIN {
