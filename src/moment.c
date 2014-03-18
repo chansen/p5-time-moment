@@ -35,7 +35,7 @@ moment_local_rd(const moment_t *mt) {
 
 dt_t
 moment_local_dt(const moment_t *mt) {
-    return dt_from_rdn((int)moment_local_rd(mt));
+    return dt_from_rdn(moment_local_rd(mt));
 }
 
 void
@@ -206,40 +206,12 @@ THX_moment_new(pTHX_ IV Y, IV M, IV D, IV h, IV m, IV s, IV ns, IV offset) {
 }
 
 static moment_t
-THX_moment_with_yd(pTHX_ const moment_t *mt, int y, int d) {
+THX_moment_with_local_dt(pTHX_ const moment_t *mt, const dt_t dt) {
     moment_t r;
     int64_t sod, rdn;
 
     sod = moment_local_rd_seconds(mt) % SECS_PER_DAY;
-    rdn = dt_rdn(dt_from_yd(y, d));
-    r.sec    = sod + rdn * SECS_PER_DAY;
-    r.nsec   = mt->nsec;
-    r.offset = mt->offset;
-    THX_moment_check_self(aTHX_ &r);
-    return r;
-}
-
-static moment_t
-THX_moment_with_ymd(pTHX_ const moment_t *mt, int y, int m, int d) {
-    moment_t r;
-    int64_t sod, rdn;
-
-    sod = moment_local_rd_seconds(mt) % SECS_PER_DAY;
-    rdn = dt_rdn(dt_from_ymd(y, m, d));
-    r.sec    = sod + rdn * SECS_PER_DAY;
-    r.nsec   = mt->nsec;
-    r.offset = mt->offset;
-    THX_moment_check_self(aTHX_ &r);
-    return r;
-}
-
-static moment_t
-THX_moment_with_yqd(pTHX_ const moment_t *mt, int y, int q, int d) {
-    moment_t r;
-    int64_t sod, rdn;
-
-    sod = moment_local_rd_seconds(mt) % SECS_PER_DAY;
-    rdn = dt_rdn(dt_from_yqd(y, q, d));
+    rdn = dt_rdn(dt);
     r.sec    = sod + rdn * SECS_PER_DAY;
     r.nsec   = mt->nsec;
     r.offset = mt->offset;
@@ -259,7 +231,7 @@ THX_moment_with_year(pTHX_ const moment_t *mt, IV v) {
         if (d > dim)
             d = dim;
     }
-    return THX_moment_with_ymd(aTHX_ mt, y, m, d);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_ymd(y, m, d));
 }
 
 static moment_t
@@ -274,7 +246,7 @@ THX_moment_with_month(pTHX_ const moment_t *mt, IV v) {
         if (d > dim)
             d = dim;
     }
-    return THX_moment_with_ymd(aTHX_ mt, y, m, d);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_ymd(y, m, d));
 }
 
 static moment_t
@@ -287,7 +259,7 @@ THX_moment_with_day_of_month(pTHX_ const moment_t *mt, IV v) {
         if (v < 1 || v > dim)
             croak("Parameter 'day' is out of the range [1, %d]", dim);
     }
-    return THX_moment_with_ymd(aTHX_ mt, y, m, (int)v);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_ymd(y, m, (int)v));
 }
 
 static moment_t
@@ -300,7 +272,7 @@ THX_moment_with_day_of_quarter(pTHX_ const moment_t *mt, IV v) {
         if (v < 1 || v > diq)
             croak("Parameter 'day' is out of the range [1, %d]", diq);
     }
-    return THX_moment_with_yqd(aTHX_ mt, y, q, (int)v);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_yqd(y, q, (int)v));
 }
 
 static moment_t
@@ -313,7 +285,7 @@ THX_moment_with_day_of_year(pTHX_ const moment_t *mt, IV v) {
         if (v < 1 || v > diy)
             croak("Parameter 'day' is out of the range [1, %d]", diy);
     }
-    return THX_moment_with_yd(aTHX_ mt, y, (int)v);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_yd(y, (int)v));
 }
 
 moment_t
