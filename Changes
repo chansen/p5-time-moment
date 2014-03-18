@@ -1,3 +1,15 @@
+0.16 2014-03-18
+  - Fixed the Storable thaw method to account for negative offsets
+  - Corrected documentation for length_of_{year,quarter,month} methods
+  - Added following methods to inrcrease consistency in the API:
+       - with_day_of_quarter()
+       - with_millisecond()
+       - with_microsecond()
+       - plus_milliseconds()
+       - plus_microseconds()
+       - minus_milliseconds()
+       - minus_microseconds()
+
 0.15 2014-02-23
   - Changed API in to_string() to use named parameters instead of boolean to
     make the API more consistent.
