@@ -112,9 +112,6 @@ Time::Moment - Represents a date and time of day with an offset from UTC
 
 =head1 DESCRIPTION
 
-B<IMPORTANT:> This is an early preview release available for testing and 
-feedback. The API is still subject to change.
-
 C<Time::Moment> is an immutable object representing a date and time of day 
 with an offset from UTC in the ISO 8601 calendar system.
 
