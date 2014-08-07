@@ -1,3 +1,10 @@
+0.17 2014-08-07
+  - Ensure that the SvREFCNT is 1 before trying to reuse the invocant in
+    chained method calls (leont++).
+  - Require Test::Fatal v0.006 or higher, fixes issue #5. Reported by
+    Doug Bell (preaction).
+  - Removed the "early preview release" warning from the documentation.
+
 0.16 2014-03-18
   - Fixed the Storable thaw method to account for negative offsets
   - Corrected documentation for length_of_{year,quarter,month} methods
