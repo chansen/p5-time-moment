@@ -272,6 +272,9 @@ THX_sv_2moment_coerce_sv(pTHX_ SV *sv) {
 #define croak_cmp(sv1, sv2, swap, name) \
     THX_croak_cmp(aTHX_ sv1, sv2, swap, name)
 
+#define sv_reusable(sv) \
+    (SvTEMP(sv) && SvREFCNT(sv) == 1)
+
 XS(XS_Time_Moment_nil) {
     dVAR; dXSARGS;
     PERL_UNUSED_VAR(items);
@@ -495,7 +498,7 @@ at_utc(self)
     if (0 == moment_offset(self))
         XSRETURN(1);
     RETVAL = moment_with_offset_same_instant(self, 0);
-    if (SvTEMP(ST(0))) {
+    if (sv_reusable(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);
     }
@@ -523,7 +526,7 @@ plus_seconds(self, value)
     if (value == 0)
         XSRETURN(1);
     RETVAL = moment_plus_unit(self, (moment_unit_t)ix, value);
-    if (SvTEMP(ST(0))) {
+    if (sv_reusable(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);
     }
@@ -551,7 +554,7 @@ minus_seconds(self, value)
     if (value == 0)
         XSRETURN(1);
     RETVAL = moment_minus_unit(self, (moment_unit_t)ix, value);
-    if (SvTEMP(ST(0))) {
+    if (sv_reusable(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);
     }
@@ -580,7 +583,7 @@ with_year(self, value)
     RETVAL = moment_with_component(self, (moment_component_t)ix, value);
     if (moment_compare_local(self, &RETVAL) == 0)
         XSRETURN(1);
-    if (SvTEMP(ST(0))) {
+    if (sv_reusable(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);
     }
@@ -607,7 +610,7 @@ with_offset_same_instant(self, offset)
         if (moment_compare(self, &RETVAL) == 0)
             XSRETURN(1);
     }
-    if (SvTEMP(ST(0))) {
+    if (sv_reusable(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);
     }
