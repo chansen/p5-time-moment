@@ -42,7 +42,7 @@ requires       'XSLoader'       => '0';
 requires       'Time::HiRes'    => '0';
 
 test_requires  'Test::More'     => '0.88';
-test_requires  'Test::Fatal'    => '0';
+test_requires  'Test::Fatal'    => '0.006';
 test_requires  'Test::Requires' => '0';
 
 cc_warnings;
