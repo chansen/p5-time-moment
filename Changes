@@ -1,3 +1,9 @@
+0.18 2014-09-09
+  - Ensure that the referenced object has a SvREFCNT of 1 before trying to 
+    reuse the invocant, fixes issue #7. Reported by Tomohiro Hosaka (bokutin).
+  - Added accessor method ->utc_year, used by DateTime::TimeZone for dates 
+    far into the future, fixes issue #6. Reported by Karl Lohner (klohner).
+
 0.17 2014-08-07
   - Ensure that the SvREFCNT is 1 before trying to reuse the invocant in
     chained method calls (leont++).
