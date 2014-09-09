@@ -256,7 +256,8 @@ must consist of a complete date representation and time of day followed by a
 time zone designator. The second part of the time of day may be omitted or 
 have a decimal fraction. The decimal sign can be either the comma [,] or the 
 full stop [.]. A decimal fraction must have at least one digit and may have a 
-total of nine digits.
+total of nine digits. When the fractional precision is greater than nine 
+digits, the value will be truncated.
 
 The following are examples of complete date representations and time of day 
 representations:
