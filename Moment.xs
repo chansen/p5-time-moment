@@ -273,7 +273,7 @@ THX_sv_2moment_coerce_sv(pTHX_ SV *sv) {
     THX_croak_cmp(aTHX_ sv1, sv2, swap, name)
 
 #define sv_reusable(sv) \
-    (SvTEMP(sv) && SvREFCNT(sv) == 1)
+    (SvTEMP(sv) && SvREFCNT(sv) == 1 && SvROK(sv) && SvREFCNT(SvRV(sv)) == 1)
 
 XS(XS_Time_Moment_nil) {
     dVAR; dXSARGS;
