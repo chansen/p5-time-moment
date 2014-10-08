@@ -8,9 +8,6 @@ BEGIN {
         'inc::Module::Install'           => '1.00',
         'Module::Install::XSUtil'        => '0.36',
         'Module::Install::ReadmeFromPod' => '0',
-        'Test::More'                     => '0.88',
-        'Test::Requires'                 => '0',
-        'Test::Fatal'                    => '0',
     );
 
     my @missing;
