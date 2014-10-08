@@ -635,6 +635,19 @@ moment_nanosecond(const moment_t *mt) {
     return mt->nsec;
 }
 
+NV
+moment_jd(const moment_t *mt) {
+    return moment_mjd(mt) + 2400000.5;
+}
+
+NV
+moment_mjd(const moment_t *mt) {
+    const int64_t s = moment_utc_rd_seconds(mt);
+    const int64_t d = (s / SECS_PER_DAY) - 678576;
+    const int64_t n = (s % SECS_PER_DAY) * SECS_PER_NANO + mt->nsec;
+    return (NV)d + (NV)n * (1E-9/60/60/24);
+}
+
 int
 moment_offset(const moment_t *mt) {
     return mt->offset;

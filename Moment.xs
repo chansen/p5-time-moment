@@ -659,6 +659,21 @@ year(self)
     XSRETURN_IV(v);
 
 void
+jd(self)
+    const moment_t *self
+  ALIAS:
+    Time::Moment::jd  = 0
+    Time::Moment::mjd = 1
+  PREINIT:
+    NV v = 0;
+  PPCODE:
+    switch (ix) {
+        case 0: v = moment_jd(self);    break;
+        case 1: v = moment_mjd(self);   break;
+    }
+    XSRETURN_NV(v);
+
+void
 length_of_year(self)
     const moment_t *self
   ALIAS:
