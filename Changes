@@ -1,3 +1,8 @@
+0.19 2014-10-08
+  - Fixed Makefile.PL to only check if Module::Install is missing, should
+    make it possible to install using cpanm.
+  - Added accessors for Julian Date (->jd) and Modified Julian Date (->mjd).
+
 0.18 2014-09-09
   - Ensure that the referenced object has a SvREFCNT of 1 before trying to 
     reuse the invocant, fixes issue #7. Reported by Tomohiro Hosaka (bokutin).
