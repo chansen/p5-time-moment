@@ -118,8 +118,8 @@ Time::Moment - Represents a date and time of day with an offset from UTC
 C<Time::Moment> is an immutable object representing a date and time of day 
 with an offset from UTC in the ISO 8601 calendar system.
 
-Time is measured in nanoseconds since C<1970-01-01Z>. In C<Time:Moment> leap 
-seconds are ignored. It is assumed that there are exactly C<86,400,000,000> 
+Time is measured in nanoseconds since C<1970-01-01T00Z>. In C<Time:Moment> 
+leap seconds are ignored. It is assumed that there are exactly C<86,400,000,000> 
 nanoseconds per day. C<Time::Moment> can represent all epoch integers from 
 C<-62,135,596,800> to C<2,534,02,300,799>; this range suffices to measure 
 times to nanosecond precision for any instant that is within 
@@ -254,13 +254,14 @@ C<DateTime>:
     $tm = Time::Moment->from_string($string);
     $tm = Time::Moment->from_string($string [, lenient => false]);
 
-Constructs an instance of C<Time::Moment> from the given I<string>. The string 
-must consist of a complete date representation and time of day followed by a 
-time zone designator. The second part of the time of day may be omitted or 
-have a decimal fraction. The decimal sign can be either the comma [,] or the 
-full stop [.]. A decimal fraction must have at least one digit and may have a 
-total of nine digits. When the fractional precision is greater than nine 
-digits, the value will be truncated.
+Constructs an instance of C<Time::Moment> from the given I<string>. The 
+string must consist of a complete date representation and time of day 
+followed by a time zone designator. The time of day may be reduced to hour 
+of the day, the second of the day may have a decimal fraction. The decimal 
+sign can be either the comma [,] or the full stop [.]. A decimal fraction 
+must have at least one digit and may have a total of nine digits, if the 
+fractional precision is greater than nine digits, the value will be 
+truncated.
 
 The following are examples of complete date representations and time of day 
 representations:
@@ -274,6 +275,7 @@ representations:
     YYYYMMDDThhmmss.ss±hhmm       20121224T121530.500+0100
     YYYYMMDDThhmmss.ss±hh         20121224T121530.500+01
     
+    YYYYMMDDThhZ                  20121224T12Z              (reduced accuracy)
     YYYYMMDDThhmmZ                20121224T1215Z            (reduced accuracy)
     YYYYMMDDThhmm±hhmm            20121224T1215+0100        (reduced accuracy)
     YYYYMMDDThhmm±hh              20121224T1215+01          (reduced accuracy)
@@ -287,6 +289,7 @@ representations:
     YYYY-MM-DDThh:mm:ss.ss±hh:mm  2012-12-24T12:15:30.500+01:00
     YYYY-MM-DDThh:mm:ss.ss±hh     2012-12-24T12:15:30.500+01
     
+    YYYY-MM-DDThhZ                2012-12-24T12Z            (reduced accuracy)
     YYYY-MM-DDThh:mmZ             2012-12-24T12:15Z         (reduced accuracy)
     YYYY-MM-DDThh:mm±hh:mm        2012-12-24T12:15+01:00    (reduced accuracy)
     YYYY-MM-DDThh:mm±hh           2012-12-24T12:15+01       (reduced accuracy)
@@ -445,16 +448,16 @@ Returns the time zone offset from UTC in minutes [-1080, 1080].
     $jd = $tm->jd;
 
 Returns the Julian Date. Julian Date is a count of days elapsed since 
-Greenwich Mean Time noon on January 1, 4713 BCE (proleptic Julian calendar). 
-The fractional part corresponds to the fraction of the day after noon.
+-4713-11-24T12Z. The fractional part corresponds to the fraction of the 
+day after noon.
 
 =head2 mjd
 
     $mjd = $tm->mjd;
 
 Returns the Modified Julian Date. Modified Julian Date is a count of days 
-elapsed since Greenwich Mean Time midnight on Novemeber 17, 1858. The 
-fractional part corresponds to the fraction of the day after midnight.
+elapsed since 1858-11-17T00Z. The fractional part corresponds to the fraction 
+of the day after midnight.
 
     $tm = Time::Moment->now;
     say $tm->jd - $tm->mjd; # 2400000.5
