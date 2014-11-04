@@ -981,6 +981,11 @@ more days in the new year, then it is considered week 1. Otherwise, it is the
 last week of the previous year, and the next week is week 1. Both January 4th 
 and the first Thursday of January are always in week 1.
 
+=item <%w>
+
+Replaced by the day of the week as a decimal number [0, 6], with 0 
+representing Sunday.
+
 =item C<%W>
 
 Replaced by the week number of the year as a decimal number [00, 53]. The 
