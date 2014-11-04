@@ -1,3 +1,11 @@
+0.20 2014-11-04
+  - Reduced the required accuracy in ISO 8601 representations, previously 
+    the time of day where required to include hour and minute, the required 
+    accuracy has now been reduced to hour.
+  - Documented the %w conversion specification in ->srtftime, reported
+    by <Peter Isaksson>.
+  - Minor documentation tweaks.
+
 0.19 2014-10-08
   - Fixed Makefile.PL to only check if Module::Install is missing, should
     make it possible to install using cpanm.
