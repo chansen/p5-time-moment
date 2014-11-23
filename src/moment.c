@@ -250,6 +250,19 @@ THX_moment_with_month(pTHX_ const moment_t *mt, IV v) {
 }
 
 static moment_t
+THX_moment_with_week(pTHX_ const moment_t *mt, IV v) {
+    int y, d;
+
+    dt_to_ywd(moment_local_dt(mt), &y, NULL, &d);
+    if (v < 1 || v > 52) {
+        int wiy = dt_weeks_in_year(y);
+        if (v < 1 || v > wiy)
+            croak("Parameter 'week' is out of the range [1, %d]", wiy);
+    }
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_ywd(y, (int)v, d));
+}
+
+static moment_t
 THX_moment_with_day_of_month(pTHX_ const moment_t *mt, IV v) {
     int y, m;
 
@@ -286,6 +299,17 @@ THX_moment_with_day_of_year(pTHX_ const moment_t *mt, IV v) {
             croak("Parameter 'day' is out of the range [1, %d]", diy);
     }
     return THX_moment_with_local_dt(aTHX_ mt, dt_from_yd(y, (int)v));
+}
+
+static moment_t
+THX_moment_with_day_of_week(pTHX_ const moment_t *mt, IV v) {
+    dt_t dt;
+
+    if (v < 1 || v > 7)
+        croak("Parameter 'day' is out of the range [1, 7]");
+
+    dt = moment_local_dt(mt);
+    return THX_moment_with_local_dt(aTHX_ mt, dt - (dt_dow(dt) - v));
 }
 
 moment_t
@@ -508,12 +532,16 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
             return THX_moment_with_year(aTHX_ mt, v);
         case MOMENT_COMPONENT_MONTH:
             return THX_moment_with_month(aTHX_ mt, v);
+        case MOMENT_COMPONENT_WEEK:
+            return THX_moment_with_week(aTHX_ mt, v);
         case MOMENT_COMPONENT_DAY_OF_MONTH:
             return THX_moment_with_day_of_month(aTHX_ mt, v);
         case MOMENT_COMPONENT_DAY_OF_QUARTER:
             return THX_moment_with_day_of_quarter(aTHX_ mt, v);
         case MOMENT_COMPONENT_DAY_OF_YEAR:
             return THX_moment_with_day_of_year(aTHX_ mt, v);
+        case MOMENT_COMPONENT_DAY_OF_WEEK:
+            return THX_moment_with_day_of_week(aTHX_ mt, v);
         case MOMENT_COMPONENT_HOUR:
             return THX_moment_with_hour(aTHX_ mt, v);
         case MOMENT_COMPONENT_MINUTE:
@@ -668,4 +696,7 @@ moment_length_of_month(const moment_t *mt) {
     return dt_length_of_month(moment_local_dt(mt));
 }
 
-
+int
+moment_length_of_week_year(const moment_t *mt) {
+    return dt_length_of_week_year(moment_local_dt(mt));
+}

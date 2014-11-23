@@ -48,3 +48,9 @@ dt_length_of_month(dt_t dt) {
     return dt_days_in_month(y, m);
 }
 
+int
+dt_length_of_week_year(dt_t dt) {
+    int y;
+    dt_to_yd(dt, &y, NULL);
+    return dt_weeks_in_year(y);
+}

@@ -47,9 +47,11 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     
     $tm2          = $tm1->with_year($year);
     $tm2          = $tm1->with_month($month);
+    $tm2          = $tm1->with_week($week);
     $tm2          = $tm1->with_day_of_year($day);
     $tm2          = $tm1->with_day_of_quarter($day);
     $tm2          = $tm1->with_day_of_month($day);
+    $tm2          = $tm1->with_day_of_week($day);
     $tm2          = $tm1->with_hour($hour);
     $tm2          = $tm1->with_minute($minute);
     $tm2          = $tm1->with_second($second);
@@ -96,6 +98,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $integer      = $tm->length_of_year;                # [365, 366]
     $integer      = $tm->length_of_quarter;             # [90, 92]
     $integer      = $tm->length_of_month;               # [28, 31]
+    $integer      = $tm->length_of_week_year;           # [52, 53]
     
     @values       = $tm->utc_rd_values;
     $seconds      = $tm->utc_rd_as_seconds;
@@ -257,7 +260,7 @@ C<DateTime>:
 Constructs an instance of C<Time::Moment> from the given I<string>. The 
 string must consist of a complete date representation and time of day 
 followed by a time zone designator. The time of day may be reduced to hour 
-of the day, the second of the day may have a decimal fraction. The decimal 
+of the day, the second of the minute may have a decimal fraction. The decimal 
 sign can be either the comma [,] or the full stop [.]. A decimal fraction 
 must have at least one digit and may have a total of nine digits, if the 
 fractional precision is greater than nine digits, the value will be 
@@ -435,7 +438,7 @@ Returns the nanosecond of the second [0, 999_999_999].
 
     $epoch = $tm->epoch;
 
-Returns the number of integral seconds from the epoch of 1970-01-01T00:00:00Z.
+Returns the number of integral seconds from the epoch of 1970-01-01T00Z.
 
 =head2 offset
 
@@ -479,6 +482,14 @@ altered. The day of the month of the date is unchanged unless the day does not
 exist in the given month. In that case, the day is set to the last day of the 
 given month.
 
+=head2 with_week
+
+    $tm2 = $tm1->with_week($week);
+
+Returns a copy of this instance with the given I<week> of the year [1, 53] 
+altered. The week of the year must be valid for the year, otherwise an 
+exception is raised.
+
 =head2 with_day_of_year
 
     $tm2 = $tm1->with_day_of_year($day);
@@ -501,6 +512,13 @@ exception is raised.
 Returns a copy of this instance with the given I<day> of the month [1, 31] 
 altered. The day must be valid for the year and month, otherwise an exception 
 is raised.
+
+=head2 with_day_of_week
+ 
+    $tm2 = $tm1->with_day_of_week($day);
+
+Returns a copy of this instance with the given I<day> of the week 
+[1=Monday, 7=Sunday] altered.
 
 =head2 with_hour
 
@@ -981,7 +999,7 @@ more days in the new year, then it is considered week 1. Otherwise, it is the
 last week of the previous year, and the next week is week 1. Both January 4th 
 and the first Thursday of January are always in week 1.
 
-=item <%w>
+=item C<%w>
 
 Replaced by the day of the week as a decimal number [0, 6], with 0 
 representing Sunday.
@@ -1040,6 +1058,12 @@ Returns the length of the quarter of the year in days [90, 92].
     $integer = $tm->length_of_month;
 
 Returns the length of the month of the year in days [28, 31].
+
+=head2 length_of_week_year
+
+    $integer = $tm->length_of_week_year;
+
+Returns the length of the week of the year in weeks [52, 53].
 
 =head2 utc_rd_values
 
@@ -1430,16 +1454,16 @@ the numerically lowest offset (usually the standard one).
 
 Method called with wrong number of arguments.
 
+=item B<(F)> Parameter '%s' is out of the range [%d, %d]
+
+=item B<(F)> Parameter '%s' is out of range
+
 =item B<(F)> Parameter 'seconds' is out of range
 
 Seconds since the epoch of 1970-01-01T:00:00:00Z (0) is out of the range:
 
     [ -62135596800 (0001-01-01T00:00:00Z),
       253402300799 (9999-12-31T23:59:59Z) ]
-
-=item B<(F)> Parameter '%s' is out of the range [%d, %d]
-
-=item B<(F)> Parameter '%s' is out of range
 
 =item B<(F)> Cannot coerce object of type %s to Time::Moment
 
@@ -1484,7 +1508,7 @@ Christian Hansen C<chansen@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright 2013 by Christian Hansen.
+Copyright 2013-2014 by Christian Hansen.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

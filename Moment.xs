@@ -570,9 +570,11 @@ with_year(self, value)
   ALIAS:
     Time::Moment::with_year           =  MOMENT_COMPONENT_YEAR
     Time::Moment::with_month          =  MOMENT_COMPONENT_MONTH
+    Time::Moment::with_week           =  MOMENT_COMPONENT_WEEK
     Time::Moment::with_day_of_year    =  MOMENT_COMPONENT_DAY_OF_YEAR
     Time::Moment::with_day_of_quarter =  MOMENT_COMPONENT_DAY_OF_QUARTER
     Time::Moment::with_day_of_month   =  MOMENT_COMPONENT_DAY_OF_MONTH
+    Time::Moment::with_day_of_week    =  MOMENT_COMPONENT_DAY_OF_WEEK
     Time::Moment::with_hour           =  MOMENT_COMPONENT_HOUR
     Time::Moment::with_minute         =  MOMENT_COMPONENT_MINUTE
     Time::Moment::with_second         =  MOMENT_COMPONENT_SECOND
@@ -677,16 +679,18 @@ void
 length_of_year(self)
     const moment_t *self
   ALIAS:
-    Time::Moment::length_of_year    =  0
-    Time::Moment::length_of_quarter =  1
-    Time::Moment::length_of_month   =  2
+    Time::Moment::length_of_year      = 0
+    Time::Moment::length_of_quarter   = 1
+    Time::Moment::length_of_month     = 2
+    Time::Moment::length_of_week_year = 3
   PREINIT:
     IV v = 0;
   PPCODE:
     switch (ix) {
-        case 0: v = moment_length_of_year(self);    break;
-        case 1: v = moment_length_of_quarter(self); break;
-        case 2: v = moment_length_of_month(self);   break;
+        case 0: v = moment_length_of_year(self);        break;
+        case 1: v = moment_length_of_quarter(self);     break;
+        case 2: v = moment_length_of_month(self);       break;
+        case 3: v = moment_length_of_week_year(self);   break;
     }
     XSRETURN_IV(v);
 

@@ -79,9 +79,11 @@ typedef enum {
 typedef enum {
     MOMENT_COMPONENT_YEAR=0,
     MOMENT_COMPONENT_MONTH,
+    MOMENT_COMPONENT_WEEK,
     MOMENT_COMPONENT_DAY_OF_YEAR,
     MOMENT_COMPONENT_DAY_OF_QUARTER,
     MOMENT_COMPONENT_DAY_OF_MONTH,
+    MOMENT_COMPONENT_DAY_OF_WEEK,
     MOMENT_COMPONENT_HOUR,
     MOMENT_COMPONENT_MINUTE,
     MOMENT_COMPONENT_SECOND,
@@ -135,6 +137,7 @@ NV          moment_mjd(const moment_t *mt);
 int         moment_length_of_year(const moment_t *mt);
 int         moment_length_of_quarter(const moment_t *mt);
 int         moment_length_of_month(const moment_t *mt);
+int         moment_length_of_week_year(const moment_t *mt);
 
 #define moment_new(Y, M, D, h, m, s, ns, offset) \
     THX_moment_new(aTHX_ Y, M, D, h, m, s, ns, offset)

@@ -34,6 +34,7 @@ extern "C" {
 int     dt_length_of_year       (dt_t dt);
 int     dt_length_of_quarter    (dt_t dt);
 int     dt_length_of_month      (dt_t dt);
+int     dt_length_of_week_year  (dt_t dt);
 
 #ifdef __cplusplus
 }
