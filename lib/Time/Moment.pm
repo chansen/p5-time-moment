@@ -116,5 +116,19 @@ sub utc_year {
     return $_[0]->with_offset_same_instant(0)->year;
 }
 
+# Return days between two dates
+sub days_diff {
+    my ($class, $class2) = @_;
+
+    my $diff = $class->compare($class2);
+    return 0 if ($diff == 0);
+
+    $diff = ($diff > 0)
+      ? $class->epoch - $class2->epoch
+      : $class2->epoch - $class->epoch;
+
+    return sprintf('%.f', $diff / 86400) + 0;
+}
+
 1;
 
