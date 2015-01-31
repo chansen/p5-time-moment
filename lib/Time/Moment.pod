@@ -416,6 +416,12 @@ Returns the minute of the hour [0, 59].
 
 Returns the second of the minute [0, 59].
 
+=head2 second_of_day
+
+    $second = $tm->second_of_day;
+
+Returns the second of the day [0, 86399].
+
 =head2 millisecond
 
     $millisecond = $tm->millisecond;
@@ -487,8 +493,7 @@ given month.
     $tm2 = $tm1->with_week($week);
 
 Returns a copy of this instance with the given I<week> of the year [1, 53] 
-altered. The week of the year must be valid for the year, otherwise an 
-exception is raised.
+altered. The week must be valid for the year, otherwise an exception is raised.
 
 =head2 with_day_of_year
 
@@ -970,7 +975,7 @@ L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/st
 
 =item C<%S>
 
-Replaced by the second of hour as a decimal number [00, 60].
+Replaced by the second of hour as a decimal number [00, 59].
 
 =item C<%t>
 

@@ -649,6 +649,11 @@ moment_second(const moment_t *mt) {
 }
 
 int
+moment_second_of_day(const moment_t *mt) {
+    return (int)(moment_local_rd_seconds(mt) % SECS_PER_DAY);
+}
+
+int
 moment_millisecond(const moment_t *mt) {
     return (mt->nsec / 1000000);
 }

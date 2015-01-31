@@ -634,10 +634,11 @@ year(self)
     Time::Moment::hour           =  8
     Time::Moment::minute         =  9
     Time::Moment::second         = 10
-    Time::Moment::millisecond    = 11
-    Time::Moment::microsecond    = 12
-    Time::Moment::nanosecond     = 13
-    Time::Moment::offset         = 14
+    Time::Moment::second_of_day  = 11
+    Time::Moment::millisecond    = 12
+    Time::Moment::microsecond    = 13
+    Time::Moment::nanosecond     = 14
+    Time::Moment::offset         = 15
   PREINIT:
     IV v = 0;
   PPCODE:
@@ -653,10 +654,11 @@ year(self)
         case  8: v = moment_hour(self);             break;
         case  9: v = moment_minute(self);           break;
         case 10: v = moment_second(self);           break;
-        case 11: v = moment_millisecond(self);      break;
-        case 12: v = moment_microsecond(self);      break;
-        case 13: v = moment_nanosecond(self);       break;
-        case 14: v = moment_offset(self);           break;
+        case 11: v = moment_second_of_day(self);    break;
+        case 12: v = moment_millisecond(self);      break;
+        case 13: v = moment_microsecond(self);      break;
+        case 14: v = moment_nanosecond(self);       break;
+        case 15: v = moment_offset(self);           break;
     }
     XSRETURN_IV(v);
 

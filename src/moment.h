@@ -125,6 +125,7 @@ int         moment_day_of_week(const moment_t *mt);
 int         moment_hour(const moment_t *mt);
 int         moment_minute(const moment_t *mt);
 int         moment_second(const moment_t *mt);
+int         moment_second_of_day(const moment_t *mt);
 int         moment_millisecond(const moment_t *mt);
 int         moment_microsecond(const moment_t *mt);
 int         moment_nanosecond(const moment_t *mt);
