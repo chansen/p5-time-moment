@@ -38,6 +38,6 @@ for my $clock (sort { $a->[1]->offset <=> $b->[1]->offset } @clocks) {
     my ($name, $time) = @$clock;
     my $hours = sprintf '(%+3.2fH)', ($time->offset - $now->offset) / 60;
        $hours =~ s/\.00//;
-    printf "%-12s %-16s %s\n", $name, $time->strftime("%a %H:%M %Z"), $hours;
+    printf "%-12s %-16s %s\n", $name, $time->strftime("%a %H:%M %:z"), $hours;
 }
 
