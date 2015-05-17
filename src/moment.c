@@ -77,6 +77,12 @@ THX_check_second(pTHX_ IV v) {
 }
 
 static void
+THX_check_second_of_day(pTHX_ IV v) {
+    if (v < 0 || v > 86399)
+        croak("Parameter 'second' is out of the range [0, 86399]");
+}
+
+static void
 THX_check_millisecond(pTHX_ IV v) {
     if (v < 0 || v > 999)
         croak("Parameter 'millisecond' is out of the range [0, 999]");
@@ -346,6 +352,17 @@ THX_moment_with_second(pTHX_ const moment_t *mt, IV v) {
 }
 
 moment_t
+THX_moment_with_second_of_day(pTHX_ const moment_t *mt, IV v) {
+    moment_t r;
+
+    THX_check_second_of_day(aTHX_ v);
+    r.sec    = mt->sec + (v - moment_second_of_day(mt));
+    r.nsec   = mt->nsec;
+    r.offset = mt->offset;
+    return r;
+}
+
+moment_t
 THX_moment_with_millisecond(pTHX_ const moment_t *mt, IV msec) {
     moment_t r;
 
@@ -548,6 +565,8 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
             return THX_moment_with_minute(aTHX_ mt, v);
         case MOMENT_COMPONENT_SECOND:
             return THX_moment_with_second(aTHX_ mt, v);
+        case MOMENT_COMPONENT_SECOND_OF_DAY:
+            return THX_moment_with_second_of_day(aTHX_ mt, v);
         case MOMENT_COMPONENT_MILLISECOND:
             return THX_moment_with_millisecond(aTHX_ mt, v);
         case MOMENT_COMPONENT_MICROSECOND:

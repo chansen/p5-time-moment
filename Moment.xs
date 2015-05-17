@@ -578,6 +578,7 @@ with_year(self, value)
     Time::Moment::with_hour           =  MOMENT_COMPONENT_HOUR
     Time::Moment::with_minute         =  MOMENT_COMPONENT_MINUTE
     Time::Moment::with_second         =  MOMENT_COMPONENT_SECOND
+    Time::Moment::with_second_of_day  =  MOMENT_COMPONENT_SECOND_OF_DAY
     Time::Moment::with_millisecond    =  MOMENT_COMPONENT_MILLISECOND
     Time::Moment::with_microsecond    =  MOMENT_COMPONENT_MICROSECOND
     Time::Moment::with_nanosecond     =  MOMENT_COMPONENT_NANOSECOND
