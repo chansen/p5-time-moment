@@ -628,30 +628,24 @@ int
 moment_compare_instant(const moment_t *m1, const moment_t *m2) {
     const int64_t s1 = moment_utc_rd_seconds(m1);
     const int64_t s2 = moment_utc_rd_seconds(m2);
-    if (s1 < s2)
-        return -1;
-    if (s1 > s2)
-        return 1;
-    if (m1->nsec < m2->nsec)
-        return -1;
-    if (m1->nsec > m2->nsec)
-        return 1;
-    return 0;
+    int r;
+
+    r = (s1 > s2) - (s1 < s2);
+    if (r == 0)
+        r = (m1->nsec > m2->nsec) - (m1->nsec < m2->nsec);
+    return r;
 }
 
 int
 moment_compare_local(const moment_t *m1, const moment_t *m2) {
     const int64_t s1 = moment_local_rd_seconds(m1);
     const int64_t s2 = moment_local_rd_seconds(m2);
-    if (s1 < s2)
-        return -1;
-    if (s1 > s2)
-        return 1;
-    if (m1->nsec < m2->nsec)
-        return -1;
-    if (m1->nsec > m2->nsec)
-        return 1;
-    return 0;
+    int r;
+
+    r = (s1 > s2) - (s1 < s2);
+    if (r == 0)
+        r = (m1->nsec > m2->nsec) - (m1->nsec < m2->nsec);
+    return r;
 }
 
 int64_t
