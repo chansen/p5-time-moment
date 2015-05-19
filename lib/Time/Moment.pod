@@ -5,7 +5,7 @@
 Time::Moment - Represents a date and time of day with an offset from UTC
 
 =head1 SYNOPSIS
-    
+
     $tm = Time::Moment->new(
         year       => 2012,
         month      => 12,
@@ -87,6 +87,11 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->minus_nanoseconds($nanoseconds);
     
     $tm2          = $tm1->at_utc;
+    $tm2          = $tm1->at_midnight;
+    $tm2          = $tm1->at_noon;
+    $tm2          = $tm1->at_last_day_of_year;
+    $tm2          = $tm1->at_last_day_of_quarter;
+    $tm2          = $tm1->at_last_day_of_month;
     
     $boolean      = $tm1->is_before($tm2);
     $boolean      = $tm1->is_after($tm2);
@@ -389,13 +394,13 @@ Returns the day of the year [1, 366].
 Returns the day of the quarter [1, 92].
 
 =head2 day_of_month
- 
+
     $day = $tm->day_of_month;
 
 Returns the day of the month [1, 31].
 
 =head2 day_of_week
- 
+
     $day = $tm->day_of_week;
 
 Returns the day of the week [1=Monday, 7=Sunday].
@@ -470,9 +475,6 @@ Returns the Modified Julian Date. Modified Julian Date is a count of days
 elapsed since 1858-11-17T00Z. The fractional part corresponds to the fraction 
 of the day after midnight.
 
-    $tm = Time::Moment->now;
-    say $tm->jd - $tm->mjd; # 2400000.5
-
 =head2 with_year
 
     $tm2 = $tm1->with_year($year);
@@ -521,7 +523,7 @@ altered. The day must be valid for the year and month, otherwise an exception
 is raised.
 
 =head2 with_day_of_week
- 
+
     $tm2 = $tm1->with_day_of_week($day);
 
 Returns a copy of this instance with the given I<day> of the week 
@@ -531,27 +533,28 @@ Returns a copy of this instance with the given I<day> of the week
 
     $tm2 = $tm1->with_hour($hour);
 
-Returns a copy of this instance with the given I<hour> of day [0, 23] altered.
+Returns a copy of this instance with the given I<hour> of the day [0, 23] 
+altered.
 
 =head2 with_minute
 
     $tm2 = $tm1->with_minute($minute);
 
-Returns a copy of this instance with the given I<minute> of hour [0, 59] 
+Returns a copy of this instance with the given I<minute> of the hour [0, 59] 
 altered.
 
 =head2 with_second
 
     $tm2 = $tm1->with_second($second);
 
-Returns a copy of this instance with the given I<second> of minute [0, 59] 
+Returns a copy of this instance with the given I<second> of the minute [0, 59] 
 altered.
 
 =head2 with_second_of_day
 
     $tm2 = $tm1->with_second_of_day($second);
 
-Returns a copy of this instance with the given I<second> of day [0, 86_399] 
+Returns a copy of this instance with the given I<second> of the day [0, 86_399] 
 altered.
 
 =head2 with_millisecond
@@ -738,7 +741,42 @@ subtracted.
 
     $tm2 = $tm1->at_utc;
 
-Returns a copy of this instance with the time zone set to UTC.
+Returns a copy of this instance with the time zone offset set to UTC.
+
+=head2 at_midnight
+
+    $tm2 = $tm1->at_midnight;
+
+Returns a copy of this instance with the time of day set to midnight 
+C<T00:00:00.000000000>.
+
+=head2 at_noon
+
+    $tm2 = $tm1->at_noon;
+
+Returns a copy of this instance with the time of day set to noon 
+C<T12:00:00.000000000>.
+
+=head2 at_last_day_of_year
+
+    $tm2 = $tm1->at_last_day_of_year;
+
+Returns a copy of this instance with the date adjusted to the last day of 
+the year, the time of the day is unaltered.
+
+=head2 at_last_day_of_quarter
+
+    $tm2 = $tm1->at_last_day_of_quarter;
+
+Returns a copy of this instance with the date adjusted to the last day of 
+the quarter, the time of the day is unaltered.
+
+=head2 at_last_day_of_month
+
+    $tm2 = $tm1->at_last_day_of_month;
+
+Returns a copy of this instance with the date adjusted to the last day of 
+the month, the time of the day is unaltered.
 
 =head2 is_before
 

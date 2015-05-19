@@ -141,6 +141,14 @@ int         moment_length_of_quarter(const moment_t *mt);
 int         moment_length_of_month(const moment_t *mt);
 int         moment_length_of_week_year(const moment_t *mt);
 
+moment_t    THX_moment_at_utc(pTHX_ const moment_t *mt);
+moment_t    THX_moment_at_midnight(pTHX_ const moment_t *mt);
+moment_t    THX_moment_at_noon(pTHX_ const moment_t *mt);
+moment_t    THX_moment_at_last_day_of_year(pTHX_ const moment_t *mt);
+moment_t    THX_moment_at_last_day_of_quarter(pTHX_ const moment_t *mt);
+moment_t    THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt);
+
+
 #define moment_new(Y, M, D, h, m, s, ns, offset) \
     THX_moment_new(aTHX_ Y, M, D, h, m, s, ns, offset)
 
@@ -165,5 +173,22 @@ int         moment_length_of_week_year(const moment_t *mt);
 #define moment_with_component(self, component, v) \
     THX_moment_with_component(aTHX_ self, component, v)
 
-#endif
+#define moment_at_utc(self) \
+    THX_moment_at_utc(aTHX_ self)
 
+#define moment_at_midnight(self) \
+    THX_moment_at_midnight(aTHX_ self)
+
+#define moment_at_noon(self) \
+    THX_moment_at_noon(aTHX_ self)
+
+#define moment_at_last_day_of_year(self) \
+    THX_moment_at_last_day_of_year(aTHX_ self)
+
+#define moment_at_last_day_of_quarter(self) \
+    THX_moment_at_last_day_of_quarter(aTHX_ self)
+
+#define moment_at_last_day_of_month(self) \
+    THX_moment_at_last_day_of_month(aTHX_ self)
+
+#endif

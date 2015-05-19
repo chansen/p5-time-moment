@@ -494,10 +494,24 @@ at_utc(self)
     const moment_t *self
   PREINIT:
     dSTASH_INVOCANT;
+  ALIAS:
+    Time::Moment::at_utc                 = 0
+    Time::Moment::at_midnight            = 1
+    Time::Moment::at_noon                = 2
+    Time::Moment::at_last_day_of_year    = 3
+    Time::Moment::at_last_day_of_quarter = 4
+    Time::Moment::at_last_day_of_month   = 5
   CODE:
-    if (0 == moment_offset(self))
+    switch (ix) {
+        case 0: RETVAL = moment_at_utc(self);                   break;
+        case 1: RETVAL = moment_at_midnight(self);              break;
+        case 2: RETVAL = moment_at_noon(self);                  break;
+        case 3: RETVAL = moment_at_last_day_of_year(self);      break;
+        case 4: RETVAL = moment_at_last_day_of_quarter(self);   break;
+        case 5: RETVAL = moment_at_last_day_of_month(self);     break;
+    }
+    if (moment_compare_local(self, &RETVAL) == 0)
         XSRETURN(1);
-    RETVAL = moment_with_offset_same_instant(self, 0);
     if (sv_reusable(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);

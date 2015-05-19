@@ -444,6 +444,53 @@ THX_moment_plus_seconds(pTHX_ const moment_t *mt, int64_t v) {
     return r;
 }
 
+moment_t
+THX_moment_at_utc(pTHX_ const moment_t *mt) {
+    return moment_with_offset_same_instant(aTHX_ mt, 0);
+}
+
+moment_t
+THX_moment_at_midnight(pTHX_ const moment_t *mt) {
+    moment_t r;
+
+    r = THX_moment_with_second_of_day(aTHX_ mt, 0);
+    r.nsec = 0;
+    return r;
+}
+
+moment_t
+THX_moment_at_noon(pTHX_ const moment_t *mt) {
+    moment_t r;
+
+    r = THX_moment_with_second_of_day(aTHX_ mt, 12*60*60);
+    r.nsec = 0;
+    return r;
+}
+
+moment_t
+THX_moment_at_last_day_of_year(pTHX_ const moment_t *mt) {
+    int y;
+
+    dt_to_yd(moment_local_dt(mt), &y, NULL);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_yd(y + 1, 0));
+}
+
+moment_t
+THX_moment_at_last_day_of_quarter(pTHX_ const moment_t *mt) {
+    int y, q;
+
+    dt_to_yqd(moment_local_dt(mt), &y, &q, NULL);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_yqd(y, q + 1, 0));
+}
+
+moment_t
+THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt) {
+    int y, m;
+
+    dt_to_ymd(moment_local_dt(mt), &y, &m, NULL);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_ymd(y, m + 1, 0));
+}
+
 static moment_t
 THX_moment_plus_time(pTHX_ const moment_t *mt, int64_t sec, int64_t nsec, int sign) {
     moment_t r;
