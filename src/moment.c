@@ -625,7 +625,7 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
 }
 
 int
-moment_compare(const moment_t *m1, const moment_t *m2) {
+moment_compare_instant(const moment_t *m1, const moment_t *m2) {
     const int64_t s1 = moment_utc_rd_seconds(m1);
     const int64_t s2 = moment_utc_rd_seconds(m2);
     if (s1 < s2)

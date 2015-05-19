@@ -311,7 +311,7 @@ XS(XS_Time_Moment_ncmp) {
         m1 = m2;
         m2 = tmp;
     }
-    XSRETURN_IV(moment_compare(m1, m2));
+    XSRETURN_IV(moment_compare_instant(m1, m2));
 }
 
 #ifdef HAS_GETTIMEOFDAY
@@ -624,7 +624,7 @@ with_offset_same_instant(self, offset)
     }
     else {
         RETVAL = moment_with_offset_same_local(self, offset);
-        if (moment_compare(self, &RETVAL) == 0)
+        if (moment_compare_instant(self, &RETVAL) == 0)
             XSRETURN(1);
     }
     if (sv_reusable(ST(0))) {
@@ -752,7 +752,7 @@ compare(self, other)
     const moment_t *self
     const moment_t *other
   CODE:
-    RETVAL = moment_compare(self, other);
+    RETVAL = moment_compare_instant(self, other);
   OUTPUT:
     RETVAL
 
@@ -768,9 +768,9 @@ is_equal(self, other)
     bool v = FALSE;
   PPCODE:
     switch (ix) {
-        case 0: v = moment_compare(self, other) == 0; break;
-        case 1: v = moment_compare(self, other) < 0;  break;
-        case 2: v = moment_compare(self, other) > 0;  break;
+        case 0: v = moment_compare_instant(self, other) == 0; break;
+        case 1: v = moment_compare_instant(self, other) < 0;  break;
+        case 2: v = moment_compare_instant(self, other) > 0;  break;
     }
     XSRETURN_BOOL(v);
 

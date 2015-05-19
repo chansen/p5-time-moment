@@ -112,7 +112,7 @@ dt_t        moment_local_dt(const moment_t *mt);
 void        moment_to_utc_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos);
 void        moment_to_local_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos);
 
-int         moment_compare(const moment_t *m1, const moment_t *m2);
+int         moment_compare_instant(const moment_t *m1, const moment_t *m2);
 int         moment_compare_local(const moment_t *m1, const moment_t *m2);
 
 int         moment_year(const moment_t *mt);
