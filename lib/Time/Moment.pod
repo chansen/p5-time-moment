@@ -1417,9 +1417,9 @@ L<RFC 5322 - 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322
 =head1 TIME ZONES
 
 An instance of C<Time::Moment> represents an unambiguous point in time, 
-but it's not fully time zone aware. When performing arithmetic on the 
-local date or time value or altering the components of the local date 
-or time it may be necessary to use a time zone to convert to the correct 
+but it's not time zone aware. When performing arithmetic on the local 
+date or time value or altering the components of the local date or time 
+it may be necessary to use a time zone to convert to the correct 
 representation. 
 
 C<Time::Moment> is API compatible with L<DateTime::TimeZone> and 
