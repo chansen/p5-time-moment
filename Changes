@@ -1,3 +1,12 @@
+0.23 2015-05-19
+  - Added following methods to the API:
+    - at_midnight
+    - at_noon
+    - at_last_day_of_year
+    - at_last_day_of_quarter
+    - at_last_day_of_month
+    - with_second_of_day
+
 0.22 2015-02-14
   - Fixed issue #12. Redefinition of bool with Visual Studio 2013 C compiler, 
     reported by A. Sinan Ünür (NANIS).
