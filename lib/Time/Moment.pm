@@ -6,7 +6,7 @@ use Carp        qw[];
 use Time::HiRes qw[];
 
 BEGIN {
-    our $VERSION = '0.23';
+    our $VERSION = '0.24';
     require XSLoader; XSLoader::load(__PACKAGE__, $VERSION);
 }
 
