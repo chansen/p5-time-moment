@@ -446,7 +446,7 @@ THX_moment_plus_seconds(pTHX_ const moment_t *mt, int64_t v) {
 
 moment_t
 THX_moment_at_utc(pTHX_ const moment_t *mt) {
-    return moment_with_offset_same_instant(aTHX_ mt, 0);
+    return THX_moment_with_offset_same_instant(aTHX_ mt, 0);
 }
 
 moment_t
