@@ -722,9 +722,9 @@ epoch(self)
     int64_t v = 0;
   PPCODE:
     switch (ix) {
-        case 0: v = moment_epoch(self);             break;
-        case 1: v = moment_utc_rd_seconds(self);    break;
-        case 2: v = moment_local_rd_seconds(self);  break;
+        case 0: v = moment_epoch(self);                 break;
+        case 1: v = moment_instant_rd_seconds(self);    break;
+        case 2: v = moment_local_rd_seconds(self);      break;
     }
     XSRETURN_I64V(v);
 
@@ -738,7 +738,7 @@ utc_rd_values(self)
     IV rdn, sod, nos;
   PPCODE:
     if (ix == 0)
-        moment_to_utc_rd_values(self, &rdn, &sod, &nos);
+        moment_to_instant_rd_values(self, &rdn, &sod, &nos);
     else
         moment_to_local_rd_values(self, &rdn, &sod, &nos);
     EXTEND(SP, 3);

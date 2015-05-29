@@ -104,12 +104,12 @@ moment_t    THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec);
 moment_t    THX_moment_plus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
 moment_t    THX_moment_minus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
 
-int64_t     moment_utc_rd_seconds(const moment_t *mt);
+int64_t     moment_instant_rd_seconds(const moment_t *mt);
 int64_t     moment_local_rd_seconds(const moment_t *mt);
 
 dt_t        moment_local_dt(const moment_t *mt);
 
-void        moment_to_utc_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos);
+void        moment_to_instant_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos);
 void        moment_to_local_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos);
 
 int         moment_compare_instant(const moment_t *m1, const moment_t *m2);

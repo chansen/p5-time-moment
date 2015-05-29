@@ -6,18 +6,18 @@
 #include "dt_length.h"
 
 int64_t
-moment_utc_rd_seconds(const moment_t *mt) {
+moment_instant_rd_seconds(const moment_t *mt) {
     return (mt->sec - mt->offset * SECS_PER_MIN);
 }
 
 int
-moment_utc_rd(const moment_t *mt) {
-    return (int)(moment_utc_rd_seconds(mt) / SECS_PER_DAY);
+moment_instant_rd(const moment_t *mt) {
+    return (int)(moment_instant_rd_seconds(mt) / SECS_PER_DAY);
 }
 
 void
-moment_to_utc_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos) {
-    const int64_t sec = moment_utc_rd_seconds(mt);
+moment_to_instant_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos) {
+    const int64_t sec = moment_instant_rd_seconds(mt);
     *rdn = (IV)(sec / SECS_PER_DAY);
     *sod = (IV)(sec % SECS_PER_DAY);
     *nos = mt->nsec;
@@ -400,7 +400,7 @@ THX_moment_with_offset_same_instant(pTHX_ const moment_t *mt, IV offset) {
     moment_t r;
 
     THX_check_offset(aTHX_ offset);
-    r.sec    = moment_utc_rd_seconds(mt) + offset * SECS_PER_MIN;
+    r.sec    = moment_instant_rd_seconds(mt) + offset * SECS_PER_MIN;
     r.nsec   = mt->nsec;
     r.offset = offset;
     return r;
@@ -626,8 +626,8 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
 
 int
 moment_compare_instant(const moment_t *m1, const moment_t *m2) {
-    const int64_t s1 = moment_utc_rd_seconds(m1);
-    const int64_t s2 = moment_utc_rd_seconds(m2);
+    const int64_t s1 = moment_instant_rd_seconds(m1);
+    const int64_t s2 = moment_instant_rd_seconds(m2);
     int r;
 
     r = (s1 > s2) - (s1 < s2);
@@ -650,7 +650,7 @@ moment_compare_local(const moment_t *m1, const moment_t *m2) {
 
 int64_t
 moment_epoch(const moment_t *mt) {
-    return (moment_utc_rd_seconds(mt) - UNIX_EPOCH);
+    return (moment_instant_rd_seconds(mt) - UNIX_EPOCH);
 }
 
 int
@@ -735,7 +735,7 @@ moment_jd(const moment_t *mt) {
 
 NV
 moment_mjd(const moment_t *mt) {
-    const int64_t s = moment_utc_rd_seconds(mt);
+    const int64_t s = moment_instant_rd_seconds(mt);
     const int64_t d = (s / SECS_PER_DAY) - 678576;
     const int64_t n = (s % SECS_PER_DAY) * SECS_PER_NANO + mt->nsec;
     return (NV)d + (NV)n * (1E-9/60/60/24);
