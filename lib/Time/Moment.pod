@@ -463,7 +463,7 @@ Returns the time zone offset from UTC in minutes [-1080, 1080].
 
     $jd = $tm->jd;
 
-Returns the Julian Date. Julian Date is a count of days elapsed since 
+Returns the Julian Date. The Julian Date is a count of days elapsed since 
 -4713-11-24T12Z. The fractional part corresponds to the fraction of the 
 day after noon.
 
@@ -471,7 +471,7 @@ day after noon.
 
     $mjd = $tm->mjd;
 
-Returns the Modified Julian Date. Modified Julian Date is a count of days 
+Returns the Modified Julian Date. The Modified Julian Date is a count of days 
 elapsed since 1858-11-17T00Z. The fractional part corresponds to the fraction 
 of the day after midnight.
 
@@ -1119,15 +1119,15 @@ Returns the length of the week of the year in weeks [52, 53].
 
 =head2 utc_rd_values
 
-    ($rd, $sod, $nanosecond) = $tm->utc_rd_values;
+    ($rdn, $sod, $nanosecond) = $tm->utc_rd_values;
 
 Returns a list of three elements:
 
 =over 4
 
-=item C<$rd>
+=item C<$rdn>
 
-The number of days from the Rata Die epoch of 0001-01-01.
+The number of integral days from the Rata Die epoch of 0000-12-31.
 
 =item C<$sod>
 
@@ -1143,19 +1143,20 @@ The nanosecond of the second [0, 999_999_999].
 
     $seconds = $tm->utc_rd_as_seconds;
 
-Returns the number of seconds from the Rata Die epoch of 0001-01-01T00:00:00Z.
+Returns the number of integral seconds from the Rata Die epoch of 
+0000-12-31T00:00:00Z.
 
 =head2 local_rd_values
 
-    ($rd, $sod, $nanosecond) = $tm->local_rd_values;
+    ($rdn, $sod, $nanosecond) = $tm->local_rd_values;
 
 Returns a list of three elements:
 
 =over 4
 
-=item C<$rd>
+=item C<$rdn>
 
-The number of days from the Rata Die epoch of 0001-01-01.
+The number of integral days from the Rata Die epoch of 0000-12-31.
 
 =item C<$sod>
 
@@ -1171,7 +1172,8 @@ The nanosecond of the second [0, 999_999_999].
 
     $seconds = $tm->local_rd_as_seconds;
 
-Returns the number of seconds from the Rata Die epoch of 0001-01-01T00:00:00.
+Returns the number of integral seconds from the Rata Die epoch of 
+0000-12-31T00:00:00.
 
 =head1 OVERLOADED OPERATORS
 
