@@ -355,6 +355,66 @@ day is in extended format. The UTC designator [Z] may also be in lower case
 have an offset. Usage of these string representations is strongly discouraged 
 as they do not conform to the ISO 8601 standard.
 
+=head2 from_jd
+
+    $tm = Time::Moment->from_jd($jd);
+
+Constructs an instance of C<Time::Moment> from the given Julian Date. 
+The Julian Date is a count of days elapsed since -4713-11-24T12Z. The 
+fractional part corresponds to the fraction of the day after noon. The 
+minimum acceptable Julian Date is C<-1721425.5> which corresponds to 
+0001-01-01T00Z.
+
+B<Parameters:>
+
+=over 4
+
+=item precision
+
+    $tm = Time::Moment->from_jd($jd, precision => 3);
+
+The optional parameter I<precision> [0, 9] specifies the number of decimal
+digits after the decimal point. The default precision is 3.
+
+=item epoch
+
+    $tm = Time::Moment->from_jd($jd, epoch => -1721425.5);
+
+The optional parameter I<epoch> specifies the epoch date relative to 
+0001-01-01T00Z. The epoch date for the Julian Date is C<-1721425.5>.
+
+=back
+
+=head2 from_mjd
+
+    $tm = Time::Moment->from_mjd($mjd);
+
+Constructs an instance of C<Time::Moment> from the given Modified Julian 
+Date. The Modified Julian Date is a count of days elapsed since 
+1858-11-17T00Z. The fractional part corresponds to the fraction of the day 
+after midnight. The minimum acceptable Modified Julian Date is C<-678575> 
+which corresponds to 0001-01-01T00Z.
+
+B<Parameters:>
+
+=over 4
+
+=item precision
+
+    $tm = Time::Moment->from_mjd($mjd, precision => 3);
+
+The optional parameter I<precision> [0, 9] specifies the number of decimal
+digits after the decimal point. The default precision is 3.
+
+=item epoch
+
+    $tm = Time::Moment->from_mjd($mjd, epoch => 678575);
+
+The optional parameter I<epoch> specifies the epoch date relative to 
+0001-01-01T00Z. The epoch date for the Modified Julian Date is C<678575>.
+
+=back
+
 =head1 INSTANCE METHODS
 
 =head2 year
@@ -1508,16 +1568,9 @@ the numerically lowest offset (usually the standard one).
 
 Method called with wrong number of arguments.
 
-=item B<(F)> Parameter '%s' is out of the range [%d, %d]
-
 =item B<(F)> Parameter '%s' is out of range
 
-=item B<(F)> Parameter 'seconds' is out of range
-
-Seconds since the epoch of 1970-01-01T:00:00:00Z (0) is out of the range:
-
-    [ -62135596800 (0001-01-01T00:00:00Z),
-      253402300799 (9999-12-31T23:59:59Z) ]
+=item B<(F)> Parameter '%s' is out of the range [%d, %d]
 
 =item B<(F)> Cannot coerce object of type %s to Time::Moment
 

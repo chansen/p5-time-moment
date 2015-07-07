@@ -186,6 +186,62 @@ THX_moment_from_epoch(pTHX_ int64_t sec, IV nsec, IV offset) {
 }
 
 moment_t
+THX_moment_from_jd(pTHX_ NV jd, NV epoch, IV precision) {
+    static const NV JD_MIN = -146097 * 50;
+    static const NV JD_MAX =  146097 * 50;
+    NV d1, d2, f1, f2, f, d, s, denom;
+    int64_t sec;
+    int32_t nos;
+
+    if (precision < 0 || precision > 9)
+        croak("Parameter 'precision' is out of the range [0, 9]");
+
+    if (!(jd > JD_MIN && jd < JD_MAX))
+        croak("Parameter 'jd' is out of range");
+
+    if (!(epoch > JD_MIN && epoch < JD_MAX))
+        croak("Parameter 'epoch' is out of range");
+
+    if (jd >= epoch) {
+        d1 = jd;
+        d2 = epoch;
+    }
+    else {
+        d1 = epoch;
+        d2 = jd;
+    }
+
+    f1 = Perl_fmod(d1, 1.0);
+    f2 = Perl_fmod(d2, 1.0);
+    d1 = Perl_floor(d1 - f1);
+    d2 = Perl_floor(d2 - f2);
+
+    f = Perl_fmod(f1 + f2, 1.0);
+    if (f < 0.0)
+        f += 1.0;
+
+    d = d1 + d2 + Perl_floor(f1 + f2 - f);
+    f *= 86400;
+    s = Perl_floor(f);
+
+    if (d < 0 || d > 3652058)
+        croak("Julian Date is out of supported range");
+
+    denom = Perl_pow(10.0, (NV)precision);
+    f = (Perl_floor((f - s) * denom + 0.5) / denom) * 1E9;
+
+    sec = ((int64_t)d - 719162) * 86400 + (int32_t)s;
+    nos = (int32_t)f;
+
+    if (nos >= SECS_PER_NANO) {
+        nos -= SECS_PER_NANO;
+        sec += 1;
+    }
+
+    return THX_moment_from_epoch(aTHX_ sec, nos, 0);
+}
+
+moment_t
 THX_moment_new(pTHX_ IV Y, IV M, IV D, IV h, IV m, IV s, IV ns, IV offset) {
     moment_t r;
     int64_t rdn, sod;

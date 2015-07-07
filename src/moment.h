@@ -96,6 +96,8 @@ typedef enum {
 moment_t    THX_moment_new(pTHX_ IV Y, IV M, IV D, IV h, IV m, IV s, IV ns, IV offset);
 moment_t    THX_moment_from_epoch(pTHX_ int64_t sec, IV usec, IV offset);
 
+moment_t    THX_moment_from_jd(pTHX_ NV jd, NV epoch, IV precision);
+
 moment_t    THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t u, IV v);
 moment_t    THX_moment_with_offset_same_instant(pTHX_ const moment_t *mt, IV offset);
 moment_t    THX_moment_with_offset_same_local(pTHX_ const moment_t *mt, IV offset);
@@ -154,6 +156,9 @@ moment_t    THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt);
 
 #define moment_from_epoch(sec, nsec, offset) \
     THX_moment_from_epoch(aTHX_ sec, nsec, offset)
+
+#define moment_from_jd(jd, epoch, precision) \
+    THX_moment_from_jd(aTHX_ jd, epoch, precision)
 
 #define moment_with_offset_same_instant(self, offset) \
     THX_moment_with_offset_same_instant(aTHX_ self, offset)

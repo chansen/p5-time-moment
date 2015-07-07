@@ -19,6 +19,8 @@ typedef enum {
     MOMENT_PARAM_OFFSET,
     MOMENT_PARAM_LENIENT,
     MOMENT_PARAM_REDUCED,
+    MOMENT_PARAM_EPOCH,
+    MOMENT_PARAM_PRECISION,
 } moment_param_t;
 
 typedef int64_t I64V;
@@ -85,6 +87,8 @@ moment_param(const char *s, const STRLEN len) {
         case 5:
             if (memEQ(s, "month", 5))
                 return MOMENT_PARAM_MONTH;
+            if (memEQ(s, "epoch", 5))
+                return MOMENT_PARAM_EPOCH;
             break;
         case 6:
             if (memEQ(s, "minute", 6))
@@ -99,6 +103,10 @@ moment_param(const char *s, const STRLEN len) {
                 return MOMENT_PARAM_LENIENT;
             if (memEQ(s, "reduced", 7))
                 return MOMENT_PARAM_REDUCED;
+            break;
+        case 9:
+            if (memEQ(s, "precision", 9))
+                return MOMENT_PARAM_PRECISION;
             break;
         case 10:
             if (memEQ(s, "nanosecond", 10))
@@ -476,6 +484,46 @@ from_string(klass, string, ...)
     }
     str = SvPV_const(string, len);
     RETVAL = moment_from_string(str, len, lenient);
+  OUTPUT:
+    RETVAL
+
+moment_t
+from_jd(klass, jd, ...)
+    SV *klass
+    NV jd
+  PREINIT:
+    dSTASH_CONSTRUCTOR_MOMENT(klass);
+    NV epoch;
+    IV precision;
+    STRLEN len;
+    const char *str;
+    I32 i;
+  ALIAS:
+    Time::Moment::from_jd  = 0
+    Time::Moment::from_mjd = 1
+  CODE:
+    if ((items % 2) != 0)
+        croak("Odd number of elements in named parameters");
+
+    if (ix == 0)
+        precision = 3, epoch = -1721425.5;
+    else
+        precision = 3, epoch = 678575;
+
+    for (i = 2; i < items; i += 2) {
+        str = SvPV_const(ST(i), len);
+        switch (moment_param(str, len)) {
+            case MOMENT_PARAM_PRECISION:
+                precision = SvIV(ST(i+1));
+                break;
+            case MOMENT_PARAM_EPOCH:
+                epoch = SvNV(ST(i+1));
+                break;
+            default:
+                croak("Unrecognised parameter: '%s'", str);
+        }
+    }
+    RETVAL = moment_from_jd(jd, epoch, precision);
   OUTPUT:
     RETVAL
 
