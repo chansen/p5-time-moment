@@ -137,6 +137,7 @@ int64_t     moment_epoch(const moment_t *mt);
 
 NV          moment_jd(const moment_t *mt);
 NV          moment_mjd(const moment_t *mt);
+NV          moment_rd(const moment_t *mt);
 
 int         moment_length_of_year(const moment_t *mt);
 int         moment_length_of_quarter(const moment_t *mt);

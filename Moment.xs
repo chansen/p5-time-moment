@@ -731,12 +731,14 @@ jd(self)
   ALIAS:
     Time::Moment::jd  = 0
     Time::Moment::mjd = 1
+    Time::Moment::rd  = 2
   PREINIT:
     NV v = 0;
   PPCODE:
     switch (ix) {
         case 0: v = moment_jd(self);    break;
         case 1: v = moment_mjd(self);   break;
+        case 2: v = moment_rd(self);    break;
     }
     XSRETURN_NV(v);
 

@@ -535,6 +535,14 @@ Returns the Modified Julian Date. The Modified Julian Date is a count of days
 elapsed since 1858-11-17T00Z. The fractional part corresponds to the fraction 
 of the day after midnight.
 
+=head2 rd
+
+    $rd = $tm->rd;
+
+Returns the Rata Die. The Rata Die is a count of days elapsed since 
+0001-12-31T00. The fractional part corresponds to the fraction of the day 
+after midnight.
+
 =head2 with_year
 
     $tm2 = $tm1->with_year($year);

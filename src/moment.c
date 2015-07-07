@@ -797,6 +797,14 @@ moment_mjd(const moment_t *mt) {
     return (NV)d + (NV)n * (1E-9/60/60/24);
 }
 
+NV
+moment_rd(const moment_t *mt) {
+    const int64_t s = moment_local_rd_seconds(mt);
+    const int64_t d = (s / SECS_PER_DAY);
+    const int64_t n = (s % SECS_PER_DAY) * SECS_PER_NANO + mt->nsec;
+    return (NV)d + (NV)n * (1E-9/60/60/24);
+}
+
 int
 moment_offset(const moment_t *mt) {
     return mt->offset;
