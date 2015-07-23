@@ -543,7 +543,7 @@ of the day after midnight.
     $rd = $tm->rd;
 
 Returns the Rata Die. The Rata Die is a count of days elapsed since 
-0001-12-31T00. The fractional part corresponds to the fraction of the day 
+0000-12-31T00. The fractional part corresponds to the fraction of the day 
 after midnight.
 
 =head2 with_year
