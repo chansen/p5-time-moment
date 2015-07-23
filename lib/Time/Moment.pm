@@ -2,8 +2,7 @@ package Time::Moment;
 use strict;
 use warnings;
 
-use Carp        qw[];
-use Time::HiRes qw[];
+use Carp qw[];
 
 BEGIN {
     our $VERSION = '0.25';
@@ -12,6 +11,7 @@ BEGIN {
 
 BEGIN {
     unless (exists &Time::Moment::now) {
+        require Time::HiRes;
         eval sprintf <<'EOC', __FILE__;
 # line 17 %s
 
