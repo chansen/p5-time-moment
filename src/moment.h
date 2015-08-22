@@ -21,13 +21,8 @@
 #  endif
 #endif
 
-#define SECS_PER_WEEK         604800
 #define SECS_PER_DAY          86400
-#define SECS_PER_HOUR         3600
-#define SECS_PER_MIN          60
-#define SECS_PER_MILLI        1000
-#define SECS_PER_MICRO        1000000
-#define SECS_PER_NANO         1000000000
+#define NANOS_PER_SEC         1000000000
 
 #define MIN_UNIT_YEARS        INT64_C(-10000)
 #define MAX_UNIT_YEARS        INT64_C(10000)

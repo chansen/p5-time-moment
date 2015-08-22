@@ -3,10 +3,10 @@
 #include "dt_parse_iso.h"
 
 static int
-parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV *op) {
+parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *np, IV *op) {
     size_t n;
     dt_t dt;
-    int td, sod, frac, off;
+    int td, sod, nanosecond, offset;
     bool extended;
 
     n = dt_parse_iso_date(str, len, &dt);
@@ -36,9 +36,9 @@ parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV 
     len -= n;
 
     if (extended)
-        n = dt_parse_iso_time_extended(str, len, &sod, &frac);
+        n = dt_parse_iso_time_extended(str, len, &sod, &nanosecond);
     else
-        n = dt_parse_iso_time_basic(str, len, &sod, &frac);
+        n = dt_parse_iso_time_basic(str, len, &sod, &nanosecond);
 
     if (!n || n == len)
         return 1;
@@ -51,31 +51,31 @@ parse_string(const char *str, size_t len, bool lenient, int64_t *sp, IV *fp, IV 
 
     if (extended) {
         if (lenient)
-            n = dt_parse_iso_zone_lenient(str, len, &off);
+            n = dt_parse_iso_zone_lenient(str, len, &offset);
         else 
-            n = dt_parse_iso_zone_extended(str, len, &off);
+            n = dt_parse_iso_zone_extended(str, len, &offset);
     }
     else {
-        n = dt_parse_iso_zone_basic(str, len, &off);
+        n = dt_parse_iso_zone_basic(str, len, &offset);
     }
 
     if (!n || n != len)
         return 1;
 
-    *sp = ((int64_t)dt_rdn(dt) - 719163) * 86400 + sod - off * 60;
-    *fp = frac;
-    *op = off;
+    *sp = ((int64_t)dt_rdn(dt) - 719163) * 86400 + sod - offset * 60;
+    *np = nanosecond;
+    *op = offset;
     return 0;
 }
 
 moment_t
 THX_moment_from_string(pTHX_ const char *str, STRLEN len, bool lenient) {
-    int64_t sec;
-    IV frac, offset;
+    int64_t seconds;
+    IV nanosecond, offset;
 
-    if (parse_string(str, len, lenient, &sec, &frac, &offset))
+    if (parse_string(str, len, lenient, &seconds, &nanosecond, &offset))
         croak("Cannot parse the given string");
 
-    return moment_from_epoch(sec, frac, offset);
+    return moment_from_epoch(seconds, nanosecond, offset);
 }
 
