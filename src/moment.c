@@ -226,13 +226,13 @@ THX_check_unit_seconds(pTHX_ int64_t v) {
 
 static void
 THX_check_unit_milliseconds(pTHX_ int64_t v) {
-    if (v < MIN_UNIT_MILLISECONDS || v > MAX_UNIT_MILLISECONDS)
+    if (v < MIN_UNIT_MILLIS || v > MAX_UNIT_MILLIS)
         croak("Parameter 'milliseconds' is out of range");
 }
 
 static void
 THX_check_unit_microseconds(pTHX_ int64_t v) {
-    if (v < MIN_UNIT_MICROSECONDS || v > MAX_UNIT_MICROSECONDS)
+    if (v < MIN_UNIT_MICROS || v > MAX_UNIT_MICROS)
         croak("Parameter 'microseconds' is out of range");
 }
 
@@ -641,13 +641,13 @@ THX_moment_plus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v) {
         case MOMENT_UNIT_SECONDS:
             THX_check_unit_seconds(aTHX_ v);
             return THX_moment_plus_seconds(aTHX_ mt, v);
-        case MOMENT_UNIT_MILLISECONDS:
+        case MOMENT_UNIT_MILLIS:
             THX_check_unit_milliseconds(aTHX_ v);
             return THX_moment_plus_time(aTHX_ mt, v / 1000, (v % 1000) * 1000000, 1);
-        case MOMENT_UNIT_MICROSECONDS:
+        case MOMENT_UNIT_MICROS:
             THX_check_unit_microseconds(aTHX_ v);
             return THX_moment_plus_time(aTHX_ mt, v / 1000000, (v % 1000000) * 1000, 1);
-        case MOMENT_UNIT_NANOSECONDS:
+        case MOMENT_UNIT_NANOS:
             return THX_moment_plus_time(aTHX_ mt, 0, v, 1);
     }
     croak("panic: THX_moment_plus_unit() called with unknown unit (%d)", (int)u);
@@ -677,13 +677,13 @@ THX_moment_minus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v) {
         case MOMENT_UNIT_SECONDS:
             THX_check_unit_seconds(aTHX_ v);
             return THX_moment_plus_seconds(aTHX_ mt, -v);
-        case MOMENT_UNIT_MILLISECONDS:
+        case MOMENT_UNIT_MILLIS:
             THX_check_unit_milliseconds(aTHX_ v);
             return THX_moment_plus_time(aTHX_ mt, v / 1000, (v % 1000) * 1000000, -1);
-        case MOMENT_UNIT_MICROSECONDS:
+        case MOMENT_UNIT_MICROS:
             THX_check_unit_microseconds(aTHX_ v);
             return THX_moment_plus_time(aTHX_ mt, v / 1000000, (v % 1000000) * 1000, -1);
-        case MOMENT_UNIT_NANOSECONDS:
+        case MOMENT_UNIT_NANOS:
             return THX_moment_plus_time(aTHX_ mt, 0, v, -1);
     }
     croak("panic: THX_moment_minus_unit() called with unknown unit (%d)", (int)u);
@@ -694,9 +694,9 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
     switch (c) {
         case MOMENT_COMPONENT_YEAR:
             return THX_moment_with_year(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MONTH:
+        case MOMENT_COMPONENT_MONTH_OF_YEAR:
             return THX_moment_with_month(aTHX_ mt, v);
-        case MOMENT_COMPONENT_WEEK:
+        case MOMENT_COMPONENT_WEEK_OF_YEAR:
             return THX_moment_with_week(aTHX_ mt, v);
         case MOMENT_COMPONENT_DAY_OF_MONTH:
             return THX_moment_with_day_of_month(aTHX_ mt, v);
@@ -706,23 +706,23 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
             return THX_moment_with_day_of_year(aTHX_ mt, v);
         case MOMENT_COMPONENT_DAY_OF_WEEK:
             return THX_moment_with_day_of_week(aTHX_ mt, v);
-        case MOMENT_COMPONENT_HOUR:
+        case MOMENT_COMPONENT_HOUR_OF_DAY:
             return THX_moment_with_hour(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MINUTE:
+        case MOMENT_COMPONENT_MINUTE_OF_HOUR:
             return THX_moment_with_minute(aTHX_ mt, v);
         case MOMENT_COMPONENT_MINUTE_OF_DAY:
             return THX_moment_with_minute_of_day(aTHX_ mt, v);
-        case MOMENT_COMPONENT_SECOND:
+        case MOMENT_COMPONENT_SECOND_OF_MINUTE:
             return THX_moment_with_second(aTHX_ mt, v);
         case MOMENT_COMPONENT_SECOND_OF_DAY:
             return THX_moment_with_second_of_day(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MILLISECOND:
+        case MOMENT_COMPONENT_MILLI_OF_SECOND:
             return THX_moment_with_millisecond(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MILLISECOND_OF_DAY:
+        case MOMENT_COMPONENT_MILLI_OF_DAY:
             return THX_moment_with_millisecond_of_day(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MICROSECOND:
+        case MOMENT_COMPONENT_MICRO_OF_SECOND:
             return THX_moment_with_microsecond(aTHX_ mt, v);
-        case MOMENT_COMPONENT_NANOSECOND:
+        case MOMENT_COMPONENT_NANO_OF_SECOND:
             return THX_moment_with_nanosecond(aTHX_ mt, v);
     }
     croak("panic: THX_moment_with_component() called with unknown component (%d)", (int)c);

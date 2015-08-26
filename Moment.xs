@@ -574,16 +574,16 @@ plus_seconds(self, value)
   PREINIT:
     dSTASH_INVOCANT;
   ALIAS:
-    Time::Moment::plus_years        =  MOMENT_UNIT_YEARS
-    Time::Moment::plus_months       =  MOMENT_UNIT_MONTHS
-    Time::Moment::plus_weeks        =  MOMENT_UNIT_WEEKS
-    Time::Moment::plus_days         =  MOMENT_UNIT_DAYS
-    Time::Moment::plus_hours        =  MOMENT_UNIT_HOURS
-    Time::Moment::plus_minutes      =  MOMENT_UNIT_MINUTES
-    Time::Moment::plus_seconds      =  MOMENT_UNIT_SECONDS
-    Time::Moment::plus_milliseconds =  MOMENT_UNIT_MILLISECONDS
-    Time::Moment::plus_microseconds =  MOMENT_UNIT_MICROSECONDS
-    Time::Moment::plus_nanoseconds  =  MOMENT_UNIT_NANOSECONDS
+    Time::Moment::plus_years        = MOMENT_UNIT_YEARS
+    Time::Moment::plus_months       = MOMENT_UNIT_MONTHS
+    Time::Moment::plus_weeks        = MOMENT_UNIT_WEEKS
+    Time::Moment::plus_days         = MOMENT_UNIT_DAYS
+    Time::Moment::plus_hours        = MOMENT_UNIT_HOURS
+    Time::Moment::plus_minutes      = MOMENT_UNIT_MINUTES
+    Time::Moment::plus_seconds      = MOMENT_UNIT_SECONDS
+    Time::Moment::plus_milliseconds = MOMENT_UNIT_MILLIS
+    Time::Moment::plus_microseconds = MOMENT_UNIT_MICROS
+    Time::Moment::plus_nanoseconds  = MOMENT_UNIT_NANOS
   CODE:
     if (value == 0)
         XSRETURN(1);
@@ -602,16 +602,16 @@ minus_seconds(self, value)
   PREINIT:
     dSTASH_INVOCANT;
   ALIAS:
-    Time::Moment::minus_years        =  MOMENT_UNIT_YEARS
-    Time::Moment::minus_months       =  MOMENT_UNIT_MONTHS
-    Time::Moment::minus_weeks        =  MOMENT_UNIT_WEEKS
-    Time::Moment::minus_days         =  MOMENT_UNIT_DAYS
-    Time::Moment::minus_hours        =  MOMENT_UNIT_HOURS
-    Time::Moment::minus_minutes      =  MOMENT_UNIT_MINUTES
-    Time::Moment::minus_seconds      =  MOMENT_UNIT_SECONDS
-    Time::Moment::minus_milliseconds =  MOMENT_UNIT_MILLISECONDS
-    Time::Moment::minus_microseconds =  MOMENT_UNIT_MICROSECONDS
-    Time::Moment::minus_nanoseconds  =  MOMENT_UNIT_NANOSECONDS
+    Time::Moment::minus_years        = MOMENT_UNIT_YEARS
+    Time::Moment::minus_months       = MOMENT_UNIT_MONTHS
+    Time::Moment::minus_weeks        = MOMENT_UNIT_WEEKS
+    Time::Moment::minus_days         = MOMENT_UNIT_DAYS
+    Time::Moment::minus_hours        = MOMENT_UNIT_HOURS
+    Time::Moment::minus_minutes      = MOMENT_UNIT_MINUTES
+    Time::Moment::minus_seconds      = MOMENT_UNIT_SECONDS
+    Time::Moment::minus_milliseconds = MOMENT_UNIT_MILLIS
+    Time::Moment::minus_microseconds = MOMENT_UNIT_MICROS
+    Time::Moment::minus_nanoseconds  = MOMENT_UNIT_NANOS
   CODE:
     if (value == 0)
         XSRETURN(1);
@@ -630,22 +630,22 @@ with_year(self, value)
   PREINIT:
     dSTASH_INVOCANT;
   ALIAS:
-    Time::Moment::with_year                 =  MOMENT_COMPONENT_YEAR
-    Time::Moment::with_month                =  MOMENT_COMPONENT_MONTH
-    Time::Moment::with_week                 =  MOMENT_COMPONENT_WEEK
-    Time::Moment::with_day_of_year          =  MOMENT_COMPONENT_DAY_OF_YEAR
-    Time::Moment::with_day_of_quarter       =  MOMENT_COMPONENT_DAY_OF_QUARTER
-    Time::Moment::with_day_of_month         =  MOMENT_COMPONENT_DAY_OF_MONTH
-    Time::Moment::with_day_of_week          =  MOMENT_COMPONENT_DAY_OF_WEEK
-    Time::Moment::with_hour                 =  MOMENT_COMPONENT_HOUR
-    Time::Moment::with_minute               =  MOMENT_COMPONENT_MINUTE
-    Time::Moment::with_minute_of_day        =  MOMENT_COMPONENT_MINUTE_OF_DAY
-    Time::Moment::with_second               =  MOMENT_COMPONENT_SECOND
-    Time::Moment::with_second_of_day        =  MOMENT_COMPONENT_SECOND_OF_DAY
-    Time::Moment::with_millisecond          =  MOMENT_COMPONENT_MILLISECOND
-    Time::Moment::with_millisecond_of_day   =  MOMENT_COMPONENT_MILLISECOND_OF_DAY
-    Time::Moment::with_microsecond          =  MOMENT_COMPONENT_MICROSECOND
-    Time::Moment::with_nanosecond           =  MOMENT_COMPONENT_NANOSECOND
+    Time::Moment::with_year               = MOMENT_COMPONENT_YEAR
+    Time::Moment::with_month              = MOMENT_COMPONENT_MONTH_OF_YEAR
+    Time::Moment::with_week               = MOMENT_COMPONENT_WEEK_OF_YEAR
+    Time::Moment::with_day_of_year        = MOMENT_COMPONENT_DAY_OF_YEAR
+    Time::Moment::with_day_of_quarter     = MOMENT_COMPONENT_DAY_OF_QUARTER
+    Time::Moment::with_day_of_month       = MOMENT_COMPONENT_DAY_OF_MONTH
+    Time::Moment::with_day_of_week        = MOMENT_COMPONENT_DAY_OF_WEEK
+    Time::Moment::with_hour               = MOMENT_COMPONENT_HOUR_OF_DAY
+    Time::Moment::with_minute             = MOMENT_COMPONENT_MINUTE_OF_HOUR
+    Time::Moment::with_minute_of_day      = MOMENT_COMPONENT_MINUTE_OF_DAY
+    Time::Moment::with_second             = MOMENT_COMPONENT_SECOND_OF_MINUTE
+    Time::Moment::with_second_of_day      = MOMENT_COMPONENT_SECOND_OF_DAY
+    Time::Moment::with_millisecond        = MOMENT_COMPONENT_MILLI_OF_SECOND
+    Time::Moment::with_millisecond_of_day = MOMENT_COMPONENT_MILLI_OF_DAY
+    Time::Moment::with_microsecond        = MOMENT_COMPONENT_MICRO_OF_SECOND
+    Time::Moment::with_nanosecond         = MOMENT_COMPONENT_NANO_OF_SECOND
   CODE:
     RETVAL = moment_with_component(self, (moment_component_t)ix, value);
     if (moment_compare_local(self, &RETVAL) == 0)
