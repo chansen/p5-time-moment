@@ -129,6 +129,12 @@ THX_check_minute(pTHX_ IV v) {
 }
 
 static void
+THX_check_minute_of_day(pTHX_ IV v) {
+    if (v < 0 || v > 1439)
+        croak("Parameter 'minute' is out of the range [1, 1439]");
+}
+
+static void
 THX_check_second(pTHX_ IV v) {
     if (v < 0 || v > 59)
         croak("Parameter 'second' is out of the range [1, 59]");
@@ -144,6 +150,12 @@ static void
 THX_check_millisecond(pTHX_ IV v) {
     if (v < 0 || v > 999)
         croak("Parameter 'millisecond' is out of the range [0, 999]");
+}
+
+static void
+THX_check_millisecond_of_day(pTHX_ IV v) {
+    if (v < 0 || v > 86399999)
+        croak("Parameter 'millisecond' is out of the range [0, 86_399_999]");
 }
 
 static void
@@ -439,6 +451,15 @@ THX_moment_with_minute(pTHX_ const moment_t *mt, IV v) {
 }
 
 moment_t
+THX_moment_with_minute_of_day(pTHX_ const moment_t *mt, IV v) {
+    int64_t sec;
+
+    THX_check_minute_of_day(aTHX_ v);
+    sec = moment_local_rd_seconds(mt) + (v - moment_minute_of_day(mt)) * 60;
+    return THX_moment_from_local(aTHX_ sec, mt->nsec, mt->offset);
+}
+
+moment_t
 THX_moment_with_second(pTHX_ const moment_t *mt, IV v) {
     int64_t sec;
 
@@ -463,6 +484,15 @@ THX_moment_with_millisecond(pTHX_ const moment_t *mt, IV msec) {
     THX_check_millisecond(aTHX_ msec);
     sec = moment_local_rd_seconds(mt);
     return THX_moment_from_local(aTHX_ sec, msec * 1000000, mt->offset);
+}
+
+moment_t
+THX_moment_with_millisecond_of_day(pTHX_ const moment_t *mt, IV v) {
+    int64_t sec;
+
+    THX_check_millisecond_of_day(aTHX_ v);
+    sec = moment_local_rd_seconds(mt) + (v / 1000 - moment_second_of_day(mt));
+    return THX_moment_from_local(aTHX_ sec, (v % 1000) * 1000000, mt->offset);
 }
 
 moment_t
@@ -535,20 +565,12 @@ THX_moment_at_utc(pTHX_ const moment_t *mt) {
 
 moment_t
 THX_moment_at_midnight(pTHX_ const moment_t *mt) {
-    moment_t r;
-
-    r = THX_moment_with_second_of_day(aTHX_ mt, 0);
-    r.nsec = 0;
-    return r;
+    return THX_moment_with_millisecond_of_day(aTHX_ mt, 0);
 }
 
 moment_t
 THX_moment_at_noon(pTHX_ const moment_t *mt) {
-    moment_t r;
-
-    r = THX_moment_with_second_of_day(aTHX_ mt, 12*60*60);
-    r.nsec = 0;
-    return r;
+    return THX_moment_with_millisecond_of_day(aTHX_ mt, 12*60*60*1000);
 }
 
 moment_t
@@ -688,12 +710,16 @@ THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) 
             return THX_moment_with_hour(aTHX_ mt, v);
         case MOMENT_COMPONENT_MINUTE:
             return THX_moment_with_minute(aTHX_ mt, v);
+        case MOMENT_COMPONENT_MINUTE_OF_DAY:
+            return THX_moment_with_minute_of_day(aTHX_ mt, v);
         case MOMENT_COMPONENT_SECOND:
             return THX_moment_with_second(aTHX_ mt, v);
         case MOMENT_COMPONENT_SECOND_OF_DAY:
             return THX_moment_with_second_of_day(aTHX_ mt, v);
         case MOMENT_COMPONENT_MILLISECOND:
             return THX_moment_with_millisecond(aTHX_ mt, v);
+        case MOMENT_COMPONENT_MILLISECOND_OF_DAY:
+            return THX_moment_with_millisecond_of_day(aTHX_ mt, v);
         case MOMENT_COMPONENT_MICROSECOND:
             return THX_moment_with_microsecond(aTHX_ mt, v);
         case MOMENT_COMPONENT_NANOSECOND:
@@ -782,6 +808,11 @@ moment_minute(const moment_t *mt) {
 }
 
 int
+moment_minute_of_day(const moment_t *mt) {
+    return (int)((moment_local_rd_seconds(mt) / 60) % 1440);
+}
+
+int
 moment_second(const moment_t *mt) {
     return (int)(moment_local_rd_seconds(mt) % 60);
 }
@@ -794,6 +825,11 @@ moment_second_of_day(const moment_t *mt) {
 int
 moment_millisecond(const moment_t *mt) {
     return (mt->nsec / 1000000);
+}
+
+int
+moment_millisecond_of_day(const moment_t *mt) {
+    return moment_second_of_day(mt) * 1000 + moment_millisecond(mt);
 }
 
 int

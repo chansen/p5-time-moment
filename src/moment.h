@@ -81,9 +81,11 @@ typedef enum {
     MOMENT_COMPONENT_DAY_OF_WEEK,
     MOMENT_COMPONENT_HOUR,
     MOMENT_COMPONENT_MINUTE,
+    MOMENT_COMPONENT_MINUTE_OF_DAY,
     MOMENT_COMPONENT_SECOND,
     MOMENT_COMPONENT_SECOND_OF_DAY,
     MOMENT_COMPONENT_MILLISECOND,
+    MOMENT_COMPONENT_MILLISECOND_OF_DAY,
     MOMENT_COMPONENT_MICROSECOND,
     MOMENT_COMPONENT_NANOSECOND,
 } moment_component_t;
@@ -122,9 +124,11 @@ int         moment_day_of_month(const moment_t *mt);
 int         moment_day_of_week(const moment_t *mt);
 int         moment_hour(const moment_t *mt);
 int         moment_minute(const moment_t *mt);
+int         moment_minute_of_day(const moment_t *mt);
 int         moment_second(const moment_t *mt);
 int         moment_second_of_day(const moment_t *mt);
 int         moment_millisecond(const moment_t *mt);
+int         moment_millisecond_of_day(const moment_t *mt);
 int         moment_microsecond(const moment_t *mt);
 int         moment_nanosecond(const moment_t *mt);
 int         moment_offset(const moment_t *mt);

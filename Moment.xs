@@ -630,20 +630,22 @@ with_year(self, value)
   PREINIT:
     dSTASH_INVOCANT;
   ALIAS:
-    Time::Moment::with_year           =  MOMENT_COMPONENT_YEAR
-    Time::Moment::with_month          =  MOMENT_COMPONENT_MONTH
-    Time::Moment::with_week           =  MOMENT_COMPONENT_WEEK
-    Time::Moment::with_day_of_year    =  MOMENT_COMPONENT_DAY_OF_YEAR
-    Time::Moment::with_day_of_quarter =  MOMENT_COMPONENT_DAY_OF_QUARTER
-    Time::Moment::with_day_of_month   =  MOMENT_COMPONENT_DAY_OF_MONTH
-    Time::Moment::with_day_of_week    =  MOMENT_COMPONENT_DAY_OF_WEEK
-    Time::Moment::with_hour           =  MOMENT_COMPONENT_HOUR
-    Time::Moment::with_minute         =  MOMENT_COMPONENT_MINUTE
-    Time::Moment::with_second         =  MOMENT_COMPONENT_SECOND
-    Time::Moment::with_second_of_day  =  MOMENT_COMPONENT_SECOND_OF_DAY
-    Time::Moment::with_millisecond    =  MOMENT_COMPONENT_MILLISECOND
-    Time::Moment::with_microsecond    =  MOMENT_COMPONENT_MICROSECOND
-    Time::Moment::with_nanosecond     =  MOMENT_COMPONENT_NANOSECOND
+    Time::Moment::with_year                 =  MOMENT_COMPONENT_YEAR
+    Time::Moment::with_month                =  MOMENT_COMPONENT_MONTH
+    Time::Moment::with_week                 =  MOMENT_COMPONENT_WEEK
+    Time::Moment::with_day_of_year          =  MOMENT_COMPONENT_DAY_OF_YEAR
+    Time::Moment::with_day_of_quarter       =  MOMENT_COMPONENT_DAY_OF_QUARTER
+    Time::Moment::with_day_of_month         =  MOMENT_COMPONENT_DAY_OF_MONTH
+    Time::Moment::with_day_of_week          =  MOMENT_COMPONENT_DAY_OF_WEEK
+    Time::Moment::with_hour                 =  MOMENT_COMPONENT_HOUR
+    Time::Moment::with_minute               =  MOMENT_COMPONENT_MINUTE
+    Time::Moment::with_minute_of_day        =  MOMENT_COMPONENT_MINUTE_OF_DAY
+    Time::Moment::with_second               =  MOMENT_COMPONENT_SECOND
+    Time::Moment::with_second_of_day        =  MOMENT_COMPONENT_SECOND_OF_DAY
+    Time::Moment::with_millisecond          =  MOMENT_COMPONENT_MILLISECOND
+    Time::Moment::with_millisecond_of_day   =  MOMENT_COMPONENT_MILLISECOND_OF_DAY
+    Time::Moment::with_microsecond          =  MOMENT_COMPONENT_MICROSECOND
+    Time::Moment::with_nanosecond           =  MOMENT_COMPONENT_NANOSECOND
   CODE:
     RETVAL = moment_with_component(self, (moment_component_t)ix, value);
     if (moment_compare_local(self, &RETVAL) == 0)
@@ -686,42 +688,46 @@ void
 year(self)
     const moment_t *self
   ALIAS:
-    Time::Moment::year           =  0
-    Time::Moment::quarter        =  1
-    Time::Moment::month          =  2
-    Time::Moment::week           =  3
-    Time::Moment::day_of_year    =  4
-    Time::Moment::day_of_quarter =  5
-    Time::Moment::day_of_month   =  6
-    Time::Moment::day_of_week    =  7
-    Time::Moment::hour           =  8
-    Time::Moment::minute         =  9
-    Time::Moment::second         = 10
-    Time::Moment::second_of_day  = 11
-    Time::Moment::millisecond    = 12
-    Time::Moment::microsecond    = 13
-    Time::Moment::nanosecond     = 14
-    Time::Moment::offset         = 15
+    Time::Moment::year               =  0
+    Time::Moment::quarter            =  1
+    Time::Moment::month              =  2
+    Time::Moment::week               =  3
+    Time::Moment::day_of_year        =  4
+    Time::Moment::day_of_quarter     =  5
+    Time::Moment::day_of_month       =  6
+    Time::Moment::day_of_week        =  7
+    Time::Moment::hour               =  8
+    Time::Moment::minute             =  9
+    Time::Moment::minute_of_day      = 10
+    Time::Moment::second             = 11
+    Time::Moment::second_of_day      = 12
+    Time::Moment::millisecond        = 13
+    Time::Moment::millisecond_of_day = 14
+    Time::Moment::microsecond        = 15
+    Time::Moment::nanosecond         = 16
+    Time::Moment::offset             = 17
   PREINIT:
     IV v = 0;
   PPCODE:
     switch (ix) {
-        case  0: v = moment_year(self);             break;
-        case  1: v = moment_quarter(self);          break;
-        case  2: v = moment_month(self);            break;
-        case  3: v = moment_week(self);             break;
-        case  4: v = moment_day_of_year(self);      break;
-        case  5: v = moment_day_of_quarter(self);   break;
-        case  6: v = moment_day_of_month(self);     break;
-        case  7: v = moment_day_of_week(self);      break;
-        case  8: v = moment_hour(self);             break;
-        case  9: v = moment_minute(self);           break;
-        case 10: v = moment_second(self);           break;
-        case 11: v = moment_second_of_day(self);    break;
-        case 12: v = moment_millisecond(self);      break;
-        case 13: v = moment_microsecond(self);      break;
-        case 14: v = moment_nanosecond(self);       break;
-        case 15: v = moment_offset(self);           break;
+        case  0: v = moment_year(self);                 break;
+        case  1: v = moment_quarter(self);              break;
+        case  2: v = moment_month(self);                break;
+        case  3: v = moment_week(self);                 break;
+        case  4: v = moment_day_of_year(self);          break;
+        case  5: v = moment_day_of_quarter(self);       break;
+        case  6: v = moment_day_of_month(self);         break;
+        case  7: v = moment_day_of_week(self);          break;
+        case  8: v = moment_hour(self);                 break;
+        case  9: v = moment_minute(self);               break;
+        case 10: v = moment_minute_of_day(self);        break;
+        case 11: v = moment_second(self);               break;
+        case 12: v = moment_second_of_day(self);        break;
+        case 13: v = moment_millisecond(self);          break;
+        case 14: v = moment_millisecond_of_day(self);   break;
+        case 15: v = moment_microsecond(self);          break;
+        case 16: v = moment_nanosecond(self);           break;
+        case 17: v = moment_offset(self);               break;
     }
     XSRETURN_IV(v);
 
