@@ -212,6 +212,31 @@ BEGIN {
 
 {
     my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
+    foreach my $hour (0, 12, 23) {
+        foreach my $minute (0, 30, 59) {
+            foreach my $second (0, 30, 45, 59) {
+                my $sod = ($hour * 60 + $minute) * 60 + $second;
+                my $got = $tm->with_second_of_day($sod);
+                
+                my $prefix = "$tm->with_second_of_day($sod)";
+                is($got->year,                2012, "$prefix->year");
+                is($got->month,                 12, "$prefix->month");
+                is($got->day_of_month,          24, "$prefix->day_of_month");
+                is($got->hour,               $hour, "$prefix->hour");
+                is($got->minute,           $minute, "$prefix->minute");
+                is($got->second,           $second, "$prefix->second");
+                is($got->second_of_day,       $sod, "$prefix->second_of_day");
+                is($got->millisecond,          123, "$prefix->millisecond");
+                is($got->microsecond,       123456, "$prefix->microsecond");
+                is($got->nanosecond,     123456789, "$prefix->nanosecond");
+                is($got->offset,          12*60+34, "$prefix->offset");
+            }
+        }
+    }
+}
+
+{
+    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
     for my $millisecond (0, 123, 456, 999) {
         my $microsecond = $millisecond * 1000;
         my $nanosecond  = $microsecond * 1000;
