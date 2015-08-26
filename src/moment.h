@@ -98,7 +98,6 @@ moment_t    THX_moment_from_jd(pTHX_ NV jd, NV epoch, IV precision);
 moment_t    THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t u, IV v);
 moment_t    THX_moment_with_offset_same_instant(pTHX_ const moment_t *mt, IV offset);
 moment_t    THX_moment_with_offset_same_local(pTHX_ const moment_t *mt, IV offset);
-moment_t    THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec);
 
 moment_t    THX_moment_plus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
 moment_t    THX_moment_minus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);

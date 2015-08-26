@@ -432,7 +432,7 @@ THX_moment_with_day_of_week(pTHX_ const moment_t *mt, IV v) {
     return THX_moment_with_local_dt(aTHX_ mt, dt - (dt_dow(dt) - v));
 }
 
-moment_t
+static moment_t
 THX_moment_with_hour(pTHX_ const moment_t *mt, IV v) {
     int64_t sec;
 
@@ -441,7 +441,7 @@ THX_moment_with_hour(pTHX_ const moment_t *mt, IV v) {
     return THX_moment_from_local(aTHX_ sec, mt->nsec, mt->offset);
 }
 
-moment_t
+static moment_t
 THX_moment_with_minute(pTHX_ const moment_t *mt, IV v) {
     int64_t sec;
 
@@ -450,7 +450,7 @@ THX_moment_with_minute(pTHX_ const moment_t *mt, IV v) {
     return THX_moment_from_local(aTHX_ sec, mt->nsec, mt->offset);
 }
 
-moment_t
+static moment_t
 THX_moment_with_minute_of_day(pTHX_ const moment_t *mt, IV v) {
     int64_t sec;
 
@@ -459,7 +459,7 @@ THX_moment_with_minute_of_day(pTHX_ const moment_t *mt, IV v) {
     return THX_moment_from_local(aTHX_ sec, mt->nsec, mt->offset);
 }
 
-moment_t
+static moment_t
 THX_moment_with_second(pTHX_ const moment_t *mt, IV v) {
     int64_t sec;
 
@@ -468,7 +468,7 @@ THX_moment_with_second(pTHX_ const moment_t *mt, IV v) {
     return THX_moment_from_local(aTHX_ sec, mt->nsec, mt->offset);
 }
 
-moment_t
+static moment_t
 THX_moment_with_second_of_day(pTHX_ const moment_t *mt, IV v) {
     int64_t sec;
 
@@ -477,7 +477,7 @@ THX_moment_with_second_of_day(pTHX_ const moment_t *mt, IV v) {
     return THX_moment_from_local(aTHX_ sec, mt->nsec, mt->offset);
 }
 
-moment_t
+static moment_t
 THX_moment_with_millisecond(pTHX_ const moment_t *mt, IV msec) {
     int64_t sec;
 
@@ -486,7 +486,7 @@ THX_moment_with_millisecond(pTHX_ const moment_t *mt, IV msec) {
     return THX_moment_from_local(aTHX_ sec, msec * 1000000, mt->offset);
 }
 
-moment_t
+static moment_t
 THX_moment_with_millisecond_of_day(pTHX_ const moment_t *mt, IV v) {
     int64_t sec;
 
@@ -495,7 +495,7 @@ THX_moment_with_millisecond_of_day(pTHX_ const moment_t *mt, IV v) {
     return THX_moment_from_local(aTHX_ sec, (v % 1000) * 1000000, mt->offset);
 }
 
-moment_t
+static moment_t
 THX_moment_with_microsecond(pTHX_ const moment_t *mt, IV usec) {
     int64_t sec;
 
@@ -504,7 +504,7 @@ THX_moment_with_microsecond(pTHX_ const moment_t *mt, IV usec) {
     return THX_moment_from_local(aTHX_ sec, usec * 1000, mt->offset);
 }
 
-moment_t
+static moment_t
 THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec) {
     int64_t sec;
 
