@@ -440,20 +440,11 @@ from_epoch(klass, seconds, nanosecond=0)
     IV nanosecond
   PREINIT:
     dSTASH_CONSTRUCTOR_MOMENT(klass);
-    int64_t secs;
-    NV frac;
   CODE:
     if (items != 2 || SvIOK(seconds))
-        secs = SvI64V(seconds);
-    else {
-        frac = SvNV(seconds);
-        secs = (int64_t)frac;
-        frac = frac - (NV)secs;
-        if (frac < 0)
-            frac = -frac;
-        nanosecond = (IV)(frac * 1E9 + 0.5);
-    }
-    RETVAL = moment_from_epoch(secs, nanosecond, 0);
+        RETVAL = moment_from_epoch(SvI64V(seconds), nanosecond, 0);
+    else
+        RETVAL = moment_from_epoch_nv(SvNV(seconds));
   OUTPUT:
     RETVAL
 

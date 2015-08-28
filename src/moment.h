@@ -92,6 +92,7 @@ typedef enum {
 
 moment_t    THX_moment_new(pTHX_ IV Y, IV M, IV D, IV h, IV m, IV s, IV ns, IV offset);
 moment_t    THX_moment_from_epoch(pTHX_ int64_t sec, IV usec, IV offset);
+moment_t    THX_moment_from_epoch_nv(pTHX_ NV sec);
 
 moment_t    THX_moment_from_jd(pTHX_ NV jd, NV epoch, IV precision);
 
@@ -155,6 +156,9 @@ moment_t    THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt);
 
 #define moment_from_epoch(sec, nsec, offset) \
     THX_moment_from_epoch(aTHX_ sec, nsec, offset)
+
+#define moment_from_epoch_nv(sec) \
+    THX_moment_from_epoch_nv(aTHX_ sec)
 
 #define moment_from_jd(jd, epoch, precision) \
     THX_moment_from_jd(aTHX_ jd, epoch, precision)
