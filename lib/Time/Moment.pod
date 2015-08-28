@@ -36,9 +36,11 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     
     $hour         = $tm->hour;                      # [0, 23]
     $minute       = $tm->minute;                    # [0, 59]
+    $minute       = $tm->minute_of_day;             # [0, 1439]
     $second       = $tm->second;                    # [0, 59]
     $second       = $tm->second_of_day;             # [0, 86_399]
     $millisecond  = $tm->millisecond;               # [0, 999]
+    $millisecond  = $tm->millisecond_of_day;        # [0, 86_399_999]
     $microsecond  = $tm->microsecond;               # [0, 999_999]
     $nanosecond   = $tm->nanosecond;                # [0, 999_999_999]
     
@@ -58,9 +60,11 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->with_day_of_week($day);
     $tm2          = $tm1->with_hour($hour);
     $tm2          = $tm1->with_minute($minute);
+    $tm2          = $tm1->with_minute_of_day($minute);
     $tm2          = $tm1->with_second($second);
     $tm2          = $tm1->with_second_of_day($second);
     $tm2          = $tm1->with_millisecond($millisecond);
+    $tm2          = $tm1->with_millisecond_of_day($millisecond);
     $tm2          = $tm1->with_microsecond($microsecond);
     $tm2          = $tm1->with_nanosecond($nanosecond);
     
@@ -482,6 +486,12 @@ Returns the hour of the day [0, 23].
 
 Returns the minute of the hour [0, 59].
 
+=head2 minute_of_day
+
+    $minute = $tm->minute_of_day;
+
+Returns the minute of the day [0, 1439].
+
 =head2 second
 
     $second = $tm->second;
@@ -499,6 +509,12 @@ Returns the second of the day [0, 86_399].
     $millisecond = $tm->millisecond;
 
 Returns the millisecond of the second [0, 999].
+
+=head2 millisecond_of_day
+
+    $millisecond = $tm->millisecond_of_day;
+
+Returns the millisecond of the day [0, 86_399_999].
 
 =head2 microsecond
 
@@ -616,6 +632,14 @@ altered.
 Returns a copy of this instance with the given I<minute> of the hour [0, 59] 
 altered.
 
+=head2 with_minute_of_day
+
+    $tm2 = $tm1->with_minute_of_day($minute);
+
+Returns a copy of this instance with the given I<minute> of the day [0, 1439] 
+altered. The second of the minute and the nanosecond of the second is 
+unaltered.
+
 =head2 with_second
 
     $tm2 = $tm1->with_second($second);
@@ -637,6 +661,15 @@ altered. The nanosecond of the second is unaltered.
 Returns a copy of this instance with the given I<millisecond> of the second 
 [0, 999] altered. The nanosecond of the second is replaced with the given
 I<millisecond> multiplied by 1,000,000.
+
+=head2 with_millisecond_of_day
+
+    $tm2 = $tm1->with_millisecond_of_day($millisecond);
+
+Returns a copy of this instance with the given I<millisecond> of the day 
+[0, 86_399_999] altered. The nanosecond of the second is replaced with the 
+millisecond of the second from the given millisecond of the day multiplied 
+by 1,000,000.
 
 =head2 with_microsecond
 
