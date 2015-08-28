@@ -173,25 +173,31 @@ BEGIN {
 }
 
 {
-    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
-    foreach my $hour (0, 12, 23) {
-        foreach my $minute (0, 30, 59) {
-            my $mod = $hour * 60 + $minute;
-            my $got = $tm->with_minute_of_day($mod);
-
-            my $prefix = "$tm->with_minute_of_day($mod)";
-            is($got->year,                2012, "$prefix->year");
-            is($got->month,                 12, "$prefix->month");
-            is($got->day_of_month,          24, "$prefix->day_of_month");
-            is($got->hour,               $hour, "$prefix->hour");
-            is($got->minute,           $minute, "$prefix->minute");
-            is($got->minute_of_day,       $mod, "$prefix->minute_of_day");
-            is($got->second,                45, "$prefix->second");
-            is($got->millisecond,          123, "$prefix->millisecond");
-            is($got->microsecond,       123456, "$prefix->microsecond");
-            is($got->nanosecond,     123456789, "$prefix->nanosecond");
-            is($got->offset,          12*60+34, "$prefix->offset");
+    my @tests;
+    foreach my $h (0, 12, 23) {
+        foreach my $m (0, 30, 59) {
+            push @tests, [$h, $m];
         }
+    }
+
+    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
+    foreach my $test (@tests) {
+        my ($h, $m) = @$test;
+        my $mod = $h * 60 + $m;
+        my $got = $tm->with_minute_of_day($mod);
+
+        my $prefix = "$tm->with_minute_of_day($mod)";
+        is($got->year,                2012, "$prefix->year");
+        is($got->month,                 12, "$prefix->month");
+        is($got->day_of_month,          24, "$prefix->day_of_month");
+        is($got->hour,                  $h, "$prefix->hour");
+        is($got->minute,                $m, "$prefix->minute");
+        is($got->minute_of_day,       $mod, "$prefix->minute_of_day");
+        is($got->second,                45, "$prefix->second");
+        is($got->millisecond,          123, "$prefix->millisecond");
+        is($got->microsecond,       123456, "$prefix->microsecond");
+        is($got->nanosecond,     123456789, "$prefix->nanosecond");
+        is($got->offset,          12*60+34, "$prefix->offset");
     }
 }
 
@@ -234,27 +240,33 @@ BEGIN {
 }
 
 {
-    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
-    foreach my $hour (0, 12, 23) {
-        foreach my $minute (0, 30, 59) {
-            foreach my $second (0, 30, 45, 59) {
-                my $sod = ($hour * 60 + $minute) * 60 + $second;
-                my $got = $tm->with_second_of_day($sod);
-
-                my $prefix = "$tm->with_second_of_day($sod)";
-                is($got->year,                2012, "$prefix->year");
-                is($got->month,                 12, "$prefix->month");
-                is($got->day_of_month,          24, "$prefix->day_of_month");
-                is($got->hour,               $hour, "$prefix->hour");
-                is($got->minute,           $minute, "$prefix->minute");
-                is($got->second,           $second, "$prefix->second");
-                is($got->second_of_day,       $sod, "$prefix->second_of_day");
-                is($got->millisecond,          123, "$prefix->millisecond");
-                is($got->microsecond,       123456, "$prefix->microsecond");
-                is($got->nanosecond,     123456789, "$prefix->nanosecond");
-                is($got->offset,          12*60+34, "$prefix->offset");
+    my @tests;
+    foreach my $h (0, 12, 23) {
+        foreach my $m (0, 30, 59) {
+            foreach my $s (0, 30, 45, 59) {
+                push @tests, [$h, $m, $s];
             }
         }
+    }
+
+    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
+    foreach my $test (@tests) {
+        my ($h, $m, $s) = @$test;
+        my $sod = ($h * 60 + $m) * 60 + $s;
+        my $got = $tm->with_second_of_day($sod);
+
+        my $prefix = "$tm->with_second_of_day($sod)";
+        is($got->year,                 2012, "$prefix->year");
+        is($got->month,                  12, "$prefix->month");
+        is($got->day_of_month,           24, "$prefix->day_of_month");
+        is($got->hour,                   $h, "$prefix->hour");
+        is($got->minute,                 $m, "$prefix->minute");
+        is($got->second,                 $s, "$prefix->second");
+        is($got->second_of_day,        $sod, "$prefix->second_of_day");
+        is($got->millisecond,           123, "$prefix->millisecond");
+        is($got->microsecond,        123456, "$prefix->microsecond");
+        is($got->nanosecond,      123456789, "$prefix->nanosecond");
+        is($got->offset,           12*60+34, "$prefix->offset");
     }
 }
 
@@ -280,31 +292,37 @@ BEGIN {
 }
 
 {
-    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
-    foreach my $hour (0, 12, 23) {
-        foreach my $minute (0, 30, 59) {
-            foreach my $second (0, 30, 45, 59) {
+    my @tests;
+    foreach my $h (0, 12, 23) {
+        foreach my $m (0, 30, 59) {
+            foreach my $s (0, 30, 45, 59) {
                 foreach my $ms (0, 100, 500, 999) {
-                    my $msod = (($hour * 60 + $minute) * 60 + $second) * 1000 + $ms;
-                    my $us   = $ms * 1000;
-                    my $ns   = $us * 1000;
-                    my $got  = $tm->with_millisecond_of_day($msod);
-
-                    my $prefix = "$tm->with_millisecond_of_day($msod)";
-                    is($got->year,                        2012, "$prefix->year");
-                    is($got->month,                         12, "$prefix->month");
-                    is($got->day_of_month,                  24, "$prefix->day_of_month");
-                    is($got->hour,                       $hour, "$prefix->hour");
-                    is($got->minute,                   $minute, "$prefix->minute");
-                    is($got->second,                   $second, "$prefix->second");
-                    is($got->millisecond,                  $ms, "$prefix->millisecond");
-                    is($got->millisecond_of_day,         $msod, "$prefix->millisecond_of_day");
-                    is($got->microsecond,                  $us, "$prefix->microsecond");
-                    is($got->nanosecond,                   $ns, "$prefix->nanosecond");
-                    is($got->offset,                  12*60+34, "$prefix->offset");
+                    push @tests, [$h, $m, $s, $ms];
                 }
             }
         }
+    }
+
+    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789+12:34");
+    foreach my $test (@tests) {
+        my ($h, $m, $s, $ms) = @$test;
+        my $msod = (($h * 60 + $m) * 60 + $s) * 1000 + $ms;
+        my $us   = $ms * 1000;
+        my $ns   = $us * 1000;
+        my $got  = $tm->with_millisecond_of_day($msod);
+
+        my $prefix = "$tm->with_millisecond_of_day($msod)";
+        is($got->year,                    2012, "$prefix->year");
+        is($got->month,                     12, "$prefix->month");
+        is($got->day_of_month,              24, "$prefix->day_of_month");
+        is($got->hour,                      $h, "$prefix->hour");
+        is($got->minute,                    $m, "$prefix->minute");
+        is($got->second,                    $s, "$prefix->second");
+        is($got->millisecond,              $ms, "$prefix->millisecond");
+        is($got->millisecond_of_day,     $msod, "$prefix->millisecond_of_day");
+        is($got->microsecond,              $us, "$prefix->microsecond");
+        is($got->nanosecond,               $ns, "$prefix->nanosecond");
+        is($got->offset,              12*60+34, "$prefix->offset");
     }
 }
 
