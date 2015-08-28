@@ -1,3 +1,19 @@
+0.26 2015-08-28
+  - The optional epoch date in ->from_jd and ->from_mjd has changed from
+    0001-01-01T00Z to 0000-12-31T00Z (Rata Die).
+  - Applied patch from Vitaliy V. Tokarev (issue #15) which addresses builds
+    on Solaris.
+  - Added following methods to the API:
+    - minutes_of_day
+    - with_minutes_of_day
+    - millisecond_of_day
+    - with_millisecond_of_day
+  - Internals has been refactored to ease maintainability
+  - Added more test cases
+  - Applied a patch by Vitaliy V. Tokarev (gh0stwizard) which fixes a build 
+    issue on solaris, #15
+
+
 0.25 2015-07-07
   - Added following methods to the API:
     - from_jd
