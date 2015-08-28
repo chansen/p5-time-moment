@@ -628,21 +628,23 @@ altered.
     $tm2 = $tm1->with_second_of_day($second);
 
 Returns a copy of this instance with the given I<second> of the day [0, 86_399] 
-altered.
+altered. The nanosecond of the second is unaltered.
 
 =head2 with_millisecond
 
     $tm2 = $tm1->with_millisecond($millisecond);
 
 Returns a copy of this instance with the given I<millisecond> of the second 
-[0, 999] altered.
+[0, 999] altered. The nanosecond of the second is replaced with the given
+I<millisecond> multiplied by 1,000,000.
 
 =head2 with_microsecond
 
     $tm2 = $tm1->with_microsecond($microsecond);
 
 Returns a copy of this instance with the given I<microsecond> of the second 
-[0, 999_999] altered.
+[0, 999_999] altered. The nanosecond of the second is replaced with the given
+I<microsecond> multiplied by 1,000.
 
 =head2 with_nanosecond
 
