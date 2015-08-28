@@ -506,9 +506,9 @@ from_jd(klass, jd, ...)
         croak("Odd number of elements in named parameters");
 
     if (ix == 0)
-        precision = 3, epoch = -1721425.5;
+        precision = 3, epoch = -1721424.5;
     else
-        precision = 3, epoch = 678575;
+        precision = 3, epoch = 678576;
 
     for (i = 2; i < items; i += 2) {
         str = SvPV_const(ST(i), len);

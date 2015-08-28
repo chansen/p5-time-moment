@@ -361,7 +361,7 @@ as they do not conform to the ISO 8601 standard.
 =head2 from_jd
 
     $tm = Time::Moment->from_jd($jd);
-    $tm = Time::Moment->from_jd($jd [, precision => 3] [, epoch => -1721425.5]);
+    $tm = Time::Moment->from_jd($jd [, precision => 3] [, epoch => -1721424.5]);
 
 Constructs an instance of C<Time::Moment> from the given Julian Date. 
 The Julian Date is a count of days elapsed since -4713-11-24T12Z. The 
@@ -382,17 +382,17 @@ digits after the decimal point. The default precision is 3.
 
 =item epoch
 
-    $tm = Time::Moment->from_jd($jd, epoch => -1721425.5);
+    $tm = Time::Moment->from_jd($jd, epoch => -1721424.5);
 
 The optional parameter I<epoch> specifies the epoch date relative to 
-0001-01-01T00Z. The epoch date for the Julian Date is C<-1721425.5>.
+0000-12-31T00Z. The epoch date for the Julian Date is C<-1721424.5>.
 
 =back
 
 =head2 from_mjd
 
     $tm = Time::Moment->from_mjd($mjd);
-    $tm = Time::Moment->from_mjd($mjd [, precision => 3] [, epoch => 678575]);
+    $tm = Time::Moment->from_mjd($mjd [, precision => 3] [, epoch => 678576]);
 
 Constructs an instance of C<Time::Moment> from the given Modified Julian 
 Date. The Modified Julian Date is a count of days elapsed since 
@@ -413,10 +413,10 @@ digits after the decimal point. The default precision is 3.
 
 =item epoch
 
-    $tm = Time::Moment->from_mjd($mjd, epoch => 678575);
+    $tm = Time::Moment->from_mjd($mjd, epoch => 678576);
 
 The optional parameter I<epoch> specifies the epoch date relative to 
-0001-01-01T00Z. The epoch date for the Modified Julian Date is C<678575>.
+0000-12-31T00Z. The epoch date for the Modified Julian Date is C<678576>.
 
 =back
 
