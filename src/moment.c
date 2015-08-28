@@ -532,21 +532,42 @@ THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec) {
 }
 
 moment_t
-THX_moment_with_offset_same_instant(pTHX_ const moment_t *mt, IV offset) {
-    int64_t sec;
-
-    THX_check_offset(aTHX_ offset);
-    sec = moment_instant_rd_seconds(mt);
-    return THX_moment_from_instant(aTHX_ sec, mt->nsec, offset);
-}
-
-moment_t
-THX_moment_with_offset_same_local(pTHX_ const moment_t *mt, IV offset) {
-    int64_t sec;
-
-    THX_check_offset(aTHX_ offset);
-    sec = moment_local_rd_seconds(mt);
-    return THX_moment_from_local(aTHX_ sec, mt->nsec, offset);
+THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) {
+    switch (c) {
+        case MOMENT_COMPONENT_YEAR:
+            return THX_moment_with_year(aTHX_ mt, v);
+        case MOMENT_COMPONENT_MONTH_OF_YEAR:
+            return THX_moment_with_month(aTHX_ mt, v);
+        case MOMENT_COMPONENT_WEEK_OF_YEAR:
+            return THX_moment_with_week(aTHX_ mt, v);
+        case MOMENT_COMPONENT_DAY_OF_MONTH:
+            return THX_moment_with_day_of_month(aTHX_ mt, v);
+        case MOMENT_COMPONENT_DAY_OF_QUARTER:
+            return THX_moment_with_day_of_quarter(aTHX_ mt, v);
+        case MOMENT_COMPONENT_DAY_OF_YEAR:
+            return THX_moment_with_day_of_year(aTHX_ mt, v);
+        case MOMENT_COMPONENT_DAY_OF_WEEK:
+            return THX_moment_with_day_of_week(aTHX_ mt, v);
+        case MOMENT_COMPONENT_HOUR_OF_DAY:
+            return THX_moment_with_hour(aTHX_ mt, v);
+        case MOMENT_COMPONENT_MINUTE_OF_HOUR:
+            return THX_moment_with_minute(aTHX_ mt, v);
+        case MOMENT_COMPONENT_MINUTE_OF_DAY:
+            return THX_moment_with_minute_of_day(aTHX_ mt, v);
+        case MOMENT_COMPONENT_SECOND_OF_MINUTE:
+            return THX_moment_with_second(aTHX_ mt, v);
+        case MOMENT_COMPONENT_SECOND_OF_DAY:
+            return THX_moment_with_second_of_day(aTHX_ mt, v);
+        case MOMENT_COMPONENT_MILLI_OF_SECOND:
+            return THX_moment_with_millisecond(aTHX_ mt, v);
+        case MOMENT_COMPONENT_MILLI_OF_DAY:
+            return THX_moment_with_millisecond_of_day(aTHX_ mt, v);
+        case MOMENT_COMPONENT_MICRO_OF_SECOND:
+            return THX_moment_with_microsecond(aTHX_ mt, v);
+        case MOMENT_COMPONENT_NANO_OF_SECOND:
+            return THX_moment_with_nanosecond(aTHX_ mt, v);
+    }
+    croak("panic: THX_moment_with_component() called with unknown component (%d)", (int)c);
 }
 
 static moment_t
@@ -574,45 +595,6 @@ THX_moment_plus_seconds(pTHX_ const moment_t *mt, int64_t v) {
     THX_check_unit_seconds(aTHX_ v);
     sec = moment_instant_rd_seconds(mt) + v;
     return THX_moment_from_instant(aTHX_ sec, mt->nsec, mt->offset);
-}
-
-moment_t
-THX_moment_at_utc(pTHX_ const moment_t *mt) {
-    return THX_moment_with_offset_same_instant(aTHX_ mt, 0);
-}
-
-moment_t
-THX_moment_at_midnight(pTHX_ const moment_t *mt) {
-    return THX_moment_with_millisecond_of_day(aTHX_ mt, 0);
-}
-
-moment_t
-THX_moment_at_noon(pTHX_ const moment_t *mt) {
-    return THX_moment_with_millisecond_of_day(aTHX_ mt, 12*60*60*1000);
-}
-
-moment_t
-THX_moment_at_last_day_of_year(pTHX_ const moment_t *mt) {
-    int y;
-
-    dt_to_yd(moment_local_dt(mt), &y, NULL);
-    return THX_moment_with_local_dt(aTHX_ mt, dt_from_yd(y + 1, 0));
-}
-
-moment_t
-THX_moment_at_last_day_of_quarter(pTHX_ const moment_t *mt) {
-    int y, q;
-
-    dt_to_yqd(moment_local_dt(mt), &y, &q, NULL);
-    return THX_moment_with_local_dt(aTHX_ mt, dt_from_yqd(y, q + 1, 0));
-}
-
-moment_t
-THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt) {
-    int y, m;
-
-    dt_to_ymd(moment_local_dt(mt), &y, &m, NULL);
-    return THX_moment_with_local_dt(aTHX_ mt, dt_from_ymd(y, m + 1, 0));
 }
 
 static moment_t
@@ -708,42 +690,60 @@ THX_moment_minus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v) {
 }
 
 moment_t
-THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) {
-    switch (c) {
-        case MOMENT_COMPONENT_YEAR:
-            return THX_moment_with_year(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MONTH_OF_YEAR:
-            return THX_moment_with_month(aTHX_ mt, v);
-        case MOMENT_COMPONENT_WEEK_OF_YEAR:
-            return THX_moment_with_week(aTHX_ mt, v);
-        case MOMENT_COMPONENT_DAY_OF_MONTH:
-            return THX_moment_with_day_of_month(aTHX_ mt, v);
-        case MOMENT_COMPONENT_DAY_OF_QUARTER:
-            return THX_moment_with_day_of_quarter(aTHX_ mt, v);
-        case MOMENT_COMPONENT_DAY_OF_YEAR:
-            return THX_moment_with_day_of_year(aTHX_ mt, v);
-        case MOMENT_COMPONENT_DAY_OF_WEEK:
-            return THX_moment_with_day_of_week(aTHX_ mt, v);
-        case MOMENT_COMPONENT_HOUR_OF_DAY:
-            return THX_moment_with_hour(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MINUTE_OF_HOUR:
-            return THX_moment_with_minute(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MINUTE_OF_DAY:
-            return THX_moment_with_minute_of_day(aTHX_ mt, v);
-        case MOMENT_COMPONENT_SECOND_OF_MINUTE:
-            return THX_moment_with_second(aTHX_ mt, v);
-        case MOMENT_COMPONENT_SECOND_OF_DAY:
-            return THX_moment_with_second_of_day(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MILLI_OF_SECOND:
-            return THX_moment_with_millisecond(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MILLI_OF_DAY:
-            return THX_moment_with_millisecond_of_day(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MICRO_OF_SECOND:
-            return THX_moment_with_microsecond(aTHX_ mt, v);
-        case MOMENT_COMPONENT_NANO_OF_SECOND:
-            return THX_moment_with_nanosecond(aTHX_ mt, v);
-    }
-    croak("panic: THX_moment_with_component() called with unknown component (%d)", (int)c);
+THX_moment_with_offset_same_instant(pTHX_ const moment_t *mt, IV offset) {
+    int64_t sec;
+
+    THX_check_offset(aTHX_ offset);
+    sec = moment_instant_rd_seconds(mt);
+    return THX_moment_from_instant(aTHX_ sec, mt->nsec, offset);
+}
+
+moment_t
+THX_moment_with_offset_same_local(pTHX_ const moment_t *mt, IV offset) {
+    int64_t sec;
+
+    THX_check_offset(aTHX_ offset);
+    sec = moment_local_rd_seconds(mt);
+    return THX_moment_from_local(aTHX_ sec, mt->nsec, offset);
+}
+
+moment_t
+THX_moment_at_utc(pTHX_ const moment_t *mt) {
+    return THX_moment_with_offset_same_instant(aTHX_ mt, 0);
+}
+
+moment_t
+THX_moment_at_midnight(pTHX_ const moment_t *mt) {
+    return THX_moment_with_millisecond_of_day(aTHX_ mt, 0);
+}
+
+moment_t
+THX_moment_at_noon(pTHX_ const moment_t *mt) {
+    return THX_moment_with_millisecond_of_day(aTHX_ mt, 12*60*60*1000);
+}
+
+moment_t
+THX_moment_at_last_day_of_year(pTHX_ const moment_t *mt) {
+    int y;
+
+    dt_to_yd(moment_local_dt(mt), &y, NULL);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_yd(y + 1, 0));
+}
+
+moment_t
+THX_moment_at_last_day_of_quarter(pTHX_ const moment_t *mt) {
+    int y, q;
+
+    dt_to_yqd(moment_local_dt(mt), &y, &q, NULL);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_yqd(y, q + 1, 0));
+}
+
+moment_t
+THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt) {
+    int y, m;
+
+    dt_to_ymd(moment_local_dt(mt), &y, &m, NULL);
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_ymd(y, m + 1, 0));
 }
 
 int
