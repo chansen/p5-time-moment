@@ -304,8 +304,8 @@ THX_moment_from_jd(pTHX_ NV jd, NV epoch, IV precision) {
     f *= 86400;
     s = Perl_floor(f);
 
-    if (d < 0 || d > 3652058)
-        croak("Julian Date is out of supported range");
+    if (d < 1 || d > 3652059)
+        croak("Serial date is out of supported range");
 
     denom = Perl_pow(10.0, (NV)precision);
     f = (Perl_floor((f - s) * denom + 0.5) / denom) * 1E9;
