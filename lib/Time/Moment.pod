@@ -564,6 +564,14 @@ Returns the Rata Die. The Rata Die is a count of days elapsed since
 0000-12-31T00. The fractional part corresponds to the fraction of the day 
 after midnight.
 
+=head2 with
+
+    $tm2 = $tm1->with($adjuster);
+
+Returns a copy of this instance adjusted by the given I<adjuster>. The 
+adjuster is a CODE reference invoked with an instance of Time::Moment and
+is expected to return an instance of Time::Moment.
+
 =head2 with_year
 
     $tm2 = $tm1->with_year($year);

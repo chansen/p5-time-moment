@@ -614,6 +614,30 @@ minus_seconds(self, value)
   OUTPUT:
     RETVAL
 
+void
+with(self, adjuster)
+    const moment_t *self
+    SV *adjuster
+  PREINIT:
+    I32 count;
+    PERL_UNUSED_VAR(self);
+  PPCODE:
+    SvGETMAGIC(adjuster);
+    if (SvROK(adjuster))
+        adjuster = SvRV(adjuster);
+    if (SvTYPE(adjuster) != SVt_PVCV || SvOBJECT(adjuster))
+        croak("Parameter: 'adjuster' is not a CODE reference");
+    PUSHMARK(SP);
+    SP += 1;
+    PUTBACK;
+    count = call_sv(adjuster, G_SCALAR);
+    if (count != 1)
+        croak("Expected one return value from adjuster, got %d elements", count);
+    if (!sv_isa_moment(ST(0)))
+        croak("Expected an instance of Time::Moment from adjuster, got '%"SVf"'", 
+          THX_sv_2neat(aTHX_ ST(0)));
+    SPAGAIN;
+
 moment_t
 with_year(self, value)
     const moment_t *self
