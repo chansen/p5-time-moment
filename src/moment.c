@@ -154,8 +154,8 @@ THX_check_millisecond(pTHX_ IV v) {
 
 static void
 THX_check_millisecond_of_day(pTHX_ IV v) {
-    if (v < 0 || v > 86399999)
-        croak("Parameter 'millisecond' is out of the range [0, 86_399_999]");
+    if (v < 0 || v > 86400000)
+        croak("Parameter 'millisecond' is out of the range [0, 86_400_000]");
 }
 
 static void
