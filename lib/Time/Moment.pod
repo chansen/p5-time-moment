@@ -646,8 +646,7 @@ altered.
     $tm2 = $tm1->with_minute_of_day($minute);
 
 Returns a copy of this instance with the given I<minute> of the day [0, 1439] 
-altered. The second of the minute and the nanosecond of the second is 
-unaltered.
+altered. The lower-order time elements is unaltered.
 
 =head2 with_second
 
@@ -661,7 +660,7 @@ altered.
     $tm2 = $tm1->with_second_of_day($second);
 
 Returns a copy of this instance with the given I<second> of the day [0, 86_399] 
-altered. The nanosecond of the second is unaltered.
+altered. The lower-order time elements is unaltered.
 
 =head2 with_millisecond
 
@@ -676,9 +675,7 @@ I<millisecond> multiplied by 1,000,000.
     $tm2 = $tm1->with_millisecond_of_day($millisecond);
 
 Returns a copy of this instance with the given I<millisecond> of the day 
-[0, 86_399_999] altered. The nanosecond of the second is replaced with the 
-millisecond of the second from the given millisecond of the day multiplied 
-by 1,000,000.
+[0, 86_399_999] altered. The lower-order time elements are truncated.
 
 =head2 with_microsecond
 
