@@ -570,7 +570,8 @@ after midnight.
 
 Returns a copy of this instance adjusted by the given I<adjuster>. The 
 adjuster is a CODE reference invoked with an instance of Time::Moment and
-is expected to return an instance of Time::Moment.
+is expected to return an instance of Time::Moment. See 
+L<Time::Moment::Adjusters> for available adjusters.
 
 =head2 with_year
 
