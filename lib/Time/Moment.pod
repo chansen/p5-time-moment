@@ -675,7 +675,7 @@ I<millisecond> multiplied by 1,000,000.
     $tm2 = $tm1->with_millisecond_of_day($millisecond);
 
 Returns a copy of this instance with the given I<millisecond> of the day 
-[0, 86_399_999] altered. The lower-order time elements are truncated.
+[0, 86_400_000] altered. The lower-order time elements are truncated.
 
 =head2 with_microsecond
 
