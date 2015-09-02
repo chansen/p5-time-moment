@@ -113,6 +113,7 @@ void        moment_to_local_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *
 
 int         moment_compare_instant(const moment_t *m1, const moment_t *m2);
 int         moment_compare_local(const moment_t *m1, const moment_t *m2);
+bool        moment_equals(const moment_t *m1, const moment_t *m2);
 
 int         moment_year(const moment_t *mt);
 int         moment_quarter(const moment_t *mt);

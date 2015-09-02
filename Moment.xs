@@ -116,6 +116,15 @@ moment_param(const char *s, const STRLEN len) {
     return MOMENT_PARAM_UNKNOWN;
 }
 
+static moment_param_t
+THX_sv_moment_param(pTHX_ SV *sv) {
+    const char *str;
+    STRLEN len;
+
+    str = SvPV_const(sv, len);
+    return moment_param(str, len);
+}
+
 static SV *
 THX_sv_as_object(pTHX_ SV *sv, const char *name) {
     dSP;
@@ -280,6 +289,9 @@ THX_sv_2moment_coerce_sv(pTHX_ SV *sv) {
 #define croak_cmp(sv1, sv2, swap, name) \
     THX_croak_cmp(aTHX_ sv1, sv2, swap, name)
 
+#define sv_moment_param(sv) \
+    THX_sv_moment_param(aTHX_ sv)
+
 #define sv_reusable(sv) \
     (SvTEMP(sv) && SvREFCNT(sv) == 1 && SvROK(sv) && SvREFCNT(SvRV(sv)) == 1)
 
@@ -392,15 +404,12 @@ new(klass, ...)
     IV year = 1, month = 1, day = 1;
     IV hour = 0, minute = 0, second = 0, ns = 0, offset = 0;
     I32 i;
-    STRLEN len;
-    const char *str;
   CODE:
     if (((items - 1) % 2) != 0)
         croak("Odd number of elements in call to constructor when named parameters were expected");
 
     for (i = 1; i < items; i += 2) {
-        str = SvPV_const(ST(i), len);
-        switch (moment_param(str, len)) {
+        switch (sv_moment_param(ST(i))) {
             case MOMENT_PARAM_YEAR:        year   = SvIV(ST(i+1)); break;
             case MOMENT_PARAM_MONTH:       month  = SvIV(ST(i+1)); break;
             case MOMENT_PARAM_DAY:         day    = SvIV(ST(i+1)); break;
@@ -409,7 +418,7 @@ new(klass, ...)
             case MOMENT_PARAM_SECOND:      second = SvIV(ST(i+1)); break;
             case MOMENT_PARAM_NANOSECOND:  ns     = SvIV(ST(i+1)); break;
             case MOMENT_PARAM_OFFSET:      offset = SvIV(ST(i+1)); break;
-            default: croak("Unrecognised parameter: '%s'", str);
+            default: croak("Unrecognised parameter: '%"SVf"'", ST(i));
         }
     }
     RETVAL = moment_new(year, month, day, hour, minute, second, ns, offset);
@@ -455,8 +464,8 @@ from_string(klass, string, ...)
   PREINIT:
     dSTASH_CONSTRUCTOR_MOMENT(klass);
     bool lenient;
-    STRLEN len;
     const char *str;
+    STRLEN len;
     I32 i;
   CODE:
     if ((items % 2) != 0)
@@ -464,13 +473,12 @@ from_string(klass, string, ...)
 
     lenient = FALSE;
     for (i = 2; i < items; i += 2) {
-        str = SvPV_const(ST(i), len);
-        switch (moment_param(str, len)) {
+        switch (sv_moment_param(ST(i))) {
             case MOMENT_PARAM_LENIENT:
                 lenient = cBOOL(SvTRUE((ST(i+1))));
                 break;
             default: 
-                croak("Unrecognised parameter: '%s'", str);
+                croak("Unrecognised parameter: '%"SVf"'", ST(i));
         }
     }
     str = SvPV_const(string, len);
@@ -486,8 +494,6 @@ from_jd(klass, jd, ...)
     dSTASH_CONSTRUCTOR_MOMENT(klass);
     NV epoch;
     IV precision;
-    STRLEN len;
-    const char *str;
     I32 i;
   ALIAS:
     Time::Moment::from_jd  = 0
@@ -502,8 +508,7 @@ from_jd(klass, jd, ...)
         precision = 3, epoch = 678576;
 
     for (i = 2; i < items; i += 2) {
-        str = SvPV_const(ST(i), len);
-        switch (moment_param(str, len)) {
+        switch (sv_moment_param(ST(i))) {
             case MOMENT_PARAM_PRECISION:
                 precision = SvIV(ST(i+1));
                 break;
@@ -511,7 +516,7 @@ from_jd(klass, jd, ...)
                 epoch = SvNV(ST(i+1));
                 break;
             default:
-                croak("Unrecognised parameter: '%s'", str);
+                croak("Unrecognised parameter: '%"SVf"'", ST(i));
         }
     }
     RETVAL = moment_from_jd(jd, epoch, precision);
@@ -549,7 +554,7 @@ at_utc(self)
         case 4: RETVAL = moment_at_last_day_of_quarter(self);   break;
         case 5: RETVAL = moment_at_last_day_of_month(self);     break;
     }
-    if (moment_compare_local(self, &RETVAL) == 0)
+    if (moment_equals(self, &RETVAL))
         XSRETURN(1);
     if (sv_reusable(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
@@ -663,7 +668,7 @@ with_year(self, value)
     Time::Moment::with_nanosecond         = MOMENT_COMPONENT_NANO_OF_SECOND
   CODE:
     RETVAL = moment_with_component(self, (moment_component_t)ix, value);
-    if (moment_compare_local(self, &RETVAL) == 0)
+    if (moment_equals(self, &RETVAL))
         XSRETURN(1);
     if (sv_reusable(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
@@ -682,16 +687,13 @@ with_offset_same_instant(self, offset)
     Time::Moment::with_offset_same_instant = 0
     Time::Moment::with_offset_same_local   = 1
   CODE:
-    if (ix == 0) {
+    if (ix == 0)
         RETVAL = moment_with_offset_same_instant(self, offset);
-        if (moment_compare_local(self, &RETVAL) == 0)
-            XSRETURN(1);
-    }
-    else {
+    else
         RETVAL = moment_with_offset_same_local(self, offset);
-        if (moment_compare_instant(self, &RETVAL) == 0)
-            XSRETURN(1);
-    }
+
+    if (moment_equals(self, &RETVAL))
+        XSRETURN(1);
     if (sv_reusable(ST(0))) {
         sv_set_moment(ST(0), &RETVAL);
         XSRETURN(1);
@@ -865,8 +867,6 @@ to_string(self, ...)
     const moment_t *self
   PREINIT:
     bool reduced;
-    STRLEN len;
-    const char *str;
     I32 i;
   PPCODE:
     if (((items - 1) % 2) != 0)
@@ -874,13 +874,12 @@ to_string(self, ...)
 
     reduced = FALSE;
     for (i = 1; i < items; i += 2) {
-        str = SvPV_const(ST(i), len);
-        switch (moment_param(str, len)) {
+        switch (sv_moment_param(ST(i))) {
             case MOMENT_PARAM_REDUCED:
                 reduced = cBOOL(SvTRUE((ST(i+1))));
                 break;
             default: 
-                croak("Unrecognised parameter: '%s'", str);
+                croak("Unrecognised parameter: '%"SVf"'", ST(i));
         }
     }
     XSRETURN_SV(moment_to_string(self, reduced));

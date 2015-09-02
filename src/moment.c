@@ -770,6 +770,11 @@ moment_compare_local(const moment_t *m1, const moment_t *m2) {
     return r;
 }
 
+bool
+moment_equals(const moment_t *m1, const moment_t *m2) {
+    return memcmp(m1, m2, sizeof(moment_t)) == 0;
+}
+
 int64_t
 moment_epoch(const moment_t *mt) {
     return (moment_instant_rd_seconds(mt) - UNIX_EPOCH);
