@@ -10,9 +10,6 @@
     - with_millisecond_of_day
   - Internals has been refactored to ease maintainability
   - Added more test cases
-  - Applied a patch by Vitaliy V. Tokarev (gh0stwizard) which fixes a build 
-    issue on solaris, #15
-
 
 0.25 2015-07-07
   - Added following methods to the API:
