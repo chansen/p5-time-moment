@@ -315,9 +315,8 @@ Where representations using calendar dates are shown, ordinal dates or week
 dates may be substituted. This ISO 8601 profile correspond to a subset of 
 ISO 8601:2004 4.3 Date and time of day.
 
-If the optional boolean parameter I<lenient> is true the following examples
-is also accepted where the date is a complete calendar date and time of day 
-in extended format:
+If the optional boolean parameter I<lenient> is true, the following examples
+is also accepted:
 
     YYYY-MM-DD hh:mm:ssZ          2012-12-24 12:15:30Z
     YYYY-MM-DD hh:mm:ssz          2012-12-24 12:15:30z
@@ -353,14 +352,13 @@ in extended format:
     YYYY-MM-DD hh:mm ±hhmm        2012-12-24 12:15 +0100
     YYYY-MM-DD hh:mm ±hh          2012-12-24 12:15 +01
 
-The time designator [T] may be in lower case [t] or replaced with a single 
-space. A single space is also accepted between the time of day and the zone 
-designator if the time designator is replaced with a single space. The zone 
-designator may be in basic format even though the calendar date and time of 
-day is in extended format. The UTC designator [Z] may also be in lower case 
-[z]. The literal string GMT or UTC may be used as a UTC designator and may
-have an offset. Usage of these string representations is strongly discouraged 
-as they do not conform to the ISO 8601 standard.
+The string representation may consist of a mixture of the basic format and 
+the extended format. The time designator [T] may be in lower case [t] or 
+replaced with a single space. A single space is also accepted between the 
+time of day and the zone designator. The UTC designator [Z] may also be in 
+lower case [z]. The literal string GMT or UTC may be used as a UTC designator 
+and may have an offset. Usage of these string representations is strongly 
+discouraged as they do not conform to the ISO 8601 standard.
 
 =head2 from_jd
 
