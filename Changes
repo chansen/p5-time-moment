@@ -1,3 +1,11 @@
+0.28 XXXX-XX-XX
+  - Changed the lenient mode in ->from_string to be more lenient. The string 
+    representation may now consist of a mixture of the basic format and the 
+    extended format. e.g. the date may be in the basic format, while the 
+    time of day is in the extended format, 20121224T12:15:30Z.
+  - Applied pull request by Gareth Harper (GHARPER) which fixes test issues,
+    due to changes in Test::More (pull request #17).
+
 0.27 2015-09-02
   - Added ->with method
   - Added Time::Moment::Adjusters
