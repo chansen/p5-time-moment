@@ -51,6 +51,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $mjd          = $tm->mjd;
     $rd           = $tm->rd;
     
+    $tm2          = $tm1->with($adjuster);
     $tm2          = $tm1->with_year($year);
     $tm2          = $tm1->with_month($month);
     $tm2          = $tm1->with_week($week);
