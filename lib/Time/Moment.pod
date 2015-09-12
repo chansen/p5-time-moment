@@ -1662,7 +1662,7 @@ Method called with wrong number of arguments.
 
 =item B<(F)> Cannot coerce object of type %s to Time::Moment
 
-=item B<(F)> Cannot parse the given string
+=item B<(F)> Could not parse the given string
 
 =item B<(F)> %s is not an instance of Time::Moment
 
