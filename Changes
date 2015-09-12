@@ -3,6 +3,9 @@
     representation may now consist of a mixture of the basic format and the 
     extended format. e.g. the date may be in the basic format, while the 
     time of day is in the extended format, 20121224T12:15:30Z.
+  - Changed the fractional second precision in ->jd, ->mjd and ->rd from 
+    nanosecond to millisecond, higher precision can be returned by providing
+    the optional named parameter precision.
   - Applied pull request by Gareth Harper (GHARPER) which fixes test issues,
     due to changes in Test::More (pull request #17).
 

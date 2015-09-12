@@ -542,26 +542,35 @@ Returns the time zone offset from UTC in minutes [-1080, 1080] (±18:00).
 =head2 jd
 
     $jd = $tm->jd;
+    $jd = $tm->jd([precision => 3]);
 
 Returns the Julian Date. The Julian Date is a count of days elapsed since 
 -4713-11-24T12Z. The fractional part corresponds to the fraction of the 
-day after noon.
+day after noon. The optional named parameter I<precision> [0, 9] specifies 
+the precision of the fractional second. The default precision is 3 
+(milliseconds).
 
 =head2 mjd
 
     $mjd = $tm->mjd;
+    $mjd = $tm->mjd([precision => 3]);
 
 Returns the Modified Julian Date. The Modified Julian Date is a count of days 
 elapsed since 1858-11-17T00Z. The fractional part corresponds to the fraction 
-of the day after midnight.
+of the day after midnight. The optional named parameter I<precision> [0, 9] 
+specifies the precision of the fractional second. The default precision is 3 
+(milliseconds).
 
 =head2 rd
 
     $rd = $tm->rd;
+    $rd = $tm->rd([precision => 3]);
 
 Returns the Rata Die. The Rata Die is a count of days elapsed since 
 0000-12-31T00. The fractional part corresponds to the fraction of the day 
-after midnight.
+after midnight. The optional named parameter I<precision> [0, 9] specifies 
+the precision of the fractional second. The default precision is 3 
+(milliseconds).
 
 =head2 with
 
