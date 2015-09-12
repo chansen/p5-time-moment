@@ -678,6 +678,23 @@ with_year(self, value)
     RETVAL
 
 moment_t
+with_precision(self, precision)
+    const moment_t *self
+    IV precision
+  PREINIT:
+    dSTASH_INVOCANT;
+  CODE:
+    RETVAL = moment_with_precision(self, precision);
+    if (moment_equals(self, &RETVAL))
+        XSRETURN(1);
+    if (sv_reusable(ST(0))) {
+        sv_set_moment(ST(0), &RETVAL);
+        XSRETURN(1);
+    }
+  OUTPUT:
+    RETVAL
+
+moment_t
 with_offset_same_instant(self, offset)
     const moment_t *self
     IV offset

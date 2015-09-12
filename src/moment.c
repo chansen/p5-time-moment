@@ -708,6 +708,42 @@ THX_moment_with_offset_same_local(pTHX_ const moment_t *mt, IV offset) {
 }
 
 moment_t
+THX_moment_with_precision(pTHX_ const moment_t *mt, IV precision) {
+    int64_t sec;
+    int32_t nsec;
+
+    if (precision < -3 || precision > 9)
+        croak("Parameter 'precision' is out of the range [-3, 9]");
+
+    sec = moment_local_rd_seconds(mt);
+    nsec = mt->nsec;
+    if (precision <= 0) {
+        nsec = 0;
+        switch (precision) {
+            case -1: sec -= sec % 60;       break;
+            case -2: sec -= sec % 3600;     break;
+            case -3: sec -= sec % 86400;    break;
+        }
+    }
+    else {
+        static const int32_t pow_10[10] = {
+            1,
+            10,
+            100,
+            1000,
+            10000,
+            100000,
+            1000000,
+            10000000,
+            100000000,
+            1000000000,
+        };
+        nsec -= nsec % pow_10[9 - precision];
+    }
+    return THX_moment_from_local(aTHX_ sec, nsec, mt->offset);
+}
+
+moment_t
 THX_moment_at_utc(pTHX_ const moment_t *mt) {
     return THX_moment_with_offset_same_instant(aTHX_ mt, 0);
 }
