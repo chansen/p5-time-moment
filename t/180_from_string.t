@@ -161,7 +161,7 @@ sub TRUE () { !!1 }
     foreach my $string (@tests) {
         {
             my $name = "from_string($string)";
-            throws_ok { Time::Moment->from_string($string) } q/^Cannot parse/, $name;
+            throws_ok { Time::Moment->from_string($string) } q/^Could not parse/, $name;
         }
         {
             my $tm;

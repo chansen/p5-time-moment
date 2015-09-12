@@ -99,7 +99,7 @@ THX_moment_from_string(pTHX_ const char *str, STRLEN len, bool lenient) {
         ret = parse_string_strict(str, len, &seconds, &nanosecond, &offset);
 
     if (ret != 0)
-        croak("Cannot parse the given string");
+        croak("Could not parse the given string");
 
     return moment_from_epoch(seconds, nanosecond, offset);
 }
