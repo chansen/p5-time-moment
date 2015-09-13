@@ -34,7 +34,12 @@ foreach my $name (@zones) {
     push @clocks, [$name, $time];
 }
 
-for my $clock (sort { $a->[1]->offset <=> $b->[1]->offset } @clocks) {
+@clocks = sort { 
+       $a->[1]->offset <=> $b->[1]->offset 
+    or $a->[0]         cmp $b->[0]
+} @clocks;
+
+for my $clock (@clocks) {
     my ($name, $time) = @$clock;
     my $hours = sprintf '(%+3.2fH)', ($time->offset - $now->offset) / 60;
        $hours =~ s/\.00//;
