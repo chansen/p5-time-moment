@@ -8,6 +8,10 @@
     - delta_milliseconds
     - delta_microseconds
     - delta_nanoseconds
+    - microsecond_of_day
+    - nanosecond_of_day
+    - with_microsecond_of_day
+    - with_nanosecond_of_day
 
 0.28 2015-09-12
   - Changed the lenient mode in ->from_string to be more lenient. The string 
