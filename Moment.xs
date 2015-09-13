@@ -620,6 +620,23 @@ minus_seconds(self, value)
     RETVAL
 
 void
+delta_hours(self, other)
+    const moment_t *self
+    const moment_t *other
+  PREINIT:
+    int64_t delta;
+  ALIAS:
+    Time::Moment::delta_hours        = MOMENT_UNIT_HOURS
+    Time::Moment::delta_minutes      = MOMENT_UNIT_MINUTES
+    Time::Moment::delta_seconds      = MOMENT_UNIT_SECONDS
+    Time::Moment::delta_milliseconds = MOMENT_UNIT_MILLIS
+    Time::Moment::delta_microseconds = MOMENT_UNIT_MICROS
+    Time::Moment::delta_nanoseconds  = MOMENT_UNIT_NANOS
+  PPCODE:
+    delta = moment_delta_unit(self, other, (moment_unit_t)ix);
+    XSRETURN_I64V(delta);
+
+void
 with(self, adjuster)
     const moment_t *self
     SV *adjuster

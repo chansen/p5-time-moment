@@ -1,6 +1,13 @@
 0.29 XXXX-XX-XX
   - Changed the exception message in ->from_string(), from "Cannot parse ..." 
     to "Could not parse ...".
+  - Added following methods to the API:
+    - delta_hours
+    - delta_minutes
+    - delta_seconds
+    - delta_milliseconds
+    - delta_microseconds
+    - delta_nanoseconds
 
 0.28 2015-09-12
   - Changed the lenient mode in ->from_string to be more lenient. The string 

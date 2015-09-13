@@ -58,6 +58,11 @@ typedef struct {
     int32_t offset;
 } moment_t;
 
+typedef struct {
+    int64_t sec;
+    int32_t nsec;
+} moment_duration_t;
+
 typedef enum {
     MOMENT_UNIT_YEARS=0,
     MOMENT_UNIT_MONTHS,
@@ -103,6 +108,8 @@ moment_t    THX_moment_with_precision(pTHX_ const moment_t *mt, IV precision);
 
 moment_t    THX_moment_plus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
 moment_t    THX_moment_minus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
+
+int64_t     THX_moment_delta_unit(pTHX_ const moment_t *mt1, const moment_t *mt2, moment_unit_t u);
 
 int64_t     moment_instant_rd_seconds(const moment_t *mt);
 int64_t     moment_local_rd_seconds(const moment_t *mt);
@@ -171,7 +178,7 @@ moment_t    THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt);
 #define moment_with_offset_same_local(self, offset) \
     THX_moment_with_offset_same_local(aTHX_ self, offset)
 
-#define moment_with_precision(self,precision) \
+#define moment_with_precision(self, precision) \
     THX_moment_with_precision(aTHX_ self, precision)
 
 #define moment_with_nanosecond(self, nsec) \
@@ -182,6 +189,9 @@ moment_t    THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt);
 
 #define moment_minus_unit(self, unit, v) \
     THX_moment_minus_unit(aTHX_ self, unit, v)
+
+#define moment_delta_unit(self, other, unit) \
+    THX_moment_delta_unit(aTHX_ self, other, unit)
 
 #define moment_with_component(self, component, v) \
     THX_moment_with_component(aTHX_ self, component, v)

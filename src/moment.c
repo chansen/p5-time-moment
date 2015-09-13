@@ -743,6 +743,87 @@ THX_moment_with_precision(pTHX_ const moment_t *mt, IV precision) {
     return THX_moment_from_local(aTHX_ sec, nsec, mt->offset);
 }
 
+moment_duration_t
+moment_subtract_moment(const moment_t *mt1, const moment_t *mt2) {
+    const int64_t s1 = moment_instant_rd_seconds(mt1);
+    const int64_t s2 = moment_instant_rd_seconds(mt2);
+    moment_duration_t d;
+
+    d.sec = s1 - s2;
+    d.nsec = mt1->nsec - mt2->nsec;
+    if (d.nsec < 0) {
+        d.sec -= 1;
+        d.nsec += NANOS_PER_SEC;
+    }
+    return d;
+}
+
+static int64_t
+THX_moment_delta_hours(pTHX_ const moment_t *mt1, const moment_t *mt2) {
+    moment_duration_t d;
+    d = moment_subtract_moment(mt1, mt2);
+    return (d.sec / 3600);
+}
+
+static int64_t
+THX_moment_delta_minutes(pTHX_ const moment_t *mt1, const moment_t *mt2) {
+    moment_duration_t d;
+    d = moment_subtract_moment(mt1, mt2);
+    return (d.sec / 60);
+}
+
+static int64_t
+THX_moment_delta_seconds(pTHX_ const moment_t *mt1, const moment_t *mt2) {
+    moment_duration_t d;
+    d = moment_subtract_moment(mt1, mt2);
+    return d.sec;
+}
+
+static int64_t
+THX_moment_delta_milliseconds(pTHX_ const moment_t *mt1, const moment_t *mt2) {
+    moment_duration_t d;
+    d = moment_subtract_moment(mt1, mt2);
+    return d.sec * 1000 + (d.nsec / 1000000);
+}
+
+static int64_t
+THX_moment_delta_microseconds(pTHX_ const moment_t *mt1, const moment_t *mt2) {
+    moment_duration_t d;
+    d = moment_subtract_moment(mt1, mt2);
+    return d.sec * 1000000 + (d.nsec / 1000);
+}
+
+static int64_t
+THX_moment_delta_nanoseconds(pTHX_ const moment_t *mt1, const moment_t *mt2) {
+    static const int64_t kMaxSec = INT64_C(9223372035);
+    moment_duration_t d;
+
+    d = moment_subtract_moment(mt1, mt2);
+    if (d.sec > kMaxSec || d.sec < -kMaxSec)
+        croak("Nanosecond duration is too large to be represented in a 64-bit integer");
+    return d.sec * 1000000000 + d.nsec;
+}
+
+int64_t
+THX_moment_delta_unit(pTHX_ const moment_t *mt1, const moment_t *mt2, moment_unit_t u) {
+    switch (u) {
+        case MOMENT_UNIT_HOURS:
+            return THX_moment_delta_hours(aTHX_ mt1, mt2);
+        case MOMENT_UNIT_MINUTES:
+            return THX_moment_delta_minutes(aTHX_ mt1, mt2);
+        case MOMENT_UNIT_SECONDS:
+            return THX_moment_delta_seconds(aTHX_ mt1, mt2);
+        case MOMENT_UNIT_MILLIS:
+            return THX_moment_delta_milliseconds(aTHX_ mt1, mt2);
+        case MOMENT_UNIT_MICROS:
+            return THX_moment_delta_microseconds(aTHX_ mt1, mt2);
+        case MOMENT_UNIT_NANOS:
+            return THX_moment_delta_nanoseconds(aTHX_ mt1, mt2);
+        default:
+            croak("panic: THX_moment_delta_unit() called with unknown unit (%d)", (int)u);
+    }
+}
+
 moment_t
 THX_moment_at_utc(pTHX_ const moment_t *mt) {
     return THX_moment_with_offset_same_instant(aTHX_ mt, 0);

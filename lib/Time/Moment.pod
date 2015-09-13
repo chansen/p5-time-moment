@@ -94,6 +94,13 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->minus_microseconds($microseconds);
     $tm2          = $tm1->minus_nanoseconds($nanoseconds);
     
+    $hours        = $tm1->delta_hours($tm2);
+    $minutes      = $tm1->delta_minutes($tm2);
+    $seconds      = $tm1->delta_seconds($tm2);
+    $milliseconds = $tm1->delta_milliseconds($tm2);
+    $microseconds = $tm1->delta_microseconds($tm2);
+    $nanoseconds  = $tm1->delta_nanoseconds($tm2);
+    
     $tm2          = $tm1->at_utc;
     
     $tm2          = $tm1->at_midnight;              # T00:00:00.000000000
@@ -860,6 +867,54 @@ subtracted.
 
 Returns a copy of this instance with the given number of nanoseconds 
 subtracted.
+
+=head2 delta_hours
+
+    $hours = $tm->delta_hours($other);
+
+Returns the difference between the instant of this time and the other in 
+terms of hours. The result will be negative if the other time is before 
+this time.
+
+=head2 delta_minutes
+
+    $minutes = $tm->delta_minutes($other);
+
+Returns the difference between the instant of this time and the other in 
+terms of minutes. The result will be negative if the other time is before 
+this time.
+
+=head2 delta_seconds
+
+    $seconds = $tm->delta_seconds($other);
+
+Returns the difference between the instant of this time and the other in 
+terms of seconds. The result will be negative if the other time is before 
+this time.
+
+=head2 delta_milliseconds
+
+    $milliseconds = $tm->delta_milliseconds($other);
+
+Returns the difference between the instant of this time and the other in 
+terms of milliseconds. The result will be negative if the other time is 
+before this time.
+
+=head2 delta_microseconds
+
+    $microseconds = $tm->delta_microseconds($other);
+
+Returns the difference between the instant of this time and the other in 
+terms of microseconds. The result will be negative if the other time is 
+before this time.
+
+=head2 delta_nanoseconds
+
+    $nanoseconds = $tm->delta_nanoseconds($other);
+
+Returns the difference between the instant of this time and the other in 
+terms of nanoseconds. The result will be negative if the other time is 
+before this time.
 
 =head2 at_utc
 
