@@ -102,10 +102,10 @@ moment_t    THX_moment_from_epoch_nv(pTHX_ NV sec);
 
 moment_t    THX_moment_from_jd(pTHX_ NV jd, NV epoch, IV precision);
 
-moment_t    THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t u, IV v);
+moment_t    THX_moment_with_field(pTHX_ const moment_t *mt, moment_component_t u, int64_t v);
 moment_t    THX_moment_with_offset_same_instant(pTHX_ const moment_t *mt, IV offset);
 moment_t    THX_moment_with_offset_same_local(pTHX_ const moment_t *mt, IV offset);
-moment_t    THX_moment_with_precision(pTHX_ const moment_t *mt, IV precision);
+moment_t    THX_moment_with_precision(pTHX_ const moment_t *mt, int64_t precision);
 
 moment_t    THX_moment_plus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
 moment_t    THX_moment_minus_unit(pTHX_ const moment_t *mt, moment_unit_t u, int64_t v);
@@ -194,8 +194,8 @@ moment_t    THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt);
 #define moment_delta_unit(self, other, unit) \
     THX_moment_delta_unit(aTHX_ self, other, unit)
 
-#define moment_with_component(self, component, v) \
-    THX_moment_with_component(aTHX_ self, component, v)
+#define moment_with_field(self, component, v) \
+    THX_moment_with_field(aTHX_ self, component, v)
 
 #define moment_at_utc(self) \
     THX_moment_at_utc(aTHX_ self)

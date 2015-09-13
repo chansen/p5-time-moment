@@ -663,7 +663,7 @@ with(self, adjuster)
 moment_t
 with_year(self, value)
     const moment_t *self
-    IV value
+    I64V value
   PREINIT:
     dSTASH_INVOCANT;
   ALIAS:
@@ -685,7 +685,7 @@ with_year(self, value)
     Time::Moment::with_nanosecond         = MOMENT_FIELD_NANO_OF_SECOND
     Time::Moment::with_precision          = MOMENT_FIELD_PRECISION
   CODE:
-    RETVAL = moment_with_component(self, (moment_component_t)ix, value);
+    RETVAL = moment_with_field(self, (moment_component_t)ix, value);
     if (moment_equals(self, &RETVAL))
         XSRETURN(1);
     if (sv_reusable(ST(0))) {
