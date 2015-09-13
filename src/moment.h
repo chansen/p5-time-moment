@@ -92,7 +92,9 @@ typedef enum {
     MOMENT_FIELD_MILLI_OF_SECOND,
     MOMENT_FIELD_MILLI_OF_DAY,
     MOMENT_FIELD_MICRO_OF_SECOND,
+    MOMENT_FIELD_MICRO_OF_DAY,
     MOMENT_FIELD_NANO_OF_SECOND,
+    MOMENT_FIELD_NANO_OF_DAY,
     MOMENT_FIELD_PRECISION,
 } moment_component_t;
 
@@ -140,7 +142,9 @@ int         moment_second_of_day(const moment_t *mt);
 int         moment_millisecond(const moment_t *mt);
 int         moment_millisecond_of_day(const moment_t *mt);
 int         moment_microsecond(const moment_t *mt);
+int64_t     moment_microsecond_of_day(const moment_t *mt);
 int         moment_nanosecond(const moment_t *mt);
+int64_t     moment_nanosecond_of_day(const moment_t *mt);
 int         moment_offset(const moment_t *mt);
 int64_t     moment_epoch(const moment_t *mt);
 

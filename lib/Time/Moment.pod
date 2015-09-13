@@ -42,7 +42,9 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $millisecond  = $tm->millisecond;               # [0, 999]
     $millisecond  = $tm->millisecond_of_day;        # [0, 86_399_999]
     $microsecond  = $tm->microsecond;               # [0, 999_999]
+    $microsecond  = $tm->microsecond_of_day;        # [0, 86_399_999_999]
     $nanosecond   = $tm->nanosecond;                # [0, 999_999_999]
+    $microsecond  = $tm->nanosecond_of_day;         # [0, 86_399_999_999_999]
     
     $epoch        = $tm->epoch;
     $offset       = $tm->offset;                    # [-1080, 1080] (±18:00)
@@ -67,7 +69,9 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->with_millisecond($millisecond);
     $tm2          = $tm1->with_millisecond_of_day($millisecond);
     $tm2          = $tm1->with_microsecond($microsecond);
+    $tm2          = $tm1->with_microsecond_of_day($microsecond);
     $tm2          = $tm1->with_nanosecond($nanosecond);
+    $tm2          = $tm1->with_nanosecond_of_day($nanosecond);
     
     $tm2          = $tm1->with_offset_same_instant($offset);
     $tm2          = $tm1->with_offset_same_local($offset);
@@ -528,11 +532,23 @@ Returns the millisecond of the day [0, 86_399_999].
 
 Returns the microsecond of the second [0, 999_999].
 
+=head2 microsecond_of_day
+
+    $microsecond = $tm->microsecond_of_day;
+
+Returns the microsecond of the day [0, 86_399_999_999].
+
 =head2 nanosecond
 
     $nanosecond = $tm->nanosecond;
 
 Returns the nanosecond of the second [0, 999_999_999].
+
+=head2 nanosecond_of_day
+
+    $nanosecond = $tm->nanosecond_of_day;
+
+Returns the nanosecond of the day [0, 86_399_999_999_999].
 
 =head2 epoch
 
@@ -700,12 +716,26 @@ Returns a copy of this instance with the given I<microsecond> of the second
 [0, 999_999] altered. The nanosecond of the second is replaced with the given
 I<microsecond> multiplied by 1,000.
 
+=head2 with_microsecond_of_day
+
+    $tm2 = $tm1->with_microsecond_of_day($microsecond);
+
+Returns a copy of this instance with the given I<microsecond> of the day 
+[0, 86_400_000_000] altered. The lower-order time elements are truncated.
+
 =head2 with_nanosecond
 
     $tm2 = $tm1->with_nanosecond($nanosecond);
 
 Returns a copy of this instance with the given I<nanosecond> of the second 
 [0, 999_999_999] altered.
+
+=head2 with_nanosecond_of_day
+
+    $tm2 = $tm1->with_nanosecond_of_day($nanosecond);
+
+Returns a copy of this instance with the given I<nanosecond> of the day 
+[0, 86_400_000_000_000] altered.
 
 =head2 with_offset_same_instant
 

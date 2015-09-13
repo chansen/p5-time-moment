@@ -153,12 +153,6 @@ THX_check_millisecond(pTHX_ int64_t v) {
 }
 
 static void
-THX_check_millisecond_of_day(pTHX_ int64_t v) {
-    if (v < 0 || v > 86400000)
-        croak("Parameter 'millisecond' is out of the range [0, 86_400_000]");
-}
-
-static void
 THX_check_microsecond(pTHX_ int64_t v) {
     if (v < 0 || v > 999999)
         croak("Parameter 'microsecond' is out of the range [0, 999_999]");
@@ -505,15 +499,6 @@ THX_moment_with_millisecond(pTHX_ const moment_t *mt, int64_t v) {
 }
 
 static moment_t
-THX_moment_with_millisecond_of_day(pTHX_ const moment_t *mt, int64_t v) {
-    int64_t sec;
-
-    THX_check_millisecond_of_day(aTHX_ v);
-    sec = moment_local_rd_seconds(mt) + (v / 1000 - moment_second_of_day(mt));
-    return THX_moment_from_local(aTHX_ sec, (v % 1000) * 1000000, mt->offset);
-}
-
-static moment_t
 THX_moment_with_microsecond(pTHX_ const moment_t *mt, int64_t v) {
     int64_t sec;
 
@@ -529,6 +514,33 @@ THX_moment_with_nanosecond(pTHX_ const moment_t *mt, int64_t v) {
     THX_check_nanosecond(aTHX_ v);
     sec = moment_local_rd_seconds(mt);
     return THX_moment_from_local(aTHX_ sec, v, mt->offset);
+}
+
+static moment_t
+THX_moment_with_nanosecond_of_day(pTHX_ const moment_t *mt, int64_t v) {
+    int64_t sec;
+    int32_t nsec;
+
+    if (v < 0 || v > INT64_C(86400000000000))
+        croak("Paramteter 'nanosecond' is out of the range [0, 86_400_000_000_000]");
+
+    sec = moment_local_rd_seconds(mt) + v / NANOS_PER_SEC - moment_second_of_day(mt);
+    nsec = v % NANOS_PER_SEC;
+    return THX_moment_from_local(aTHX_ sec, nsec, mt->offset);
+}
+
+static moment_t
+THX_moment_with_microsecond_of_day(pTHX_ const moment_t *mt, int64_t v) {
+    if (v < 0 || v > INT64_C(86400000000))
+        croak("Paramteter 'microsecond' is out of the range [0, 86_400_000_000]");
+    return THX_moment_with_nanosecond_of_day(aTHX_ mt, v * 1000);
+}
+
+static moment_t
+THX_moment_with_millisecond_of_day(pTHX_ const moment_t *mt, int64_t v) {
+    if (v < 0 || v > INT64_C(86400000))
+        croak("Paramteter 'millisecond' is out of the range [0, 86_400_000]");
+    return THX_moment_with_nanosecond_of_day(aTHX_ mt, v * 1000000);
 }
 
 moment_t
@@ -564,8 +576,12 @@ THX_moment_with_field(pTHX_ const moment_t *mt, moment_component_t c, int64_t v)
             return THX_moment_with_millisecond_of_day(aTHX_ mt, v);
         case MOMENT_FIELD_MICRO_OF_SECOND:
             return THX_moment_with_microsecond(aTHX_ mt, v);
+        case MOMENT_FIELD_MICRO_OF_DAY:
+            return THX_moment_with_microsecond_of_day(aTHX_ mt, v);
         case MOMENT_FIELD_NANO_OF_SECOND:
             return THX_moment_with_nanosecond(aTHX_ mt, v);
+        case MOMENT_FIELD_NANO_OF_DAY:
+            return THX_moment_with_nanosecond_of_day(aTHX_ mt, v);
         case MOMENT_FIELD_PRECISION:
             return THX_moment_with_precision(aTHX_ mt, v);
     }
@@ -979,9 +995,21 @@ moment_microsecond(const moment_t *mt) {
     return (mt->nsec / 1000);
 }
 
+int64_t
+moment_microsecond_of_day(const moment_t *mt) {
+    const int64_t sod = moment_local_rd_seconds(mt) % 86400;
+    return sod * 1000000 + (mt->nsec / 1000);
+}
+
 int
 moment_nanosecond(const moment_t *mt) {
     return mt->nsec;
+}
+
+int64_t
+moment_nanosecond_of_day(const moment_t *mt) {
+    const int64_t sod = moment_local_rd_seconds(mt) % 86400;
+    return sod * 1000000000 + mt->nsec;
 }
 
 NV

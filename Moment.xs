@@ -682,7 +682,9 @@ with_year(self, value)
     Time::Moment::with_millisecond        = MOMENT_FIELD_MILLI_OF_SECOND
     Time::Moment::with_millisecond_of_day = MOMENT_FIELD_MILLI_OF_DAY
     Time::Moment::with_microsecond        = MOMENT_FIELD_MICRO_OF_SECOND
+    Time::Moment::with_microsecond_of_day = MOMENT_FIELD_MICRO_OF_DAY
     Time::Moment::with_nanosecond         = MOMENT_FIELD_NANO_OF_SECOND
+    Time::Moment::with_nanosecond_of_day  = MOMENT_FIELD_NANO_OF_DAY
     Time::Moment::with_precision          = MOMENT_FIELD_PRECISION
   CODE:
     RETVAL = moment_with_field(self, (moment_component_t)ix, value);
@@ -767,6 +769,27 @@ year(self)
     XSRETURN_IV(v);
 
 void
+epoch(self)
+    const moment_t *self
+  ALIAS:
+    Time::Moment::epoch                 = 0
+    Time::Moment::utc_rd_as_seconds     = 1
+    Time::Moment::local_rd_as_seconds   = 2
+    Time::Moment::microsecond_of_day    = 3
+    Time::Moment::nanosecond_of_day     = 4
+  PREINIT:
+    int64_t v = 0;
+  PPCODE:
+    switch (ix) {
+        case 0: v = moment_epoch(self);                 break;
+        case 1: v = moment_instant_rd_seconds(self);    break;
+        case 2: v = moment_local_rd_seconds(self);      break;
+        case 3: v = moment_microsecond_of_day(self);    break;
+        case 4: v = moment_nanosecond_of_day(self);     break;
+    }
+    XSRETURN_I64V(v);
+
+void
 jd(self, ...)
     const moment_t *self
   ALIAS:
@@ -817,23 +840,6 @@ length_of_year(self)
         case 3: v = moment_length_of_week_year(self);   break;
     }
     XSRETURN_IV(v);
-
-void
-epoch(self)
-    const moment_t *self
-  ALIAS:
-    Time::Moment::epoch                 = 0
-    Time::Moment::utc_rd_as_seconds     = 1
-    Time::Moment::local_rd_as_seconds   = 2
-  PREINIT:
-    int64_t v = 0;
-  PPCODE:
-    switch (ix) {
-        case 0: v = moment_epoch(self);                 break;
-        case 1: v = moment_instant_rd_seconds(self);    break;
-        case 2: v = moment_local_rd_seconds(self);      break;
-    }
-    XSRETURN_I64V(v);
 
 void
 utc_rd_values(self)
