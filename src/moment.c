@@ -534,38 +534,40 @@ THX_moment_with_nanosecond(pTHX_ const moment_t *mt, IV nsec) {
 moment_t
 THX_moment_with_component(pTHX_ const moment_t *mt, moment_component_t c, IV v) {
     switch (c) {
-        case MOMENT_COMPONENT_YEAR:
+        case MOMENT_FIELD_YEAR:
             return THX_moment_with_year(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MONTH_OF_YEAR:
+        case MOMENT_FIELD_MONTH_OF_YEAR:
             return THX_moment_with_month(aTHX_ mt, v);
-        case MOMENT_COMPONENT_WEEK_OF_YEAR:
+        case MOMENT_FIELD_WEEK_OF_YEAR:
             return THX_moment_with_week(aTHX_ mt, v);
-        case MOMENT_COMPONENT_DAY_OF_MONTH:
+        case MOMENT_FIELD_DAY_OF_MONTH:
             return THX_moment_with_day_of_month(aTHX_ mt, v);
-        case MOMENT_COMPONENT_DAY_OF_QUARTER:
+        case MOMENT_FIELD_DAY_OF_QUARTER:
             return THX_moment_with_day_of_quarter(aTHX_ mt, v);
-        case MOMENT_COMPONENT_DAY_OF_YEAR:
+        case MOMENT_FIELD_DAY_OF_YEAR:
             return THX_moment_with_day_of_year(aTHX_ mt, v);
-        case MOMENT_COMPONENT_DAY_OF_WEEK:
+        case MOMENT_FIELD_DAY_OF_WEEK:
             return THX_moment_with_day_of_week(aTHX_ mt, v);
-        case MOMENT_COMPONENT_HOUR_OF_DAY:
+        case MOMENT_FIELD_HOUR_OF_DAY:
             return THX_moment_with_hour(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MINUTE_OF_HOUR:
+        case MOMENT_FIELD_MINUTE_OF_HOUR:
             return THX_moment_with_minute(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MINUTE_OF_DAY:
+        case MOMENT_FIELD_MINUTE_OF_DAY:
             return THX_moment_with_minute_of_day(aTHX_ mt, v);
-        case MOMENT_COMPONENT_SECOND_OF_MINUTE:
+        case MOMENT_FIELD_SECOND_OF_MINUTE:
             return THX_moment_with_second(aTHX_ mt, v);
-        case MOMENT_COMPONENT_SECOND_OF_DAY:
+        case MOMENT_FIELD_SECOND_OF_DAY:
             return THX_moment_with_second_of_day(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MILLI_OF_SECOND:
+        case MOMENT_FIELD_MILLI_OF_SECOND:
             return THX_moment_with_millisecond(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MILLI_OF_DAY:
+        case MOMENT_FIELD_MILLI_OF_DAY:
             return THX_moment_with_millisecond_of_day(aTHX_ mt, v);
-        case MOMENT_COMPONENT_MICRO_OF_SECOND:
+        case MOMENT_FIELD_MICRO_OF_SECOND:
             return THX_moment_with_microsecond(aTHX_ mt, v);
-        case MOMENT_COMPONENT_NANO_OF_SECOND:
+        case MOMENT_FIELD_NANO_OF_SECOND:
             return THX_moment_with_nanosecond(aTHX_ mt, v);
+        case MOMENT_FIELD_PRECISION:
+            return THX_moment_with_precision(aTHX_ mt, v);
     }
     croak("panic: THX_moment_with_component() called with unknown component (%d)", (int)c);
 }

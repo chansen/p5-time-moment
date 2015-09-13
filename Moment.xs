@@ -667,41 +667,25 @@ with_year(self, value)
   PREINIT:
     dSTASH_INVOCANT;
   ALIAS:
-    Time::Moment::with_year               = MOMENT_COMPONENT_YEAR
-    Time::Moment::with_month              = MOMENT_COMPONENT_MONTH_OF_YEAR
-    Time::Moment::with_week               = MOMENT_COMPONENT_WEEK_OF_YEAR
-    Time::Moment::with_day_of_year        = MOMENT_COMPONENT_DAY_OF_YEAR
-    Time::Moment::with_day_of_quarter     = MOMENT_COMPONENT_DAY_OF_QUARTER
-    Time::Moment::with_day_of_month       = MOMENT_COMPONENT_DAY_OF_MONTH
-    Time::Moment::with_day_of_week        = MOMENT_COMPONENT_DAY_OF_WEEK
-    Time::Moment::with_hour               = MOMENT_COMPONENT_HOUR_OF_DAY
-    Time::Moment::with_minute             = MOMENT_COMPONENT_MINUTE_OF_HOUR
-    Time::Moment::with_minute_of_day      = MOMENT_COMPONENT_MINUTE_OF_DAY
-    Time::Moment::with_second             = MOMENT_COMPONENT_SECOND_OF_MINUTE
-    Time::Moment::with_second_of_day      = MOMENT_COMPONENT_SECOND_OF_DAY
-    Time::Moment::with_millisecond        = MOMENT_COMPONENT_MILLI_OF_SECOND
-    Time::Moment::with_millisecond_of_day = MOMENT_COMPONENT_MILLI_OF_DAY
-    Time::Moment::with_microsecond        = MOMENT_COMPONENT_MICRO_OF_SECOND
-    Time::Moment::with_nanosecond         = MOMENT_COMPONENT_NANO_OF_SECOND
+    Time::Moment::with_year               = MOMENT_FIELD_YEAR
+    Time::Moment::with_month              = MOMENT_FIELD_MONTH_OF_YEAR
+    Time::Moment::with_week               = MOMENT_FIELD_WEEK_OF_YEAR
+    Time::Moment::with_day_of_year        = MOMENT_FIELD_DAY_OF_YEAR
+    Time::Moment::with_day_of_quarter     = MOMENT_FIELD_DAY_OF_QUARTER
+    Time::Moment::with_day_of_month       = MOMENT_FIELD_DAY_OF_MONTH
+    Time::Moment::with_day_of_week        = MOMENT_FIELD_DAY_OF_WEEK
+    Time::Moment::with_hour               = MOMENT_FIELD_HOUR_OF_DAY
+    Time::Moment::with_minute             = MOMENT_FIELD_MINUTE_OF_HOUR
+    Time::Moment::with_minute_of_day      = MOMENT_FIELD_MINUTE_OF_DAY
+    Time::Moment::with_second             = MOMENT_FIELD_SECOND_OF_MINUTE
+    Time::Moment::with_second_of_day      = MOMENT_FIELD_SECOND_OF_DAY
+    Time::Moment::with_millisecond        = MOMENT_FIELD_MILLI_OF_SECOND
+    Time::Moment::with_millisecond_of_day = MOMENT_FIELD_MILLI_OF_DAY
+    Time::Moment::with_microsecond        = MOMENT_FIELD_MICRO_OF_SECOND
+    Time::Moment::with_nanosecond         = MOMENT_FIELD_NANO_OF_SECOND
+    Time::Moment::with_precision          = MOMENT_FIELD_PRECISION
   CODE:
     RETVAL = moment_with_component(self, (moment_component_t)ix, value);
-    if (moment_equals(self, &RETVAL))
-        XSRETURN(1);
-    if (sv_reusable(ST(0))) {
-        sv_set_moment(ST(0), &RETVAL);
-        XSRETURN(1);
-    }
-  OUTPUT:
-    RETVAL
-
-moment_t
-with_precision(self, precision)
-    const moment_t *self
-    IV precision
-  PREINIT:
-    dSTASH_INVOCANT;
-  CODE:
-    RETVAL = moment_with_precision(self, precision);
     if (moment_equals(self, &RETVAL))
         XSRETURN(1);
     if (sv_reusable(ST(0))) {
