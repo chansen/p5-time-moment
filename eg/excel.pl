@@ -128,33 +128,22 @@ my @tests = (
     [ '9999-12-31T23:59:59Z',     2958465.999988426  ],
 );
 
-use Time::Moment 0.26;
-use Test::More   0.88;
-use POSIX        qw[];
-
-sub almost_equal {
-    my ($got, $exp) = @_;
-    
-    my $diff = abs($got - $exp);
-    $got = abs($got);
-    $exp = abs($exp);
-    my $largest = ($got > $exp) ? $got : $exp;
-
-    return ($diff <= $largest * POSIX::FLT_EPSILON);
-}
+use Time::Moment        0.26;
+use Test::More          0.88;
+use Test::Number::Delta relative => 0.0000000001;
 
 foreach my $test (@tests) {
     my ($string, $date) = @$test;
     my $tm = moment_from_excel($date);
-    is($tm, $string, "moment_from_excel($date)");
-    ok(almost_equal(moment_to_excel($tm), $date), "moment_to_excel($tm)");
+    is($tm->to_string, $string, "moment_from_excel($date)");
+    delta_ok(moment_to_excel($tm), $date, "moment_to_excel($tm)");
 }
 
 done_testing();
 
 eval {
-    require Benchmark;
     require DateTime::Format::Excel;
+    require Benchmark;
     {
         print "\nComparing DateTime::Format::Excel and Time::Moment\n";
         my $date = 30188.010650613425;
