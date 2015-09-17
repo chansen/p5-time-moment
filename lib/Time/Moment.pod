@@ -391,8 +391,8 @@ B<Parameters:>
 
     $tm = Time::Moment->from_jd($jd, precision => 3);
 
-The optional parameter I<precision> [0, 9] specifies the number of decimal
-digits after the decimal point. The default precision is 3.
+The optional parameter I<precision> [0, 9] specifies the precision of the
+fractional seconds. The default precision is 3 (milliseconds).
 
 =item epoch
 
@@ -422,8 +422,8 @@ B<Parameters:>
 
     $tm = Time::Moment->from_mjd($mjd, precision => 3);
 
-The optional parameter I<precision> [0, 9] specifies the number of decimal
-digits after the decimal point. The default precision is 3.
+The optional parameter I<precision> [0, 9] specifies the precision of the
+fractional seconds. The default precision is 3 (milliseconds).
 
 =item epoch
 
@@ -570,7 +570,7 @@ Returns the time zone offset from UTC in minutes [-1080, 1080] (±18:00).
 Returns the Julian Date. The Julian Date is a count of days elapsed since 
 -4713-11-24T12Z. The fractional part corresponds to the fraction of the 
 day after noon. The optional named parameter I<precision> [0, 9] specifies 
-the precision of the fractional second. The default precision is 3 
+the precision of the fractional seconds. The default precision is 3 
 (milliseconds).
 
 =head2 mjd
@@ -581,7 +581,7 @@ the precision of the fractional second. The default precision is 3
 Returns the Modified Julian Date. The Modified Julian Date is a count of days 
 elapsed since 1858-11-17T00Z. The fractional part corresponds to the fraction 
 of the day after midnight. The optional named parameter I<precision> [0, 9] 
-specifies the precision of the fractional second. The default precision is 3 
+specifies the precision of the fractional seconds. The default precision is 3 
 (milliseconds).
 
 =head2 rd
@@ -592,7 +592,7 @@ specifies the precision of the fractional second. The default precision is 3
 Returns the Rata Die. The Rata Die is a count of days elapsed since 
 0000-12-31T00. The fractional part corresponds to the fraction of the day 
 after midnight. The optional named parameter I<precision> [0, 9] specifies 
-the precision of the fractional second. The default precision is 3 
+the precision of the fractional seconds. The default precision is 3 
 (milliseconds).
 
 =head2 with
@@ -601,7 +601,7 @@ the precision of the fractional second. The default precision is 3
 
 Returns a copy of this instance adjusted by the given I<adjuster>. The 
 adjuster is a CODE reference invoked with an instance of Time::Moment and
-is expected to return an instance of Time::Moment. See 
+is expected to return an instance of Time::Moment. Please see 
 L<Time::Moment::Adjusters> for available adjusters.
 
 =head2 with_year
@@ -765,8 +765,8 @@ local time.
 
     $tm2 = $tm1->plus_years($years);
 
-Returns a copy of this instance with the given number of years added. The day 
-of the month of the date is unchanged unless the day does not exist in the 
+Returns a copy of this instance with the given number of I<years> added. The 
+day of the month of the date is unchanged unless the day does not exist in the 
 resulting month. In that case, the day is set to the last day of the resulting 
 month. For example, 2012-02-29 plus one year results in 2013-02-28.
 
@@ -774,8 +774,8 @@ month. For example, 2012-02-29 plus one year results in 2013-02-28.
 
     $tm2 = $tm1->plus_months($months);
 
-Returns a copy of this instance with the given number of months added. The day 
-of the month of the date is unchanged unless the day does not exist in the 
+Returns a copy of this instance with the given number of I<months> added. The 
+day of the month of the date is unchanged unless the day does not exist in the 
 resulting month. In that case, the day is set to the last day of the resulting 
 month. For example, 2013-01-31 plus one month results in 2013-02-28; 
 2013-02-28 plus one month results in 2013-03-28.
@@ -784,55 +784,58 @@ month. For example, 2013-01-31 plus one month results in 2013-02-28;
 
     $tm2 = $tm1->plus_weeks($weeks);
 
-Returns a copy of this instance with the given number of weeks added.
+Returns a copy of this instance with the given number of I<weeks> added.
 
 =head2 plus_days
 
     $tm2 = $tm1->plus_days($days);
 
-Returns a copy of this instance with the given number of days added.
+Returns a copy of this instance with the given number of I<days> added.
 
 =head2 plus_hours
 
     $tm2 = $tm1->plus_hours($hours);
 
-Returns a copy of this instance with the given number of hours added.
+Returns a copy of this instance with the given number of I<hours> added.
 
 =head2 plus_minutes
 
     $tm2 = $tm1->plus_minutes($minutes);
 
-Returns a copy of this instance with the given number of minutes added.
+Returns a copy of this instance with the given number of I<minutes> added.
 
 =head2 plus_seconds
 
     $tm2 = $tm1->plus_seconds($seconds);
 
-Returns a copy of this instance with the given number of seconds added.
+Returns a copy of this instance with the given number of I<seconds> added.
 
 =head2 plus_milliseconds
 
     $tm2 = $tm1->plus_milliseconds($milliseconds);
 
-Returns a copy of this instance with the given number of milliseconds added.
+Returns a copy of this instance with the given number of I<milliseconds> 
+added.
 
 =head2 plus_microseconds
 
     $tm2 = $tm1->plus_microseconds($microseconds);
 
-Returns a copy of this instance with the given number of microseconds added.
+Returns a copy of this instance with the given number of I<microseconds> 
+added.
 
 =head2 plus_nanoseconds
 
     $tm2 = $tm1->plus_nanoseconds($nanoeconds);
 
-Returns a copy of this instance with the given number of nanoseconds added.
+Returns a copy of this instance with the given number of I<nanoseconds> 
+added.
 
 =head2 minus_years
 
     $tm2 = $tm1->minus_years($years);
 
-Returns a copy of this instance with the given number of years subtracted. 
+Returns a copy of this instance with the given number of I<years> subtracted. 
 The day of the month of the date is unchanged unless the day does not exist in 
 the resulting month. In that case, the day is set to the last day of the 
 resulting month. For example, 2012-02-29 minus one year results in 2011-02-28.
@@ -841,68 +844,68 @@ resulting month. For example, 2012-02-29 minus one year results in 2011-02-28.
 
     $tm2 = $tm1->minus_months($months);
 
-Returns a copy of this instance with the given number of months subtracted. The 
-day of the month of the date is unchanged unless the day does not exist in the 
-resulting month. In that case, the day is set to the last day of the resulting 
-month. For example, 2013-03-31 minus one month results in 2013-02-28; 
+Returns a copy of this instance with the given number of I<months> subtracted. 
+The day of the month of the date is unchanged unless the day does not exist in 
+the resulting month. In that case, the day is set to the last day of the 
+resulting month. For example, 2013-03-31 minus one month results in 2013-02-28; 
 2013-02-28 minus one month results in 2013-01-28.
 
 =head2 minus_weeks
 
     $tm2 = $tm1->minus_weeks($weeks);
 
-Returns a copy of this instance with the given number of weeks subtracted.
+Returns a copy of this instance with the given number of I<weeks> subtracted.
 
 =head2 minus_days
 
     $tm2 = $tm1->minus_days($days);
 
-Returns a copy of this instance with the given number of days subtracted.
+Returns a copy of this instance with the given number of I<days> subtracted.
 
 =head2 minus_hours
 
     $tm2 = $tm1->minus_hours($hours);
 
-Returns a copy of this instance with the given number of hours subtracted.
+Returns a copy of this instance with the given number of I<hours> subtracted.
 
 =head2 minus_minutes
 
     $tm2 = $tm1->minus_minutes($minutes);
 
-Returns a copy of this instance with the given number of minutes subtracted.
+Returns a copy of this instance with the given number of I<minutes> subtracted.
 
 =head2 minus_seconds
 
     $tm2 = $tm1->minus_seconds($seconds);
 
-Returns a copy of this instance with the given number of seconds subtracted.
+Returns a copy of this instance with the given number of I<seconds> subtracted.
 
 =head2 minus_milliseconds
 
     $tm2 = $tm1->minus_milliseconds($milliseconds);
 
-Returns a copy of this instance with the given number of milliseconds 
+Returns a copy of this instance with the given number of I<milliseconds> 
 subtracted.
 
 =head2 minus_microseconds
 
     $tm2 = $tm1->minus_microseconds($microseconds);
 
-Returns a copy of this instance with the given number of microseconds 
+Returns a copy of this instance with the given number of I<microseconds> 
 subtracted.
 
 =head2 minus_nanoseconds
 
     $tm2 = $tm1->minus_nanoseconds($nanoseconds);
 
-Returns a copy of this instance with the given number of nanoseconds 
+Returns a copy of this instance with the given number of I<nanoseconds> 
 subtracted.
 
 =head2 delta_hours
 
     $hours = $tm->delta_hours($other);
 
-Returns the difference between the instant of this time and the other in 
+Returns the difference between the instant of this time and the I<other> in 
 terms of hours. The result will be negative if the other time is before 
 this time.
 
@@ -910,7 +913,7 @@ this time.
 
     $minutes = $tm->delta_minutes($other);
 
-Returns the difference between the instant of this time and the other in 
+Returns the difference between the instant of this time and the I<other> in 
 terms of minutes. The result will be negative if the other time is before 
 this time.
 
@@ -918,7 +921,7 @@ this time.
 
     $seconds = $tm->delta_seconds($other);
 
-Returns the difference between the instant of this time and the other in 
+Returns the difference between the instant of this time and the I<other> in 
 terms of seconds. The result will be negative if the other time is before 
 this time.
 
@@ -926,7 +929,7 @@ this time.
 
     $milliseconds = $tm->delta_milliseconds($other);
 
-Returns the difference between the instant of this time and the other in 
+Returns the difference between the instant of this time and the I<other> in 
 terms of milliseconds. The result will be negative if the other time is 
 before this time.
 
@@ -934,7 +937,7 @@ before this time.
 
     $microseconds = $tm->delta_microseconds($other);
 
-Returns the difference between the instant of this time and the other in 
+Returns the difference between the instant of this time and the I<other> in 
 terms of microseconds. The result will be negative if the other time is 
 before this time.
 
@@ -942,7 +945,7 @@ before this time.
 
     $nanoseconds = $tm->delta_nanoseconds($other);
 
-Returns the difference between the instant of this time and the other in 
+Returns the difference between the instant of this time and the I<other> in 
 terms of nanoseconds. The result will be negative if the other time is 
 before this time.
 
@@ -1005,38 +1008,38 @@ the month, the time of the day is unaltered.
     $boolean = $tm->is_before($other);
 
 Returns a boolean indicating whether or not the instant of this time is before 
-the other time.
+the I<other> time.
 
 =head2 is_after
 
     $boolean = $tm->is_after($other);
 
 Returns a boolean indicating whether or not the instant of this time is after 
-the other time.
+the I<other> time.
 
 =head2 is_equal
 
     $boolean = $tm->is_equal($other);
 
 Returns a boolean indicating whether or not the instant of this time is equal 
-the other time.
+the I<other> time.
 
 =head2 compare
 
     $integer = $tm->compare($other);
 
 Returns an integer indicating whether the instant of this time is before, 
-after or equal another time. Returns a value less than zero if this time is 
-before the other; zero if this date is equal the other time; a value greater 
-than zero if this time is after the other time.
+after or equal the I<other> time. Returns a value less than zero if this 
+time is before the other; zero if this date is equal the other time; a value 
+greater than zero if this time is after the other time.
 
 =head2 to_string
 
     $string = $tm->to_string;
     $string = $tm->to_string([reduced => false]);
 
-Returns a string representation of the instance. If the optional boolean 
-parameter I<reduced> is true a shorter representation is attempted.
+Returns a string representation of the instance. If the optional named 
+boolean parameter I<reduced> is true a shorter representation is attempted.
 
 The string will be in one of the following representations:
 
