@@ -1,4 +1,6 @@
-0.29 XXXX-XX-XX
+0.29 2015-09-17
+  - Changed the fractional second precision in from_epoch() when invoked with 
+    a floating point value from nanosecond precision to microsecond precision. 
   - Changed the exception message in ->from_string(), from "Cannot parse ..." 
     to "Could not parse ...".
   - Added following methods to the API:
