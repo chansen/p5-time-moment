@@ -255,7 +255,7 @@ THX_moment_from_epoch_nv(pTHX_ NV sec) {
     if (n < 0)
         n += 1.0;
     s = s + Perl_floor(f - n);
-    n = Perl_floor(n * 1E9 + 0.5);
+    n = Perl_floor(n * 1E6 + 0.5) * 1000;
     return THX_moment_from_epoch(aTHX_ (int64_t)s, (IV)n, 0);
 }
 

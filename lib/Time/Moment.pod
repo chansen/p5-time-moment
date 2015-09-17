@@ -49,9 +49,9 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $epoch        = $tm->epoch;
     $offset       = $tm->offset;                    # [-1080, 1080] (±18:00)
     
-    $jd           = $tm->jd;
-    $mjd          = $tm->mjd;
-    $rd           = $tm->rd;
+    $jd           = $tm->jd;                        # Julian Date
+    $mjd          = $tm->mjd;                       # Modified Julian Date
+    $rd           = $tm->rd;                        # Rata Die
     
     $tm2          = $tm1->with($adjuster);
     $tm2          = $tm1->with_year($year);
@@ -235,9 +235,8 @@ and time from the system clock in the UTC time zone.
 Constructs an instance of C<Time::Moment> from the given I<seconds> from the 
 epoch of 1970-01-01T00Z. The optional parameter I<nanosecond> specifies the 
 nanosecond of the second [0, 999_999_999]. Fractional seconds is supported 
-if the constructor is invoked with I<seconds> only:
-
-    $tm = Time::Moment->from_epoch(0.123456); # 1970-01-01T00:00:00.123456Z
+if the constructor is invoked with I<seconds> only, fractional seconds is 
+rounded to the nearest microsecond.
 
 =head2 from_object
 
