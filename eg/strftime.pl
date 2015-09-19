@@ -63,4 +63,3 @@ sub output {
     );
     output('week', \@basic, \@extended);
 }
-

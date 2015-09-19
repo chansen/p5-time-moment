@@ -45,4 +45,3 @@ for my $clock (@clocks) {
        $hours =~ s/\.00//;
     printf "%-12s %-16s %s\n", $name, $time->strftime("%a %H:%M %:z"), $hours;
 }
-

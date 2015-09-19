@@ -12,4 +12,3 @@ my $decoded = decode_sereal($encoded);
 foreach my $time (@$decoded) {
     print $time->to_string, "\n";
 }
-
