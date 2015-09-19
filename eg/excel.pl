@@ -130,7 +130,7 @@ my @tests = (
 
 use Time::Moment        0.26;
 use Test::More          0.88;
-use Test::Number::Delta relative => 0.0000000001;
+use Test::Number::Delta relative => 1E-10;
 
 foreach my $test (@tests) {
     my ($string, $date) = @$test;
