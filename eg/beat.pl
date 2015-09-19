@@ -4,7 +4,7 @@ use warnings;
 
 use Time::Moment;
 
-# Coverts the given moment to Swatch Internet Time (beat time).
+# Converts the given moment to Swatch Internet Time (beat time).
 # http://www.swatch.com/en/internet-time
 # https://en.wikipedia.org/wiki/Swatch_Internet_Time
 sub moment_to_beat {
