@@ -5,7 +5,7 @@ use warnings;
 use Carp qw[];
 
 BEGIN {
-    our $VERSION    = '0.29';
+    our $VERSION    = '0.30';
     our @EXPORT_OK  = qw[ NextDayOfWeek
                           NextOrSameDayOfWeek
                           PreviousDayOfWeek
