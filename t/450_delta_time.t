@@ -11,60 +11,60 @@ BEGIN {
 {
     my $tm = Time::Moment->from_string('2012-12-24T15:30:45.123456789Z');
     for my $n (-20..20) {
-        $n *= $n ** 4;
+        my $x = $n * ($n ** 4);
 
         {
-            my $exp = $n;
+            my $exp = $x;
             {
-                my $got = $tm->delta_hours($tm->plus_hours($n));
-                is($got, $exp, "delta_hours(plus_hours($n))");
+                my $got = $tm->delta_hours($tm->plus_hours($x));
+                is($got, $exp, "delta_hours(plus_hours($x))");
             }
             {
-                my $got = $tm->delta_minutes($tm->plus_minutes($n));
-                is($got, $exp, "delta_minutes(plus_minutes($n))");
+                my $got = $tm->delta_minutes($tm->plus_minutes($x));
+                is($got, $exp, "delta_minutes(plus_minutes($x))");
             }
             {
-                my $got = $tm->delta_seconds($tm->plus_seconds($n));
-                is($got, $exp, "delta_seconds(plus_seconds($n))");
+                my $got = $tm->delta_seconds($tm->plus_seconds($x));
+                is($got, $exp, "delta_seconds(plus_seconds($x))");
             }
             {
-                my $got = $tm->delta_milliseconds($tm->plus_milliseconds($n));
-                is($got, $exp, "delta_milliseconds(plus_milliseconds($n))");
+                my $got = $tm->delta_milliseconds($tm->plus_milliseconds($x));
+                is($got, $exp, "delta_milliseconds(plus_milliseconds($x))");
             }
             {
-                my $got = $tm->delta_microseconds($tm->plus_microseconds($n));
-                is($got, $exp, "delta_microseconds(plus_microseconds($n))");
+                my $got = $tm->delta_microseconds($tm->plus_microseconds($x));
+                is($got, $exp, "delta_microseconds(plus_microseconds($x))");
             }
             {
-                my $got = $tm->delta_nanoseconds($tm->plus_nanoseconds($n));
-                is($got, $exp, "delta_nanoseconds(plus_nanoseconds($n))");
+                my $got = $tm->delta_nanoseconds($tm->plus_nanoseconds($x));
+                is($got, $exp, "delta_nanoseconds(plus_nanoseconds($x))");
             }
         }
         {
-            my $exp = -$n;
+            my $exp = -$x;
             {
-                my $got = $tm->delta_hours($tm->minus_hours($n));
-                is($got, $exp, "delta_hours(minus_hours($n))");
+                my $got = $tm->delta_hours($tm->minus_hours($x));
+                is($got, $exp, "delta_hours(minus_hours($x))");
             }
             {
-                my $got = $tm->delta_minutes($tm->minus_minutes($n));
-                is($got, $exp, "delta_minutes(minus_minutes($n))");
+                my $got = $tm->delta_minutes($tm->minus_minutes($x));
+                is($got, $exp, "delta_minutes(minus_minutes($x))");
             }
             {
-                my $got = $tm->delta_seconds($tm->minus_seconds($n));
-                is($got, $exp, "delta_seconds(minus_seconds($n))");
+                my $got = $tm->delta_seconds($tm->minus_seconds($x));
+                is($got, $exp, "delta_seconds(minus_seconds($x))");
             }
             {
-                my $got = $tm->delta_milliseconds($tm->minus_milliseconds($n));
-                is($got, $exp, "delta_milliseconds(minus_milliseconds($n))");
+                my $got = $tm->delta_milliseconds($tm->minus_milliseconds($x));
+                is($got, $exp, "delta_milliseconds(minus_milliseconds($x))");
             }
             {
-                my $got = $tm->delta_microseconds($tm->minus_microseconds($n));
-                is($got, $exp, "delta_microseconds(minus_microseconds($n))");
+                my $got = $tm->delta_microseconds($tm->minus_microseconds($x));
+                is($got, $exp, "delta_microseconds(minus_microseconds($x))");
             }
             {
-                my $got = $tm->delta_nanoseconds($tm->minus_nanoseconds($n));
-                is($got, $exp, "delta_nanoseconds(minus_nanoseconds($n))");
+                my $got = $tm->delta_nanoseconds($tm->minus_nanoseconds($x));
+                is($got, $exp, "delta_nanoseconds(minus_nanoseconds($x))");
             }
         }
     }
