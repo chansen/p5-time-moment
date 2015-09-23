@@ -767,8 +767,8 @@ moment_subtract_moment(const moment_t *mt1, const moment_t *mt2) {
     const int64_t s2 = moment_instant_rd_seconds(mt2);
     moment_duration_t d;
 
-    d.sec = s1 - s2;
-    d.nsec = mt1->nsec - mt2->nsec;
+    d.sec = s2 - s1;
+    d.nsec = mt2->nsec - mt1->nsec;
     if (d.nsec < 0) {
         d.sec -= 1;
         d.nsec += NANOS_PER_SEC;
