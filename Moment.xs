@@ -620,12 +620,16 @@ minus_seconds(self, value)
     RETVAL
 
 void
-delta_hours(self, other)
+delta_years(self, other)
     const moment_t *self
     const moment_t *other
   PREINIT:
     int64_t delta;
   ALIAS:
+    Time::Moment::delta_years        = MOMENT_UNIT_YEARS
+    Time::Moment::delta_months       = MOMENT_UNIT_MONTHS
+    Time::Moment::delta_weeks        = MOMENT_UNIT_WEEKS
+    Time::Moment::delta_days         = MOMENT_UNIT_DAYS
     Time::Moment::delta_hours        = MOMENT_UNIT_HOURS
     Time::Moment::delta_minutes      = MOMENT_UNIT_MINUTES
     Time::Moment::delta_seconds      = MOMENT_UNIT_SECONDS

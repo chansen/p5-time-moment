@@ -776,6 +776,30 @@ moment_subtract_moment(const moment_t *mt1, const moment_t *mt2) {
     return d;
 }
 
+static int
+moment_delta_days(const moment_t *mt1, const moment_t *mt2) {
+    const dt_t dt1 = moment_local_dt(mt1);
+    const dt_t dt2 = moment_local_dt(mt2);
+    return dt2 - dt1;
+}
+
+static int
+moment_delta_weeks(const moment_t *mt1, const moment_t *mt2) {
+    return moment_delta_days(mt1, mt2) / 7;
+}
+
+static int
+moment_delta_months(const moment_t *mt1, const moment_t *mt2) {
+    const dt_t dt1 = moment_local_dt(mt1);
+    const dt_t dt2 = moment_local_dt(mt2);
+    return dt_delta_months(dt1, dt2, true);
+}
+
+static int
+moment_delta_years(const moment_t *mt1, const moment_t *mt2) {
+    return moment_delta_months(mt1, mt2) / 12;
+}
+
 static int64_t
 THX_moment_delta_hours(pTHX_ const moment_t *mt1, const moment_t *mt2) {
     moment_duration_t d;
@@ -825,6 +849,14 @@ THX_moment_delta_nanoseconds(pTHX_ const moment_t *mt1, const moment_t *mt2) {
 int64_t
 THX_moment_delta_unit(pTHX_ const moment_t *mt1, const moment_t *mt2, moment_unit_t u) {
     switch (u) {
+        case MOMENT_UNIT_YEARS:
+            return moment_delta_years(mt1, mt2);
+        case MOMENT_UNIT_MONTHS:
+            return moment_delta_months(mt1, mt2);
+        case MOMENT_UNIT_WEEKS:
+            return moment_delta_weeks(mt1, mt2);
+        case MOMENT_UNIT_DAYS:
+            return moment_delta_days(mt1, mt2);
         case MOMENT_UNIT_HOURS:
             return THX_moment_delta_hours(aTHX_ mt1, mt2);
         case MOMENT_UNIT_MINUTES:
