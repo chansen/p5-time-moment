@@ -10,7 +10,7 @@ BEGIN {
 
 {
     my $tm = Time::Moment->from_string('2012-12-24T15:30:45.123456789Z');
-    for my $n (0..20) {
+    for my $n (-20..20) {
         $n *= $n ** 4;
 
         {
