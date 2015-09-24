@@ -904,49 +904,49 @@ subtracted.
 
     $hours = $tm->delta_hours($other);
 
-Returns the difference between the instant of this time and the I<other> in 
-terms of hours. The result will be negative if the other time is before 
-this time.
+Returns the difference between the instant of this moment and the I<other> 
+in terms of complete hours. The result will be negative if the time of the 
+I<other> moment is before this time.
 
 =head2 delta_minutes
 
     $minutes = $tm->delta_minutes($other);
 
-Returns the difference between the instant of this time and the I<other> in 
-terms of minutes. The result will be negative if the other time is before 
-this time.
+Returns the difference between the instant of this moment and the I<other> 
+in terms of complete minutes. The result will be negative if the time of the 
+I<other> moment is before this time.
 
 =head2 delta_seconds
 
     $seconds = $tm->delta_seconds($other);
 
 Returns the difference between the instant of this time and the I<other> in 
-terms of seconds. The result will be negative if the other time is before 
-this time.
+terms of complete seconds. The result will be negative if the time of the 
+I<other> moment is before this time.
 
 =head2 delta_milliseconds
 
     $milliseconds = $tm->delta_milliseconds($other);
 
 Returns the difference between the instant of this time and the I<other> in 
-terms of milliseconds. The result will be negative if the other time is 
-before this time.
+terms of complete milliseconds. The result will be negative if the time of 
+the I<other> moment is before this time.
 
 =head2 delta_microseconds
 
     $microseconds = $tm->delta_microseconds($other);
 
 Returns the difference between the instant of this time and the I<other> in 
-terms of microseconds. The result will be negative if the other time is 
-before this time.
+terms of complete microseconds. The result will be negative if the time of 
+the I<other> moment is before this time.
 
 =head2 delta_nanoseconds
 
     $nanoseconds = $tm->delta_nanoseconds($other);
 
 Returns the difference between the instant of this time and the I<other> in 
-terms of nanoseconds. The result will be negative if the other time is 
-before this time.
+terms of complete nanoseconds. The result will be negative if the time of the 
+I<other> moment is before this time.
 
 =head2 at_utc
 
