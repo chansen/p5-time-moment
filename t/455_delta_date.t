@@ -54,4 +54,22 @@ BEGIN {
     }
 }
 
+{
+    my $tm1 = Time::Moment->from_string('2012-12-23T15:30:45+12');
+    my $tm2 = Time::Moment->from_string('2012-12-24T15:30:45-12');
+    is($tm1->delta_days($tm2), 1, "$tm1->delta_days($tm2)");
+}
+
+{
+    my $tm1 = Time::Moment->from_string('2012-10-23T15:30:45+12');
+    my $tm2 = Time::Moment->from_string('2012-12-22T15:30:45-12');
+    is($tm1->delta_months($tm2), 1, "$tm1->delta_months($tm2)");
+}
+
+{
+    my $tm1 = Time::Moment->from_string('2012-10-23T15:30:45+12');
+    my $tm2 = Time::Moment->from_string('2012-12-23T15:30:45-12');
+    is($tm1->delta_months($tm2), 2, "$tm1->delta_months($tm2)");
+}
+
 done_testing();
