@@ -18,7 +18,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     );
     $tm = Time::Moment->now;
     $tm = Time::Moment->now_utc;
-    $tm = Time::Moment->from_epoch($seconds [, $nanosecond]);
+    $tm = Time::Moment->from_epoch($seconds);
     $tm = Time::Moment->from_object($object);
     $tm = Time::Moment->from_string($string);
     $tm = Time::Moment->from_jd($jd);
@@ -111,8 +111,8 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     
     $tm2          = $tm1->at_utc;
     
-    $tm2          = $tm1->at_midnight;              # T00:00:00.000000000
-    $tm2          = $tm1->at_noon;                  # T12:00:00.000000000
+    $tm2          = $tm1->at_midnight;              # T00:00:00.0
+    $tm2          = $tm1->at_noon;                  # T12:00:00.0
     
     $tm2          = $tm1->at_last_day_of_year;
     $tm2          = $tm1->at_last_day_of_quarter;
@@ -998,7 +998,7 @@ This method is equivalent to:
     $tm2 = $tm1->at_midnight;
 
 Returns a copy of this instance with the time of day set to midnight, 
-T00:00:00.000000000. This method is equivalent to:
+T00:00:00.0. This method is equivalent to:
 
     $tm2 = $tm1->with_hour(0)
                ->with_minute(0)
@@ -1010,7 +1010,7 @@ T00:00:00.000000000. This method is equivalent to:
     $tm2 = $tm1->at_noon;
 
 Returns a copy of this instance with the time of day set to noon, 
-T12:00:00.000000000. This method is equivalent to:
+T12:00:00.0. This method is equivalent to:
 
     $tm2 = $tm1->with_hour(12)
                ->with_minute(0)
@@ -1735,7 +1735,7 @@ L<European Summer Time|http://en.wikipedia.org/wiki/Summer_Time_in_Europe>.
     }
 
 European Summer Time begins (clocks go forward) at 01:00 UTC on the last 
-Sunday in March, in 2014 the transition date is March 30.
+Sunday in March, in 2014 the transition date was March 30.
 
     $tm1 = Time::Moment->from_string('2014-03-29T12+01');
     $tm2 = $tm1->plus_hours(24);
@@ -1753,7 +1753,7 @@ an exception when attempting to convert non-existing local time.
     say convert_from_local($tm2, $zone);   # raises an exception
 
 European Summer Time ends (clocks go backward) at 01:00 UTC on the last 
-Sunday in October, in 2014 the transition date is October 26.
+Sunday in October, in 2014 the transition date was October 26.
 
     $tm1 = Time::Moment->from_string('2014-10-25T12+02');
     $tm2 = $tm1->plus_hours(24);
