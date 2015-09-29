@@ -124,6 +124,8 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     
     $integer      = $tm1->compare($tm2);
     
+    $integer      = $tm1->days_diff($tm2);
+    
     $string       = $tm->to_string;
     $string       = $tm->strftime($format);
     
@@ -1067,6 +1069,12 @@ Returns an integer indicating whether the instant of this time is before,
 after or equal the I<other> time. Returns a value less than zero if this 
 time is before the other; zero if this date is equal the other time; a value 
 greater than zero if this time is after the other time.
+
+=head2 days_diff
+
+    $integer = $tm->days_diff($other);
+
+Returns days between two dates
 
 =head2 to_string
 
