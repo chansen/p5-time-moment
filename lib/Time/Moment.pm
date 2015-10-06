@@ -55,6 +55,11 @@ sub __as_DateTime {
     )->set_nanosecond($tm->nanosecond);
 }
 
+sub __as_Time_Piece {
+    my ($tm) = @_;
+    return scalar Time::Piece::gmtime($tm->epoch);
+}
+
 sub DateTime::__as_Time_Moment {
     my ($dt) = @_;
 

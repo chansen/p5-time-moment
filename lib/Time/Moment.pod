@@ -277,9 +277,10 @@ L<Params::Coerce>:
     $tm = Params::Coerce::coerce('Time::Moment', DateTime->now);
 
 C<Time::Moment> also implements a coercion handler from C<Time::Moment> to 
-C<DateTime>:
+C<DateTime> and C<Time::Piece>:
 
     $dt = Params::Coerce::coerce('DateTime', Time::Moment->now);
+    $tp = Params::Coerce::coerce('Time::Piece', Time::Moment->now);
 
 =head2 from_string
 

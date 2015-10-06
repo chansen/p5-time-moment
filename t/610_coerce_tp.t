@@ -19,5 +19,14 @@ BEGIN {
     is($tm->epoch, 123456789, '->epoch');
 }
 
+{
+    my $tm = Time::Moment->from_epoch(123456789);
+    my $tp;
+
+    lives_ok { $tp = Params::Coerce::coerce('Time::Piece', $tm) };
+    isa_ok($tp, 'Time::Piece');
+    is($tp->epoch, 123456789, '->epoch');
+}
+
 done_testing();
 
