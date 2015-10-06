@@ -212,7 +212,7 @@ The nanosecond of the second [0, 999_999_999].
 
 =item offset
 
-The time zone offset from UTC in minutes [-1080, 1080] (±18:00).
+The offset from UTC in minutes [-1080, 1080] (±18:00).
 
 =back
 
@@ -258,9 +258,9 @@ C<Time::Moment> implements coercion handlers for the following object types:
 
     $tm = Time::Moment->from_object( DateTime->now );
 
-The given C<DateTime> object must be within the supported date range and must 
-have a time zone or a time zone offset from UTC, coercing from the 'floating' 
-time zone is not supported.
+The given C<DateTime> object must be within the supported range and must have 
+a time zone or an offset from UTC, coercing from the 'floating' time zone is 
+not supported.
 
 =item L<Time::Piece>
 
@@ -564,7 +564,7 @@ Returns the number of integral seconds from the epoch of 1970-01-01T00Z.
 
     $offset = $tm->offset;
 
-Returns the time zone offset from UTC in minutes [-1080, 1080] (±18:00).
+Returns the offset from UTC in minutes [-1080, 1080] (±18:00).
 
 =head2 jd
 
@@ -745,8 +745,8 @@ Returns a copy of this instance with the given I<nanosecond> of the day
 
     $tm2 = $tm1->with_offset_same_instant($offset);
 
-Returns a copy of this instance with the given time zone I<offset> from UTC 
-in minutes [-1080, 1080] (±18:00) altered. The resulting time is at the same 
+Returns a copy of this instance with the given I<offset> from UTC in 
+minutes [-1080, 1080] (±18:00) altered. The resulting time is at the same 
 instant.
 
     $tm = Time::Moment->from_string('2012-12-24T15-05')
@@ -757,8 +757,8 @@ instant.
 
     $tm2 = $tm1->with_offset_same_local($offset);
 
-Returns a copy of this instance with the given time zone I<offset> from UTC 
-in minutes [-1080, 1080] (±18:00) altered. The resulting time has the same 
+Returns a copy of this instance with the given I<offset> from UTC in 
+minutes [-1080, 1080] (±18:00) altered. The resulting time has the same 
 local time.
 
     $tm = Time::Moment->from_string('2012-12-24T15-05')
@@ -989,8 +989,8 @@ the I<other> moment is before this.
 
     $tm2 = $tm1->at_utc;
 
-Returns a copy of this instance with the time zone offset set to zero.
-This method is equivalent to:
+Returns a copy of this instance with the offset from UTC set to zero. This 
+method is equivalent to:
 
     $tm2 = $tm1->with_offset_same_instant(0);
 
@@ -1698,7 +1698,7 @@ L<DateTime::TimeZone::Tzfile>.
         hour   => 15
     );
     $zone   = DateTime::TimeZone->new(name => 'America/New_York');
-    $offset = int($zone->offset_for_datetime($tm) / 60);
+    $offset = $zone->offset_for_datetime($tm) / 60;
     
     say $tm->with_offset_same_instant($offset); # 2012-12-24T10-05
 
@@ -1711,7 +1711,7 @@ L<DateTime::TimeZone::Tzfile>.
         hour   => 15
     );
     $zone   = DateTime::TimeZone->new(name => 'America/New_York');
-    $offset = int($zone->offset_for_local_datetime($tm) / 60);
+    $offset = $zone->offset_for_local_datetime($tm) / 60;
     
     say $tm->with_offset_same_local($offset); # 2012-12-24T15-05
 
@@ -1725,13 +1725,13 @@ L<European Summer Time|http://en.wikipedia.org/wiki/Summer_Time_in_Europe>.
     
     sub convert_from_instant {
         my ($tm, $zone) = @_;
-        my $offset = int($zone->offset_for_datetime($tm) / 60);
+        my $offset = $zone->offset_for_datetime($tm) / 60;
         return $tm->with_offset_same_instant($offset);
     }
     
     sub convert_from_local {
         my ($tm, $zone) = @_;
-        my $offset = int($zone->offset_for_local_datetime($tm) / 60);
+        my $offset = $zone->offset_for_local_datetime($tm) / 60;
         return $tm->with_offset_same_local($offset);
     }
 
