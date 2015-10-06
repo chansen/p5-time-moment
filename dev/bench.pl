@@ -110,19 +110,19 @@ use POSIX         qw[];
 }
 
 {
-    print "\nBenchmarking arithmetic: +10 days -10 days\n";
+    print "\nBenchmarking arithmetic: +10 hours -10 hours\n";
     my $dt = DateTime->now;
     my $tm = Time::Moment->now_utc;
     my $tp = Time::Piece::gmtime();
     Benchmark::cmpthese( -10, {
         'DateTime' => sub {
-            my $r = $dt->add(days => 10)->subtract(days => 10);
+            my $r = $dt->add(hours => 10)->subtract(hours => 10);
         },
         'Time::Moment' => sub {
-            my $r = $tm->plus_days(10)->minus_days(10);
+            my $r = $tm->plus_hours(10)->minus_hours(10);
         },
         'Time::Piece' => sub {
-            my $r = $tp->add(86400 * 10)->add(-86400 * 10);
+            my $r = $tp->add(10*60*60)->add(-10*60*60);
         },
     });
 }
