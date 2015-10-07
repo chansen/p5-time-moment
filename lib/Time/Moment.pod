@@ -21,6 +21,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm = Time::Moment->from_epoch($seconds);
     $tm = Time::Moment->from_object($object);
     $tm = Time::Moment->from_string($string);
+    $tm = Time::Moment->from_rd($rd);
     $tm = Time::Moment->from_jd($jd);
     $tm = Time::Moment->from_mjd($mjd);
     
