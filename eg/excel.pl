@@ -3,14 +3,14 @@ use strict;
 use warnings;
 
 # Convert between Excel serial dates and Time::Moment
-use Time::Moment 0.26;
+use Time::Moment;
 
 use constant EXCEL_EPOCH => Time::Moment->from_string('1899-12-30T00Z')->rd;
 
 sub moment_from_excel {
     @_ == 1 or die q/Usage: moment_from_excel(date)/;
     my ($date) = @_;
-    return Time::Moment->from_jd($date + ($date < 61), epoch => EXCEL_EPOCH);
+    return Time::Moment->from_rd($date + ($date < 61), epoch => EXCEL_EPOCH);
 }
 
 sub moment_to_excel {
@@ -128,7 +128,6 @@ my @tests = (
     [ '9999-12-31T23:59:59Z',     2958465.999988426  ],
 );
 
-use Time::Moment        0.26;
 use Test::More          0.88;
 use Test::Number::Delta 1.06 relative => 1E-10;
 
