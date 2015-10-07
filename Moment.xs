@@ -487,25 +487,27 @@ from_string(klass, string, ...)
     RETVAL
 
 moment_t
-from_jd(klass, jd, ...)
+from_rd(klass, jd, ...)
     SV *klass
     NV jd
   PREINIT:
     dSTASH_CONSTRUCTOR_MOMENT(klass);
-    NV epoch;
-    IV precision;
+    NV epoch = 0;
+    IV precision = 3;
+    IV offset = 0;
     I32 i;
   ALIAS:
-    Time::Moment::from_jd  = 0
-    Time::Moment::from_mjd = 1
+    Time::Moment::from_rd  = 0
+    Time::Moment::from_jd  = 1
+    Time::Moment::from_mjd = 2
   CODE:
     if ((items % 2) != 0)
         croak("Odd number of elements in named parameters");
 
-    if (ix == 0)
-        precision = 3, epoch = -1721424.5;
-    else
-        precision = 3, epoch = 678576;
+    switch (ix) {
+        case 1: epoch = -1721424.5; break;
+        case 2: epoch = 678576;     break;
+    }
 
     for (i = 2; i < items; i += 2) {
         switch (sv_moment_param(ST(i))) {
@@ -515,11 +517,20 @@ from_jd(klass, jd, ...)
             case MOMENT_PARAM_EPOCH:
                 epoch = SvNV(ST(i+1));
                 break;
+            case MOMENT_PARAM_OFFSET:
+                if (ix == 0) {
+                    offset = SvIV(ST(i+1));
+                    break;
+                }
+                /* FALLTROUGH */
             default:
                 croak("Unrecognised parameter: '%"SVf"'", ST(i));
         }
     }
-    RETVAL = moment_from_jd(jd, epoch, precision);
+    if      (ix == 0) RETVAL = moment_from_rd(jd, epoch, precision, offset);
+    else if (ix == 1) RETVAL = moment_from_jd(jd, epoch, precision);
+    else              RETVAL = moment_from_mjd(jd, epoch, precision);
+
   OUTPUT:
     RETVAL
 

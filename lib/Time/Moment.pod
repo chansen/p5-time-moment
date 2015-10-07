@@ -376,6 +376,44 @@ lower case [z]. The literal string GMT or UTC may be used as a UTC designator
 and may have an offset. Usage of these string representations is strongly 
 discouraged as they do not conform to the ISO 8601 standard.
 
+=head2 from_rd
+
+    $tm = Time::Moment->from_rd($rd);
+    $tm = Time::Moment->from_rd($rd [, offset => 0] [, precision => 3] [, epoch => 0]);
+
+Constructs an instance of C<Time::Moment> from the given Rata Die. 
+The Rata Die is a count of days elapsed since 0000-12-31T00. The 
+fractional part corresponds to the fraction of the day after midnight. 
+The minimum acceptable Rata Die is C<1> which corresponds to 
+0001-01-01T00Z.
+
+B<Parameters:>
+
+=over 4
+
+=item offset
+
+    $tm = Time::Moment->from_rd($rd, offset => 0);
+
+The optional parameter I<offset> [-1080, 1080] (±18:00) specifies the 
+offset from UTC. The default offset is 0.
+
+=item precision
+
+    $tm = Time::Moment->from_rd($rd, precision => 3);
+
+The optional parameter I<precision> [0, 9] specifies the precision of the
+fractional seconds. The default precision is 3 (milliseconds).
+
+=item epoch
+
+    $tm = Time::Moment->from_rd($rd, epoch => 0);
+
+The optional parameter I<epoch> specifies the epoch date relative to 
+0000-12-31T00Z. The epoch date for the Rata Die is C<0>.
+
+=back
+
 =head2 from_jd
 
     $tm = Time::Moment->from_jd($jd);

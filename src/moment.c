@@ -259,30 +259,28 @@ THX_moment_from_epoch_nv(pTHX_ NV sec) {
     return THX_moment_from_epoch(aTHX_ (int64_t)s, (IV)n, 0);
 }
 
-moment_t
-THX_moment_from_jd(pTHX_ NV jd, NV epoch, IV precision) {
-    static const NV JD_MIN = -146097 * 50;
-    static const NV JD_MAX =  146097 * 50;
+static int
+THX_moment_from_sd(pTHX_ NV sd, NV epoch, IV precision, int64_t *sec, int32_t *nsec) {
+    static const NV SD_MIN = -146097 * 50;
+    static const NV SD_MAX =  146097 * 50;
     NV d1, d2, f1, f2, f, d, s, denom;
-    int64_t sec;
-    int32_t nos;
 
     if (precision < 0 || precision > 9)
         croak("Parameter 'precision' is out of the range [0, 9]");
 
-    if (!(jd > JD_MIN && jd < JD_MAX))
-        croak("Parameter 'jd' is out of range");
+    if (!(sd > SD_MIN && sd < SD_MAX))
+        return -1;
 
-    if (!(epoch > JD_MIN && epoch < JD_MAX))
+    if (!(epoch > SD_MIN && epoch < SD_MAX))
         croak("Parameter 'epoch' is out of range");
 
-    if (jd >= epoch) {
-        d1 = jd;
+    if (sd >= epoch) {
+        d1 = sd;
         d2 = epoch;
     }
     else {
         d1 = epoch;
-        d2 = jd;
+        d2 = sd;
     }
 
     f1 = Perl_fmod(d1, 1.0);
@@ -299,19 +297,70 @@ THX_moment_from_jd(pTHX_ NV jd, NV epoch, IV precision) {
     s = Perl_floor(f);
 
     if (d < 1 || d > 3652059)
-        croak("Serial date is out of supported range");
+        return -2;
 
     denom = Perl_pow(10.0, (NV)precision);
     f = (Perl_floor((f - s) * denom + 0.5) / denom) * 1E9;
 
-    sec = (int64_t)d * 86400 + (int32_t)s;
-    nos = (int32_t)f;
+    *sec = (int64_t)d * 86400 + (int32_t)s;
+    *nsec = (int32_t)f;
 
-    if (nos >= NANOS_PER_SEC) {
-        nos -= NANOS_PER_SEC;
-        sec += 1;
+    if (*nsec >= NANOS_PER_SEC) {
+        *nsec -= NANOS_PER_SEC;
+        *sec += 1;
     }
-    return THX_moment_from_instant(aTHX_ sec, nos, 0);
+    return 0;
+}
+moment_t
+THX_moment_from_rd(pTHX_ NV jd, NV epoch, IV precision, IV offset) {
+    int64_t sec;
+    int32_t nsec;
+    int r;
+
+    THX_check_offset(aTHX_ offset);
+
+    r = THX_moment_from_sd(aTHX_ jd, epoch, precision, &sec, &nsec);
+    if (r < 0) {
+        if (r == -1)
+            croak("Parameter 'rd' is out of range");
+        else
+            croak("Rata Die is out of range");
+    }
+    return THX_moment_from_local(aTHX_ sec, nsec, offset);
+}
+
+moment_t
+THX_moment_from_jd(pTHX_ NV jd, NV epoch, IV precision) {
+    int64_t sec;
+    int32_t nsec;
+    int r;
+
+    r = THX_moment_from_sd(aTHX_ jd, epoch, precision, &sec, &nsec);
+    if (r < 0) {
+        if (r == -1)
+            croak("Parameter 'jd' is out of range");
+        else
+            croak("Julian date is out of range");
+    }
+
+    return THX_moment_from_instant(aTHX_ sec, nsec, 0);
+}
+
+moment_t
+THX_moment_from_mjd(pTHX_ NV jd, NV epoch, IV precision) {
+    int64_t sec;
+    int32_t nsec;
+    int r;
+
+    r = THX_moment_from_sd(aTHX_ jd, epoch, precision, &sec, &nsec);
+    if (r < 0) {
+        if (r == -1)
+            croak("Parameter 'mjd' is out of range");
+        else
+            croak("Modified Julian date is out of range");
+    }
+
+    return THX_moment_from_instant(aTHX_ sec, nsec, 0);
 }
 
 moment_t

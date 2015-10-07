@@ -102,7 +102,9 @@ moment_t    THX_moment_new(pTHX_ IV Y, IV M, IV D, IV h, IV m, IV s, IV ns, IV o
 moment_t    THX_moment_from_epoch(pTHX_ int64_t sec, IV usec, IV offset);
 moment_t    THX_moment_from_epoch_nv(pTHX_ NV sec);
 
+moment_t    THX_moment_from_rd(pTHX_ NV jd, NV epoch, IV precision, IV offset);
 moment_t    THX_moment_from_jd(pTHX_ NV jd, NV epoch, IV precision);
+moment_t    THX_moment_from_mjd(pTHX_ NV jd, NV epoch, IV precision);
 
 moment_t    THX_moment_with_field(pTHX_ const moment_t *mt, moment_component_t u, int64_t v);
 moment_t    THX_moment_with_offset_same_instant(pTHX_ const moment_t *mt, IV offset);
@@ -174,8 +176,14 @@ moment_t    THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt);
 #define moment_from_epoch_nv(sec) \
     THX_moment_from_epoch_nv(aTHX_ sec)
 
+#define moment_from_rd(rd, epoch, precision, offset) \
+    THX_moment_from_rd(aTHX_ rd, epoch, precision, offset)
+
 #define moment_from_jd(jd, epoch, precision) \
     THX_moment_from_jd(aTHX_ jd, epoch, precision)
+
+#define moment_from_mjd(mjd, epoch, precision) \
+    THX_moment_from_mjd(aTHX_ mjd, epoch, precision)
 
 #define moment_with_offset_same_instant(self, offset) \
     THX_moment_with_offset_same_instant(aTHX_ self, offset)
