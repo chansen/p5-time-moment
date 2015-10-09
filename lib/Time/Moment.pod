@@ -290,7 +290,7 @@ C<DateTime> and C<Time::Piece>:
 
 Constructs an instance of C<Time::Moment> from the given I<string>. The 
 string must consist of a complete date representation and time of day 
-followed by a time zone designator. The time of day may be reduced to hour 
+followed by a zone designator. The time of day may be reduced to hour 
 of the day, the second of the minute may have a decimal fraction. The decimal 
 sign can be either the comma [,] or the full stop [.]. A decimal fraction 
 must have at least one digit and may have a total of nine digits, if the 
@@ -386,7 +386,7 @@ Constructs an instance of C<Time::Moment> from the given Rata Die.
 The Rata Die is a count of days elapsed since 0000-12-31T00. The 
 fractional part corresponds to the fraction of the day after midnight. 
 The minimum acceptable Rata Die is C<1> which corresponds to 
-0001-01-01T00Z.
+0001-01-01T00.
 
 B<Parameters:>
 
@@ -397,7 +397,7 @@ B<Parameters:>
     $tm = Time::Moment->from_rd($rd, offset => 0);
 
 The optional parameter I<offset> [-1080, 1080] (±18:00) specifies the 
-offset from UTC. The default offset is 0.
+offset from UTC in minutes. The default offset is 0.
 
 =item precision
 
@@ -411,7 +411,7 @@ fractional seconds. The default precision is 3 (milliseconds).
     $tm = Time::Moment->from_rd($rd, epoch => 0);
 
 The optional parameter I<epoch> specifies the epoch date relative to 
-0000-12-31T00Z. The epoch date for the Rata Die is C<0>.
+0000-12-31T00. The epoch date for the Rata Die is C<0>.
 
 =back
 
