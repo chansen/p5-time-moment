@@ -17,6 +17,6 @@ before_install:
   - "cpanm JSON::XS"
   - "cpanm CBOR::XS"
   - "cpanm Sereal"
-  - "Params::Coerce"
+  - "cpanm Params::Coerce"
 script: "perl Makefile.PL; make test"
 
