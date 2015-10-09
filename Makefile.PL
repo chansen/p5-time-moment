@@ -34,13 +34,14 @@ repository     'https://github.com/chansen/p5-time-moment';
 bugtracker     'https://github.com/chansen/p5-time-moment/issues';
 readme_from    'lib/Time/Moment.pod';
 
-requires       'Carp'           => '0';
-requires       'XSLoader'       => '0';
-requires       'Time::HiRes'    => '0';
+requires       'Carp'                => '0';
+requires       'XSLoader'            => '0';
+requires       'Time::HiRes'         => '0';
 
-test_requires  'Test::More'     => '0.88';
-test_requires  'Test::Fatal'    => '0.006';
-test_requires  'Test::Requires' => '0';
+test_requires  'Test::More'          => '0.88';
+test_requires  'Test::Fatal'         => '0.006';
+test_requires  'Test::Requires'      => '0';
+test_requires  'Test::Number::Delta' => '1.06';
 
 cc_warnings;
 cc_include_paths 'src';
