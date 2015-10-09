@@ -14,5 +14,9 @@ before_install:
   - "cpanm Test::Fatal"
   - "cpanm Test::Requires"
   - "cpanm Test::Number::Delta"
+  - "cpanm JSON::XS"
+  - "cpanm CBOR::XS"
+  - "cpanm Sereal"
+  - "Params::Coerce"
 script: "perl Makefile.PL; make test"
 
