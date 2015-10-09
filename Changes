@@ -1,3 +1,9 @@
+0.32 2015-10-09
+  - Added Test::Number::Delta v1.06 as a test prerequisite
+  - Increased test coverage
+  - Added following methods to the API:
+    - from_rd
+
 0.31 2015-09-28
   - Added following methods to the API:
     - delta_years
