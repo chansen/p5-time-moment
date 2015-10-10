@@ -574,8 +574,12 @@ from_object(klass, object)
     SV *object
   PREINIT:
     dSTASH_CONSTRUCTOR_MOMENT(klass);
-    PERL_UNUSED_VAR(stash);
   CODE:
+    /* PERL_UNUSED_VAR() fails on certain compilers because HV * const stash */ 
+    if (0) {
+        HV * dummy = stash;
+        PERL_UNUSED_VAR(dummy);
+    }
     XSRETURN_SV(sv_2moment_coerce_sv(object));
 
 moment_t
