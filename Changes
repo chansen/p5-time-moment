@@ -1,3 +1,7 @@
+0.33 2015-10-10
+  - Fixed a bug in from_rd, from_jd and from_mjd when Perl is compiled
+    with long double. Reported by Slaven Rezić (SREZIC), issue #19.
+
 0.32 2015-10-09
   - Added Test::Number::Delta v1.06 as a test prerequisite
   - Increased test coverage
