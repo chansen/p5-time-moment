@@ -1,5 +1,7 @@
-0.35 XXXX-XX-XX
+0.35 2015-10-10
   - Added support for named parameters in from_epoch
+  - Fix a compiler issue related to PERL_UNUSED_VAR(), reported by CPAN 
+    smokers, <http://www.cpantesters.org/distro/T/Time-Moment.html?grade=5&version=0.34>.
 
 0.34 2015-10-10
   - This release has no code changes. Re-released without object files.
