@@ -303,7 +303,7 @@ THX_moment_from_sd(pTHX_ NV sd, NV epoch, IV precision, int64_t *sec, int32_t *n
     f = (Perl_floor((f - s) * denom + 0.5) / denom) * 1E9;
 
     *sec = (int64_t)d * 86400 + (int32_t)s;
-    *nsec = (int32_t)f;
+    *nsec = (int32_t)(f + 0.5);
 
     if (*nsec >= NANOS_PER_SEC) {
         *nsec -= NANOS_PER_SEC;
@@ -311,6 +311,7 @@ THX_moment_from_sd(pTHX_ NV sd, NV epoch, IV precision, int64_t *sec, int32_t *n
     }
     return 0;
 }
+
 moment_t
 THX_moment_from_rd(pTHX_ NV jd, NV epoch, IV precision, IV offset) {
     int64_t sec;
