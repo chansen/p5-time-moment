@@ -242,10 +242,10 @@ THX_moment_from_epoch(pTHX_ int64_t sec, IV nsec, IV offset) {
 }
 
 moment_t
-THX_moment_from_epoch_nv(pTHX_ NV sec) {
+THX_moment_from_epoch_nv(pTHX_ NV sec, IV precision) {
     static const NV SEC_MIN = -62135596801; /*  0000-12-31T23:59:59Z */
     static const NV SEC_MAX = 253402300800; /* 10000-01-01T00:00:00Z */
-    NV s, f, n;
+    NV s, f, n, denom;
 
     if (!(sec > SEC_MIN && sec < SEC_MAX))
         croak("Parameter 'seconds' is out of range");
@@ -255,8 +255,9 @@ THX_moment_from_epoch_nv(pTHX_ NV sec) {
     if (n < 0)
         n += 1.0;
     s = s + Perl_floor(f - n);
-    n = Perl_floor(n * 1E6 + 0.5) * 1000;
-    return THX_moment_from_epoch(aTHX_ (int64_t)s, (IV)n, 0);
+    denom = Perl_pow(10.0, (NV)precision);
+    n = (Perl_floor(n * denom + 0.5) / denom) * 1E9;
+    return THX_moment_from_epoch(aTHX_ (int64_t)s, (IV)(n + 0.5), 0);
 }
 
 static int

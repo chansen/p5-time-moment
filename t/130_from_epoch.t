@@ -25,11 +25,23 @@ BEGIN {
     foreach my $test (@tests) {
         my ($secs, $nos, $string) = @$test;
         my $tm;
-        lives_ok { $tm = Time::Moment->from_epoch($secs, $nos) } "from_epoch($secs, $nos)";
-        is($tm->epoch,       $secs,   "from_epoch($secs, $nos)->epoch");
-        is($tm->nanosecond,  $nos,    "from_epoch($secs, $nos)->nanosecond");
-        is($tm->offset,      0,       "from_epoch($secs, $nos)->offset");
-        is($tm->to_string,   $string, "from_epoch($secs, $nos)->to_string");
+        {
+            my $prefix = "from_epoch($secs, $nos)";
+            lives_ok { $tm = Time::Moment->from_epoch($secs, $nos) } $prefix;
+            is($tm->epoch,       $secs,   "$prefix->epoch");
+            is($tm->nanosecond,  $nos,    "$prefix->nanosecond");
+            is($tm->offset,      0,       "$prefix->offset");
+            is($tm->to_string,   $string, "$prefix->to_string");
+        }
+
+        {
+            my $prefix = "from_epoch($secs, nanosecond => $nos)";
+            lives_ok { $tm = Time::Moment->from_epoch($secs, nanosecond => $nos) } $prefix;
+            is($tm->epoch,       $secs,   "$prefix->epoch");
+            is($tm->nanosecond,  $nos,    "$prefix->nanosecond");
+            is($tm->offset,      0,       "$prefix->offset");
+            is($tm->to_string,   $string, "$prefix->to_string");
+        }
     }
 }
 
@@ -225,8 +237,52 @@ BEGIN {
     foreach my $test (@tests) {
         my ($string, $epoch) = @$test;
 
-        my $tm = Time::Moment->from_epoch($epoch);
-        is($tm->to_string, $string, "Time::Moment->from_epoch($epoch)");
+        {
+            my $tm = Time::Moment->from_epoch($epoch);
+            is($tm->to_string, $string, "from_epoch($epoch)");
+        }
+
+        {
+            my $tm = Time::Moment->from_epoch($epoch, precision => 6);
+            is($tm->to_string, $string, "from_epoch($epoch, precision => 6)");
+        }
+    }
+}
+
+
+{
+    my @tests = (
+        [ '1920-12-31T23:59:59.499Z',      -1546300800.500999927520752  ],
+        [ '1920-12-31T23:59:59.999Z',      -1546300800.000999927520752  ],
+        [ '1969-12-31T23:59:58Z',          -2.0                         ],
+        [ '1969-12-31T23:59:58.500Z',      -1.5                         ],
+        [ '1969-12-31T23:59:58.800Z',      -1.2                         ],
+        [ '1969-12-31T23:59:58.900Z',      -1.1                         ],
+        [ '1969-12-31T23:59:58.980Z',      -1.02                        ],
+        [ '1969-12-31T23:59:58.990Z',      -1.01                        ],
+        [ '1969-12-31T23:59:58.998Z',      -1.002                       ],
+        [ '1969-12-31T23:59:58.999Z',      -1.001                       ],
+        [ '1969-12-31T23:59:59Z',          -1.0                         ],
+        [ '1970-01-01T00:00:00Z',          0.0                          ],
+        [ '1970-01-01T00:00:00.500Z',      0.5                          ],
+        [ '1970-01-01T00:00:00.501Z',      0.501                        ],
+        [ '1970-01-01T00:00:00.510Z',      0.51                         ],
+        [ '1970-01-01T00:00:00.600Z',      0.6                          ],
+        [ '1970-01-01T00:00:00.700Z',      0.7                          ],
+        [ '1970-01-01T00:00:00.800Z',      0.8                          ],
+        [ '1970-01-01T00:00:00.900Z',      0.9                          ],
+        [ '1970-01-01T00:00:00.980Z',      0.98                         ],
+        [ '1970-01-01T00:00:00.990Z',      0.99                         ],
+        [ '1970-01-01T00:00:00.999Z',      0.999                        ],
+        [ '2020-12-31T23:59:59.499Z',      1609459199.499000072479248   ],
+        [ '2020-12-31T23:59:59.999Z',      1609459199.999000072479248   ],
+    );
+
+    foreach my $test (@tests) {
+        my ($string, $epoch) = @$test;
+
+        my $tm = Time::Moment->from_epoch($epoch, precision => 3);
+        is($tm->to_string, $string, "from_epoch($epoch, precision => 3)");
     }
 }
 

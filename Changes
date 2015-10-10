@@ -1,3 +1,6 @@
+0.35 XXXX-XX-XX
+  - Added support for named parameters in from_epoch
+
 0.34 2015-10-10
   - This release has no code changes. Re-released without object files.
 

@@ -236,12 +236,31 @@ and time from the system clock in the UTC time zone.
 
     $tm = Time::Moment->from_epoch($seconds);
     $tm = Time::Moment->from_epoch($seconds, $nanosecond);
+    $tm = Time::Moment->from_epoch($seconds [, nanosecond => 0] [, precision => 6]);
 
 Constructs an instance of C<Time::Moment> from the given I<seconds> from the 
-epoch of 1970-01-01T00Z. The optional parameter I<nanosecond> specifies the 
-nanosecond of the second [0, 999_999_999]. Fractional seconds is supported 
-if the constructor is invoked with I<seconds> only, fractional seconds is 
-rounded to the nearest microsecond.
+epoch of 1970-01-01T00Z. Fractional seconds is supported if the constructor 
+is invoked with I<seconds> only, the default precision is 6 (microseconds).
+
+B<Parameters:>
+
+=over 4
+
+=item nanosecond
+
+    $tm = Time::Moment->from_epoch($seconds, nanosecond => 0);
+
+The optional parameter I<nanosecond> [0, 999_999_999] specifies the 
+nanosecond of the second.
+
+=item precision
+
+    $tm = Time::Moment->from_epoch($rd, precision => 6);
+
+The optional parameter I<precision> [0, 9] specifies the precision of the
+fractional seconds. The default precision is 6 (microseconds).
+
+=back
 
 =head2 from_object
 

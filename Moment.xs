@@ -443,17 +443,51 @@ now(klass)
 #endif
 
 moment_t 
-from_epoch(klass, seconds, nanosecond=0)
+from_epoch(klass, seconds, ...)
     SV *klass
     SV *seconds
-    IV nanosecond
   PREINIT:
     dSTASH_CONSTRUCTOR_MOMENT(klass);
+    IV precision = 6;
   CODE:
-    if (items != 2 || SvIOK(seconds))
-        RETVAL = moment_from_epoch(SvI64V(seconds), nanosecond, 0);
-    else
-        RETVAL = moment_from_epoch_nv(SvNV(seconds));
+      if (items == 2) {
+          if (SvIOK(seconds))
+              RETVAL = moment_from_epoch(SvI64V(seconds), 0, 0);
+          else
+              RETVAL = moment_from_epoch_nv(SvNV(seconds), precision);
+      }
+      else if (items == 3) {
+          RETVAL = moment_from_epoch(SvI64V(seconds), SvIV(ST(2)), 0);
+      }
+      else {
+          SV *nanosecond = NULL;
+          I32 i;
+
+          if ((items % 2) != 0)
+              croak("Odd number of elements in named parameters");
+
+          for (i = 2; i < items; i += 2) {
+              switch (sv_moment_param(ST(i))) {
+                  case MOMENT_PARAM_NANOSECOND:
+                      nanosecond = ST(i+1);
+                      break;
+                  case MOMENT_PARAM_PRECISION:
+                      precision = SvIV(ST(i+1));
+                      break;
+                  default:
+                      croak("Unrecognised parameter: '%"SVf"'", ST(i));
+              }
+          }
+
+          if (nanosecond)
+              RETVAL = moment_from_epoch(SvI64V(seconds), SvIV(nanosecond), 0);
+          else {
+              if (SvIOK(seconds))
+                  RETVAL = moment_from_epoch(SvI64V(seconds), 0, 0);
+              else
+                  RETVAL = moment_from_epoch_nv(SvNV(seconds), precision);
+          }
+      }
   OUTPUT:
     RETVAL
 
