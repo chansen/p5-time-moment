@@ -247,6 +247,9 @@ THX_moment_from_epoch_nv(pTHX_ NV sec, IV precision) {
     static const NV SEC_MAX = 253402300800; /* 10000-01-01T00:00:00Z */
     NV s, f, n, denom;
 
+    if (precision < 0 || precision > 9)
+        croak("Parameter 'precision' is out of the range [0, 9]");
+
     if (!(sec > SEC_MIN && sec < SEC_MAX))
         croak("Parameter 'seconds' is out of range");
 
