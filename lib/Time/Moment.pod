@@ -255,7 +255,7 @@ nanosecond of the second.
 
 =item precision
 
-    $tm = Time::Moment->from_epoch($rd, precision => 6);
+    $tm = Time::Moment->from_epoch($seconds, precision => 6);
 
 The optional parameter I<precision> [0, 9] specifies the precision of the
 fractional seconds. The default precision is 6 (microseconds).
