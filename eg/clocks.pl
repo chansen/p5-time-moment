@@ -27,7 +27,7 @@ my $now = Time::Moment->now;
 my @clocks;
 foreach my $name (@zones) {
     my $zone   = DateTime::TimeZone->new(name => $name);
-    my $offset = int($zone->offset_for_datetime($now) / 60);
+    my $offset = $zone->offset_for_datetime($now) / 60;
     my $time   = $now->with_offset_same_instant($offset);
     $name =~ s![^/]+/!!;
     $name =~ s!_!\x20!g;
