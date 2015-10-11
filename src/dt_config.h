@@ -26,7 +26,7 @@
 #ifndef __DT_CONFIG_H__
 #define __DT_CONFIG_H__
 
-#ifndef __sun__
+#if !(defined(__sun) && defined(__SVR4))
 #if !defined(_MSC_VER) || _MSC_VER >= 1800
 #  include <stdbool.h>
 #endif
