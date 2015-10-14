@@ -243,8 +243,8 @@ THX_moment_from_epoch(pTHX_ int64_t sec, IV nsec, IV offset) {
 
 moment_t
 THX_moment_from_epoch_nv(pTHX_ NV sec, IV precision) {
-    static const NV SEC_MIN = -62135596801; /*  0000-12-31T23:59:59Z */
-    static const NV SEC_MAX = 253402300800; /* 10000-01-01T00:00:00Z */
+    static const NV SEC_MIN = -62135596801.0; /*  0000-12-31T23:59:59Z */
+    static const NV SEC_MAX = 253402300800.0; /* 10000-01-01T00:00:00Z */
     NV s, f, n, denom;
 
     if (precision < 0 || precision > 9)
