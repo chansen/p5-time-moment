@@ -81,6 +81,12 @@ THX_check_year(pTHX_ int64_t v) {
 }
 
 static void
+THX_check_quarter(pTHX_ int64_t v) {
+    if (v < 1 || v > 4)
+        croak("Parameter 'quarter' is out of the range [1, 4]");
+}
+
+static void
 THX_check_month(pTHX_ int64_t v) {
     if (v < 1 || v > 12)
         croak("Parameter 'month' is out of the range [1, 12]");
@@ -420,6 +426,16 @@ THX_moment_with_year(pTHX_ const moment_t *mt, int64_t v) {
 }
 
 static moment_t
+THX_moment_with_quarter(pTHX_ const moment_t *mt, int64_t v) {
+    int y, m, d;
+
+    THX_check_quarter(aTHX_ v);
+    dt_to_ymd(moment_local_dt(mt), &y, &m, &d);
+    m = 1 + 3 * ((int)v - 1) + (m - 1) % 3;
+    return THX_moment_with_ymd(aTHX_ mt, y, m, d);
+}
+
+static moment_t
 THX_moment_with_month(pTHX_ const moment_t *mt, int64_t v) {
     int y, d;
 
@@ -601,6 +617,8 @@ THX_moment_with_field(pTHX_ const moment_t *mt, moment_component_t c, int64_t v)
     switch (c) {
         case MOMENT_FIELD_YEAR:
             return THX_moment_with_year(aTHX_ mt, v);
+        case MOMENT_FIELD_QUARTER_OF_YEAR:
+            return THX_moment_with_quarter(aTHX_ mt, v);
         case MOMENT_FIELD_MONTH_OF_YEAR:
             return THX_moment_with_month(aTHX_ mt, v);
         case MOMENT_FIELD_WEEK_OF_YEAR:

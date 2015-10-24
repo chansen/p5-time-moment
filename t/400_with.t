@@ -28,6 +28,24 @@ BEGIN {
 
 {
     my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789Z");
+    for my $quarter (1..4) {
+        my $got = $tm->with_quarter($quarter);
+
+        my $prefix = "$tm->with_quarter($quarter)";
+        is($got->year,             2012, "$prefix->year");
+        is($got->quarter,      $quarter, "$prefix->quarter");
+        is($got->day_of_month,       24, "$prefix->day_of_month");
+        is($got->hour,               12, "$prefix->hour");
+        is($got->minute,             30, "$prefix->minute");
+        is($got->second,             45, "$prefix->second");
+        is($got->millisecond,       123, "$prefix->millisecond");
+        is($got->microsecond,    123456, "$prefix->microsecond");
+        is($got->nanosecond,  123456789, "$prefix->nanosecond");
+    }
+}
+
+{
+    my $tm = Time::Moment->from_string("2012-12-24T12:30:45.123456789Z");
     for my $month (1..12) {
         my $got = $tm->with_month($month);
 

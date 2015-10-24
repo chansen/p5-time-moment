@@ -721,6 +721,7 @@ with_year(self, value)
     dSTASH_INVOCANT;
   ALIAS:
     Time::Moment::with_year               = MOMENT_FIELD_YEAR
+    Time::Moment::with_quarter            = MOMENT_FIELD_QUARTER_OF_YEAR
     Time::Moment::with_month              = MOMENT_FIELD_MONTH_OF_YEAR
     Time::Moment::with_week               = MOMENT_FIELD_WEEK_OF_YEAR
     Time::Moment::with_day_of_year        = MOMENT_FIELD_DAY_OF_YEAR
