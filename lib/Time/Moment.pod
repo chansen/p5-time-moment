@@ -442,7 +442,7 @@ The optional parameter I<epoch> specifies the epoch date relative to
 Constructs an instance of C<Time::Moment> from the given Julian Date. 
 The Julian Date is a count of days elapsed since -4713-11-24T12Z. The 
 fractional part corresponds to the fraction of the day after noon. The 
-minimum acceptable Julian Date is C<-1721425.5> which corresponds to 
+minimum acceptable Julian Date is C<1721425.5> which corresponds to 
 0001-01-01T00Z.
 
 B<Parameters:>
