@@ -400,12 +400,8 @@ THX_moment_with_local_dt(pTHX_ const moment_t *mt, const dt_t dt) {
 }
 
 static moment_t
-THX_moment_with_year(pTHX_ const moment_t *mt, int64_t v) {
-    int y, m, d;
+THX_moment_with_ymd(pTHX_ const moment_t *mt, int y, int m, int d) {
 
-    THX_check_year(aTHX_ v);
-    dt_to_ymd(moment_local_dt(mt), NULL, &m, &d);
-    y = (int)v;
     if (d > 28) {
         int dim = dt_days_in_month(y, m);
         if (d > dim)
@@ -415,18 +411,21 @@ THX_moment_with_year(pTHX_ const moment_t *mt, int64_t v) {
 }
 
 static moment_t
+THX_moment_with_year(pTHX_ const moment_t *mt, int64_t v) {
+    int m, d;
+
+    THX_check_year(aTHX_ v);
+    dt_to_ymd(moment_local_dt(mt), NULL, &m, &d);
+    return THX_moment_with_ymd(aTHX_ mt, (int)v, m, d);
+}
+
+static moment_t
 THX_moment_with_month(pTHX_ const moment_t *mt, int64_t v) {
-    int y, m, d;
+    int y, d;
 
     THX_check_month(aTHX_ v);
     dt_to_ymd(moment_local_dt(mt), &y, NULL, &d);
-    m = (int)v;
-    if (d > 28) {
-        int dim = dt_days_in_month(y, m);
-        if (d > dim)
-            d = dim;
-    }
-    return THX_moment_with_local_dt(aTHX_ mt, dt_from_ymd(y, m, d));
+    return THX_moment_with_local_dt(aTHX_ mt, dt_from_ymd(y, (int)v, d));
 }
 
 static moment_t
