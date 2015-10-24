@@ -56,6 +56,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     
     $tm2          = $tm1->with($adjuster);
     $tm2          = $tm1->with_year($year);
+    $tm2          = $tm1->with_quarter($quarter);
     $tm2          = $tm1->with_month($month);
     $tm2          = $tm1->with_week($week);
     $tm2          = $tm1->with_day_of_year($day);
@@ -671,6 +672,14 @@ L<Time::Moment::Adjusters> for available adjusters.
     $tm2 = $tm1->with_year($year);
 
 Returns a copy of this instance with the given I<year> [1, 9999] altered. The
+day of the month of the date is unchanged unless the day does not exist in the 
+month. In that case, the day is set to the last day of the month.
+
+=head2 with_quarter
+
+    $tm2 = $tm1->with_quarter($quarter);
+
+Returns a copy of this instance with the given I<quarter> [1, 4] altered. The
 day of the month of the date is unchanged unless the day does not exist in the 
 month. In that case, the day is set to the last day of the month.
 
