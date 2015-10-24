@@ -1125,6 +1125,25 @@ moment_offset(const moment_t *mt) {
 }
 
 int
+moment_precision(const moment_t *mt) {
+    int v;
+
+    v = mt->nsec;
+    if (v != 0) {
+        if      ((v % 1000000) == 0) return 3;
+        else if ((v %    1000) == 0) return 6;
+        else                         return 9;
+    }
+    v = moment_second_of_day(mt);
+    if (v != 0) {
+        if      ((v % 3600) == 0) return -2;
+        else if ((v %   60) == 0) return -1;
+        else                      return 0;
+    }
+    return -3;
+}
+
+int
 moment_length_of_year(const moment_t *mt) {
     return dt_length_of_year(moment_local_dt(mt));
 }

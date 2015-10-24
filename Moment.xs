@@ -796,6 +796,7 @@ year(self)
     Time::Moment::microsecond        = 15
     Time::Moment::nanosecond         = 16
     Time::Moment::offset             = 17
+    Time::Moment::precision          = 18
   PREINIT:
     IV v = 0;
   PPCODE:
@@ -818,6 +819,7 @@ year(self)
         case 15: v = moment_microsecond(self);          break;
         case 16: v = moment_nanosecond(self);           break;
         case 17: v = moment_offset(self);               break;
+        case 18: v = moment_precision(self);            break;
     }
     XSRETURN_IV(v);
 
