@@ -155,7 +155,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
 C<Time::Moment> is an immutable object representing a date and time of day 
 with an offset from UTC in the ISO 8601 calendar system.
 
-Time is measured in nanoseconds since C<1970-01-01T00Z>. In C<Time:Moment> 
+Time is measured in nanoseconds since C<0001-01-01T00Z>. In C<Time:Moment> 
 leap seconds are ignored. It is assumed that there are exactly 
 C<86,400,000,000,000> nanoseconds per day. C<Time::Moment> can represent 
 all epoch integers from C<-62,135,596,800> to C<2,534,02,300,799>; this 
@@ -317,8 +317,7 @@ must have at least one digit and may have a total of nine digits, if the
 fractional precision is greater than nine digits, the value will be 
 truncated.
 
-The following are examples of complete date representations and time of day 
-representations:
+The following are examples of complete date and time of day representations:
 
     Basic format:                 Example:
     YYYYMMDDThhmmssZ              20121224T121530Z
@@ -353,7 +352,7 @@ dates may be substituted. This ISO 8601 profile correspond to a subset of
 ISO 8601:2004 4.3 Date and time of day.
 
 If the optional boolean parameter I<lenient> is true, the following examples
-is also accepted:
+are also accepted:
 
     YYYY-MM-DD hh:mm:ssZ          2012-12-24 12:15:30Z
     YYYY-MM-DD hh:mm:ssz          2012-12-24 12:15:30z
@@ -679,9 +678,10 @@ month. In that case, the day is set to the last day of the month.
 
     $tm2 = $tm1->with_quarter($quarter);
 
-Returns a copy of this instance with the given I<quarter> [1, 4] altered. The
-day of the month of the date is unchanged unless the day does not exist in the 
-month. In that case, the day is set to the last day of the month.
+Returns a copy of this instance with the given I<quarter> of the year [1, 4] 
+altered. The day of the month of the date is unchanged unless the day does 
+not exist in the month of the quarter. In that case, the day is set to the 
+last day of the month.
 
 =head2 with_month
 
@@ -748,7 +748,7 @@ altered.
     $tm2 = $tm1->with_minute_of_day($minute);
 
 Returns a copy of this instance with the given I<minute> of the day [0, 1439] 
-altered. The lower-order time elements is unaltered.
+altered, any lower-order time elements is unaltered.
 
 =head2 with_second
 
@@ -762,7 +762,7 @@ altered.
     $tm2 = $tm1->with_second_of_day($second);
 
 Returns a copy of this instance with the given I<second> of the day [0, 86_399] 
-altered. The lower-order time elements is unaltered.
+altered, any lower-order time elements is unaltered.
 
 =head2 with_millisecond
 
@@ -777,7 +777,9 @@ I<millisecond> multiplied by 1,000,000.
     $tm2 = $tm1->with_millisecond_of_day($millisecond);
 
 Returns a copy of this instance with the given I<millisecond> of the day 
-[0, 86_400_000] altered. The lower-order time elements are truncated.
+[0, 86_400_000] altered. The millisecond value of 86_400_000 (T24:00) is 
+normalized to midnight of the following day, any lower-order time elements 
+is truncated.
 
 =head2 with_microsecond
 
@@ -792,7 +794,9 @@ I<microsecond> multiplied by 1,000.
     $tm2 = $tm1->with_microsecond_of_day($microsecond);
 
 Returns a copy of this instance with the given I<microsecond> of the day 
-[0, 86_400_000_000] altered. The lower-order time elements are truncated.
+[0, 86_400_000_000] altered. The microsecond value of 86_400_000_000 (T24:00) 
+is normalized to midnight of the following day, any lower-order time elements 
+is truncated.
 
 =head2 with_nanosecond
 
@@ -806,7 +810,8 @@ Returns a copy of this instance with the given I<nanosecond> of the second
     $tm2 = $tm1->with_nanosecond_of_day($nanosecond);
 
 Returns a copy of this instance with the given I<nanosecond> of the day 
-[0, 86_400_000_000_000] altered.
+[0, 86_400_000_000_000] altered. The nanosecond value of 86_400_000_000_000 
+(T24:00) is normalized to midnight of the following day.
 
 =head2 with_offset_same_instant
 
@@ -1546,7 +1551,7 @@ produces an equivalent string representation:
     "$tm" eq $tm->to_string;
     "$tm" eq $tm->strftime("%Y-%m-%dT%H:%M:%S%f%Z");
 
-The total length of the string representation is between 20 and 35 
+The total length of the string representation will be between 20 and 35 
 characters (inclusive).
 
 =head2 comparison
