@@ -1179,3 +1179,8 @@ int
 moment_length_of_week_year(const moment_t *mt) {
     return dt_length_of_week_year(moment_local_dt(mt));
 }
+
+bool
+moment_is_leap_year(const moment_t *mt) {
+    return dt_leap_year(moment_year(mt));
+}

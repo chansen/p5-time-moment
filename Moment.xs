@@ -944,6 +944,12 @@ is_equal(self, other)
     XSRETURN_BOOL(v);
 
 void
+is_leap_year(self)
+    const moment_t *self
+  PPCODE:
+    XSRETURN_BOOL(moment_is_leap_year(self));
+
+void
 strftime(self, format)
     const moment_t *self
     SV *format

@@ -126,6 +126,8 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     
     $integer      = $tm1->compare($tm2);
     
+    $boolean      = $tm->is_leap_year;
+    
     $string       = $tm->to_string;
     $string       = $tm->strftime($format);
     
@@ -1140,6 +1142,13 @@ Returns an integer indicating whether the instant of this time is before,
 after or equal the I<other> time. Returns a value less than zero if this 
 time is before the other; zero if this date is equal the other time; a value 
 greater than zero if this time is after the other time.
+
+=head2 is_leap_year
+
+    $boolean = $tm->is_leap_year;
+
+Returns a boolean indicating whether or not the year of the local date of 
+this moment is a leap year.
 
 =head2 to_string
 

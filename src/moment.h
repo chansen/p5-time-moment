@@ -152,6 +152,8 @@ int         moment_offset(const moment_t *mt);
 int64_t     moment_epoch(const moment_t *mt);
 int         moment_precision(const moment_t *mt);
 
+bool        moment_is_leap_year(const moment_t *mt);
+
 NV          moment_jd(const moment_t *mt);
 NV          moment_mjd(const moment_t *mt);
 NV          moment_rd(const moment_t *mt);
