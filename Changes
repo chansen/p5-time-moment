@@ -1,3 +1,9 @@
+0.38 2016-01-22
+  - Added following methods to the API:
+    - is_leap_year
+  - Added following examples to eg/
+    - eg/age.pl
+
 0.37 2015-12-18
   - Added following methods to the API:
     - with_quarter
