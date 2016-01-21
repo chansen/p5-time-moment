@@ -45,7 +45,7 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $microsecond  = $tm->microsecond;               # [0, 999_999]
     $microsecond  = $tm->microsecond_of_day;        # [0, 86_399_999_999]
     $nanosecond   = $tm->nanosecond;                # [0, 999_999_999]
-    $microsecond  = $tm->nanosecond_of_day;         # [0, 86_399_999_999_999]
+    $nanosecond   = $tm->nanosecond_of_day;         # [0, 86_399_999_999_999]
     
     $epoch        = $tm->epoch;
     $offset       = $tm->offset;                    # [-1080, 1080] (±18:00)
@@ -777,7 +777,7 @@ I<millisecond> multiplied by 1,000,000.
     $tm2 = $tm1->with_millisecond_of_day($millisecond);
 
 Returns a copy of this instance with the given I<millisecond> of the day 
-[0, 86_400_000] altered. The millisecond value of 86_400_000 (T24:00) is 
+[0, 86_400_000] altered. A millisecond value of 86_400_000 (T24:00) is 
 normalized to midnight of the following day, any lower-order time elements 
 is truncated.
 
@@ -794,7 +794,7 @@ I<microsecond> multiplied by 1,000.
     $tm2 = $tm1->with_microsecond_of_day($microsecond);
 
 Returns a copy of this instance with the given I<microsecond> of the day 
-[0, 86_400_000_000] altered. The microsecond value of 86_400_000_000 (T24:00) 
+[0, 86_400_000_000] altered. A microsecond value of 86_400_000_000 (T24:00) 
 is normalized to midnight of the following day, any lower-order time elements 
 is truncated.
 
@@ -810,7 +810,7 @@ Returns a copy of this instance with the given I<nanosecond> of the second
     $tm2 = $tm1->with_nanosecond_of_day($nanosecond);
 
 Returns a copy of this instance with the given I<nanosecond> of the day 
-[0, 86_400_000_000_000] altered. The nanosecond value of 86_400_000_000_000 
+[0, 86_400_000_000_000] altered. A nanosecond value of 86_400_000_000_000 
 (T24:00) is normalized to midnight of the following day.
 
 =head2 with_offset_same_instant
