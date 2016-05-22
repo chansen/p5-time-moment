@@ -55,18 +55,18 @@ say join ' ', map {
     (qw[ Mo Tu We Th Fr Sa Su ])[ ($_ + $FirstDayOfWeek - 1) % 7 ]
 } (0..6);
 
-my $begin = $Moment;
-my $next  = $Moment->plus_months(1);
-my $date  = $Moment->minus_weeks($FirstDayOfWeek > $Moment->day_of_week)
-                   ->with_day_of_week($FirstDayOfWeek);
+my $this_month = $Moment;
+my $next_month = $Moment->plus_months(1);
+my $date       = $Moment->minus_weeks($FirstDayOfWeek > $Moment->day_of_week)
+                        ->with_day_of_week($FirstDayOfWeek);
 
-while ($date->is_before($next)) {
+while ($date->is_before($next_month)) {
     my @week;
     foreach my $day (1..7) {
-        if ($date->is_before($begin)) {
+        if ($date->is_before($this_month)) {
             push @week, '  ';
         }
-        elsif ($date->is_before($next)) {
+        elsif ($date->is_before($next_month)) {
             push @week, sprintf '%2d', $date->day_of_month;
         }
         $date = $date->plus_days(1);
