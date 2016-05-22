@@ -25,6 +25,6 @@ my $encoded = encode_cbor([
 ]);
 
 my $decoded = CBOR::XS->new->filter(\&filter)->decode($encoded);
-foreach my $time (@$decoded) {
-    print $time->to_string, "\n";
+foreach my $moment (@$decoded) {
+    print $moment->to_string, "\n";
 }

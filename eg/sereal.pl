@@ -9,6 +9,6 @@ my @moments = (Time::Moment->now, Time::Moment->now_utc);
 my $encoded = encode_sereal([ @moments ], { freeze_callbacks => 1 });
 my $decoded = decode_sereal($encoded);
 
-foreach my $time (@$decoded) {
-    print $time->to_string, "\n";
+foreach my $moment (@$decoded) {
+    print $moment->to_string, "\n";
 }
