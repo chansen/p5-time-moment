@@ -159,11 +159,11 @@ THX_sv_as_object(pTHX_ SV *sv, const char *name) {
 static SV *
 THX_sv_2neat(pTHX_ SV *sv) {
     if (sv_isobject(sv)) {
-        const char *name = sv_reftype(SvRV(sv), 1);
-        const char *type = sv_reftype(SvRV(sv), 0);
-        SV *dsv = sv_newmortal();
-        sv_setpvf(dsv, "%s=%s(0x%p)", name, type, SvRV(sv));
-        sv = dsv;
+        SV * const rv = SvRV(sv);
+        const char *name = sv_reftype(rv, 1);
+        const char *type = sv_reftype(rv, 0);
+        sv = sv_newmortal();
+        sv_setpvf(sv, "%s=%s(0x%p)", name, type, rv);
     }
     return sv;
 }
@@ -206,9 +206,7 @@ THX_sv_isa_stash(pTHX_ SV *sv, const char *klass, HV *stash, size_t size) {
     rv = SvRV(sv);
     if (!(SvOBJECT(rv) && SvSTASH(rv) && SvPOKp(rv) && SvCUR(rv) == size))
         return FALSE;
-    if (!(SvSTASH(rv) == stash || sv_derived_from(sv, klass)))
-        return FALSE;
-    return TRUE;
+    return (SvSTASH(rv) == stash || sv_derived_from(sv, klass));
 }
 
 static HV *
