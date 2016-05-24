@@ -1009,6 +1009,44 @@ moment_compare_local(const moment_t *m1, const moment_t *m2) {
     return r;
 }
 
+int
+THX_moment_compare_precision(pTHX_ const moment_t *m1, const moment_t *m2, IV precision) {
+    int64_t n1, n2;
+    int r;
+
+    if (precision < -3 || precision > 9)
+        croak("Parameter 'precision' is out of the range [-3, 9]");
+
+    if (precision < 0) {
+        int32_t n;
+
+        n = 0;
+        switch (precision) {
+            case -1: n = 60;    break;
+            case -2: n = 3600;  break;
+            case -3: n = 86400; break;
+        }
+        n1 = moment_local_rd_seconds(m1);
+        n2 = moment_local_rd_seconds(m2);
+        n1 -= n1 % n;
+        n2 -= n2 % n;
+        n1 -= m1->offset * 60;
+        n2 -= m2->offset * 60;
+        r = (n1 > n2) - (n1 < n2);
+    }
+    else {
+        n1 = moment_instant_rd_seconds(m1);
+        n2 = moment_instant_rd_seconds(m2);
+        r = (n1 > n2) - (n1 < n2);
+        if (r == 0 && precision != 0) {
+            n1 = m1->nsec - m1->nsec % kPow10[9 - precision];
+            n2 = m2->nsec - m2->nsec % kPow10[9 - precision];
+            r = (n1 > n2) - (n1 < n2);
+        }
+    }
+    return r;
+}
+
 bool
 moment_equals(const moment_t *m1, const moment_t *m2) {
     return memcmp(m1, m2, sizeof(moment_t)) == 0;

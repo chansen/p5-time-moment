@@ -125,6 +125,7 @@ dt_t        moment_local_dt(const moment_t *mt);
 void        moment_to_instant_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos);
 void        moment_to_local_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos);
 
+int         THX_moment_compare_precision(const moment_t *mt1, const moment_t *mt2, IV precision);
 int         moment_compare_instant(const moment_t *m1, const moment_t *m2);
 int         moment_compare_local(const moment_t *m1, const moment_t *m2);
 bool        moment_equals(const moment_t *m1, const moment_t *m2);
@@ -230,5 +231,8 @@ moment_t    THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt);
 
 #define moment_at_last_day_of_month(self) \
     THX_moment_at_last_day_of_month(aTHX_ self)
+
+#define moment_compare_precision(mt1, mt2, precision) \
+    THX_moment_compare_precision(aTHX_ mt1, mt2, precision)
 
 #endif

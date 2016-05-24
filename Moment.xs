@@ -914,14 +914,32 @@ utc_rd_values(self)
     mPUSHi(nos);
     XSRETURN(3);
 
-IV
-compare(self, other)
+void
+compare(self, other, ...)
     const moment_t *self
     const moment_t *other
-  CODE:
-    RETVAL = moment_compare_instant(self, other);
-  OUTPUT:
-    RETVAL
+  PREINIT:
+    IV precision = 9;
+    I32 i;
+    IV r;
+  PPCODE:
+    if ((items % 2) != 0)
+        croak("Odd number of elements in named parameters");
+
+    for (i = 2; i < items; i += 2) {
+        switch (sv_moment_param(ST(i))) {
+            case MOMENT_PARAM_PRECISION:
+                precision = SvIV(ST(i+1));
+                break;
+            default:
+                croak("Unrecognised parameter: '%"SVf"'", ST(i));
+        }
+    }
+    if (precision == 9)
+        r = moment_compare_instant(self, other);
+    else
+        r = THX_moment_compare_precision(self, other, precision);
+    XSRETURN_IV(r);
 
 void
 is_equal(self, other)
