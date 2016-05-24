@@ -1143,13 +1143,27 @@ moment_offset(const moment_t *mt) {
 
 int
 moment_precision(const moment_t *mt) {
-    int v;
+    static const int32_t pow_10[10] = {
+        1,
+        10,
+        100,
+        1000,
+        10000,
+        100000,
+        1000000,
+        10000000,
+        100000000,
+        1000000000,
+    };
+    int v, i;
 
     v = mt->nsec;
     if (v != 0) {
-        if      ((v % 1000000) == 0) return 3;
-        else if ((v %    1000) == 0) return 6;
-        else                         return 9;
+        for (i = 8; i > 0; i--) {
+            if ((v % pow_10[i]) == 0)
+                break;
+        }
+        return 9 - i;
     }
     v = moment_second_of_day(mt);
     if (v != 0) {
