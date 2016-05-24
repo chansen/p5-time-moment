@@ -5,6 +5,19 @@
 #include "dt_util.h"
 #include "dt_length.h"
 
+static const int32_t kPow10[10] = {
+    1,
+    10,
+    100,
+    1000,
+    10000,
+    100000,
+    1000000,
+    10000000,
+    100000000,
+    1000000000,
+};
+
 static void
 THX_moment_check_self(pTHX_ const moment_t *mt) {
     if (mt->sec < MIN_RANGE || mt->sec > MAX_RANGE)
@@ -815,19 +828,7 @@ THX_moment_with_precision(pTHX_ const moment_t *mt, int64_t precision) {
         }
     }
     else {
-        static const int32_t pow_10[10] = {
-            1,
-            10,
-            100,
-            1000,
-            10000,
-            100000,
-            1000000,
-            10000000,
-            100000000,
-            1000000000,
-        };
-        nsec -= nsec % pow_10[9 - precision];
+        nsec -= nsec % kPow10[9 - precision];
     }
     return THX_moment_from_local(aTHX_ sec, nsec, mt->offset);
 }
@@ -1143,24 +1144,12 @@ moment_offset(const moment_t *mt) {
 
 int
 moment_precision(const moment_t *mt) {
-    static const int32_t pow_10[10] = {
-        1,
-        10,
-        100,
-        1000,
-        10000,
-        100000,
-        1000000,
-        10000000,
-        100000000,
-        1000000000,
-    };
     int v, i;
 
     v = mt->nsec;
     if (v != 0) {
         for (i = 8; i > 0; i--) {
-            if ((v % pow_10[i]) == 0)
+            if ((v % kPow10[i]) == 0)
                 break;
         }
         return 9 - i;
