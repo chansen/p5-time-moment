@@ -26,11 +26,63 @@ BEGIN {
         [ -3, '2012-12-24T00:00:00Z'           ],
     );
 
-    for my $precision (-3..9) {
-        my $test = $tests[9 - $precision];
+    for my $test (@tests) {
+        my ($precision, $string) = @$test;
         my $got = $tm->with_precision($precision);
-        is($got->to_string, $test->[1], "->with_precision($precision)");
-        is($got->precision, $test->[0], "$got->precision");
+        is($got->to_string, $string, "->with_precision($precision)");
+        is($got->precision, $precision, "$got->precision");
+    }
+}
+
+{
+    my $tm = Time::Moment->from_string('2012-12-24T12:30:45.123456789+14:30');
+    my @tests = (
+        [  9, '2012-12-24T12:30:45.123456789+14:30' ],
+        [  8, '2012-12-24T12:30:45.123456780+14:30' ],
+        [  7, '2012-12-24T12:30:45.123456700+14:30' ],
+        [  6, '2012-12-24T12:30:45.123456+14:30'    ],
+        [  5, '2012-12-24T12:30:45.123450+14:30'    ],
+        [  4, '2012-12-24T12:30:45.123400+14:30'    ],
+        [  3, '2012-12-24T12:30:45.123+14:30'       ],
+        [  2, '2012-12-24T12:30:45.120+14:30'       ],
+        [  1, '2012-12-24T12:30:45.100+14:30'       ],
+        [  0, '2012-12-24T12:30:45+14:30'           ],
+        [ -1, '2012-12-24T12:30:00+14:30'           ],
+        [ -2, '2012-12-24T12:00:00+14:30'           ],
+        [ -3, '2012-12-24T00:00:00+14:30'           ],
+    );
+
+    for my $test (@tests) {
+        my ($precision, $string) = @$test;
+        my $got = $tm->with_precision($precision);
+        is($got->to_string, $string, "->with_precision($precision)");
+        is($got->precision, $precision, "$got->precision");
+    }
+}
+
+{
+    my $tm = Time::Moment->from_string('2012-12-24T12:30:45.123456789-14:30');
+    my @tests = (
+        [  9, '2012-12-24T12:30:45.123456789-14:30' ],
+        [  8, '2012-12-24T12:30:45.123456780-14:30' ],
+        [  7, '2012-12-24T12:30:45.123456700-14:30' ],
+        [  6, '2012-12-24T12:30:45.123456-14:30'    ],
+        [  5, '2012-12-24T12:30:45.123450-14:30'    ],
+        [  4, '2012-12-24T12:30:45.123400-14:30'    ],
+        [  3, '2012-12-24T12:30:45.123-14:30'       ],
+        [  2, '2012-12-24T12:30:45.120-14:30'       ],
+        [  1, '2012-12-24T12:30:45.100-14:30'       ],
+        [  0, '2012-12-24T12:30:45-14:30'           ],
+        [ -1, '2012-12-24T12:30:00-14:30'           ],
+        [ -2, '2012-12-24T12:00:00-14:30'           ],
+        [ -3, '2012-12-24T00:00:00-14:30'           ],
+    );
+
+    for my $test (@tests) {
+        my ($precision, $string) = @$test;
+        my $got = $tm->with_precision($precision);
+        is($got->to_string, $string, "->with_precision($precision)");
+        is($got->precision, $precision, "$got->precision");
     }
 }
 
