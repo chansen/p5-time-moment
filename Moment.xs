@@ -938,7 +938,7 @@ compare(self, other, ...)
     if (precision == 9)
         r = moment_compare_instant(self, other);
     else
-        r = THX_moment_compare_precision(self, other, precision);
+        r = moment_compare_precision(self, other, precision);
     XSRETURN_IV(r);
 
 void
