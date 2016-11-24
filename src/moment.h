@@ -43,6 +43,9 @@
 #define MIN_UNIT_MICROS     INT64_C(-315569520000000000)
 #define MAX_UNIT_MICROS     INT64_C(315569520000000000)
 
+#define MIN_RATA_DIE_DAY    INT64_C(1)            /* 0001-01-01           */
+#define MAX_RATA_DIE_DAY    INT64_C(3652059)      /* 9999-12-31           */
+
 #define MIN_RANGE           INT64_C(86400)        /* 0001-01-01T00:00:00Z */
 #define MAX_RANGE           INT64_C(315537983999) /* 9999-12-31T23:59:59Z */
 #define UNIX_EPOCH          INT64_C(62135683200)  /* 1970-01-01T00:00:00Z */
@@ -97,6 +100,7 @@ typedef enum {
     MOMENT_FIELD_NANO_OF_SECOND,
     MOMENT_FIELD_NANO_OF_DAY,
     MOMENT_FIELD_PRECISION,
+    MOMENT_FIELD_RATA_DIE_DAY,
 } moment_component_t;
 
 moment_t    THX_moment_new(pTHX_ IV Y, IV M, IV D, IV h, IV m, IV s, IV ns, IV offset);
@@ -152,6 +156,7 @@ int64_t     moment_nanosecond_of_day(const moment_t *mt);
 int         moment_offset(const moment_t *mt);
 int64_t     moment_epoch(const moment_t *mt);
 int         moment_precision(const moment_t *mt);
+int         moment_rata_die_day(const moment_t *mt);
 
 bool        moment_is_leap_year(const moment_t *mt);
 

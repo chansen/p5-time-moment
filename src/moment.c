@@ -196,6 +196,12 @@ THX_check_epoch_seconds(pTHX_ int64_t v) {
 }
 
 static void
+THX_check_rata_die_day(pTHX_ int64_t v) {
+    if (v < MIN_RATA_DIE_DAY || v > MAX_RATA_DIE_DAY)
+        croak("Parameter 'rdn' is out of range");
+}
+
+static void
 THX_check_unit_years(pTHX_ int64_t v) {
     if (v < MIN_UNIT_YEARS || v > MAX_UNIT_YEARS)
         croak("Parameter 'years' is out of range");
@@ -527,6 +533,15 @@ THX_moment_with_day_of_week(pTHX_ const moment_t *mt, int64_t v) {
 }
 
 static moment_t
+THX_moment_with_rata_die_day(pTHX_ const moment_t *mt, int64_t v) {
+    dt_t dt;
+
+    THX_check_rata_die_day(aTHX_ v);
+    dt = dt_from_rdn((int)v);
+    return THX_moment_with_local_dt(aTHX_ mt, dt);
+}
+
+static moment_t
 THX_moment_with_hour(pTHX_ const moment_t *mt, int64_t v) {
     int64_t sec;
 
@@ -668,6 +683,8 @@ THX_moment_with_field(pTHX_ const moment_t *mt, moment_component_t c, int64_t v)
             return THX_moment_with_nanosecond_of_day(aTHX_ mt, v);
         case MOMENT_FIELD_PRECISION:
             return THX_moment_with_precision(aTHX_ mt, v);
+        case MOMENT_FIELD_RATA_DIE_DAY:
+            return THX_moment_with_rata_die_day(aTHX_ mt, v);
     }
     croak("panic: THX_moment_with_component() called with unknown component (%d)", (int)c);
 }
@@ -1173,6 +1190,11 @@ moment_rd(const moment_t *mt) {
     const int64_t d = (s / SECS_PER_DAY);
     const int64_t n = (s % SECS_PER_DAY) * NANOS_PER_SEC + mt->nsec;
     return (NV)d + (NV)n * (1E-9/60/60/24);
+}
+
+int
+moment_rata_die_day(const moment_t *mt) {
+    return dt_rdn(moment_local_dt(mt));
 }
 
 int

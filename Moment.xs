@@ -738,6 +738,7 @@ with_year(self, value)
     Time::Moment::with_nanosecond         = MOMENT_FIELD_NANO_OF_SECOND
     Time::Moment::with_nanosecond_of_day  = MOMENT_FIELD_NANO_OF_DAY
     Time::Moment::with_precision          = MOMENT_FIELD_PRECISION
+    Time::Moment::with_rdn                = MOMENT_FIELD_RATA_DIE_DAY
   CODE:
     RETVAL = moment_with_field(self, (moment_component_t)ix, value);
     if (moment_equals(self, &RETVAL))
@@ -796,6 +797,7 @@ year(self)
     Time::Moment::nanosecond         = 16
     Time::Moment::offset             = 17
     Time::Moment::precision          = 18
+    Time::Moment::rdn                = 19
   PREINIT:
     IV v = 0;
   PPCODE:
@@ -819,6 +821,7 @@ year(self)
         case 16: v = moment_nanosecond(self);           break;
         case 17: v = moment_offset(self);               break;
         case 18: v = moment_precision(self);            break;
+        case 19: v = moment_rata_die_day(self);         break;
     }
     XSRETURN_IV(v);
 
