@@ -1446,6 +1446,10 @@ Replaced by the year as a decimal number [0001, 9999].
 
 Replaced by the offset from UTC in the ISO 8601 basic format (±hhmm).
 
+=item C<%:z>
+
+Replaced by the offset from UTC in the ISO 8601 extended format (±hh:mm).
+
 =item C<%Z>
 
 Replaced by the offset from UTC in the ISO 8601 extended format or by UTC 
