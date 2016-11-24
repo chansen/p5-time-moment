@@ -98,7 +98,7 @@ The I<day> of the week [1=Monday, 7=Sunday].
 
     $adjuster = WesternEasterSunday();
 
-The C<$adjuster> adjusts the date to the Western Easter Sunday the
+The C<$adjuster> adjusts the date to the Western Easter Sunday, the
 time of the day is unaltered. The Western computus is based on the Gregorian 
 calendar.
 
