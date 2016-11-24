@@ -1,3 +1,14 @@
+0.39 2016-11-25
+  - Added following methods to Time::Moment:
+    - precision
+    - with_precision
+  - Added following adjusters to Time::Moment::Adjusters:
+    - WesternEasterSunday()
+    - OthodoxEasterSunday()
+    - NearestMinuteInterval($interval)
+  - Added following examples to eg/
+    - eg/se_bank_holidays.pl
+
 0.38 2016-01-22
   - Added following methods to the API:
     - is_leap_year
