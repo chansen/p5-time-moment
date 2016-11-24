@@ -117,7 +117,7 @@ calendar with the Julian date converted to the equivalent Gregorian date.
     $adjuster = NearestMinuteInterval($interval);
 
 The C<$adjuster> adjusts the time of day to the nearest minute of the given
-minute C<$interval)>.
+minute C<$interval>.
 
 Given an interval of C<30> the outcome would be:
     
