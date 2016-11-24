@@ -20,6 +20,8 @@ Time::Moment::Adjusters - Adjusters for Time::Moment
     $adjuster = WesternEasterSunday();
     $adjuster = OrthodoxEasterSunday();
     
+    $adjuster = NearestMinuteInterval($interval);
+    
 
 =head1 DESCRIPTION
 
@@ -109,6 +111,18 @@ calendar.
 The C<$adjuster> adjusts the date to the Orthodox Easter Sunday, the
 time of the day is unaltered. The Orthodox computus is based on the Julian 
 calendar with the Julian date converted to the equivalent Gregorian date.
+
+=head2 NearestMinuteInterval
+
+    $adjuster = NearestMinuteInterval($interval);
+
+The C<$adjuster> adjusts the time of day to the nearest minute of the given
+minute C<$interval)>.
+    
+    T10:14:59 => T10:00:00
+    T10:15:00 => T10:30:00
+    T10:29:59 => T10:30:00
+    T23:55:00 => T00:00:00 (midnight of the following day)
 
 =head1 EXPORTS
 
