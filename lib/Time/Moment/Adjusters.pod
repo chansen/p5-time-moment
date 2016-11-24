@@ -119,7 +119,7 @@ calendar with the Julian date converted to the equivalent Gregorian date.
 The C<$adjuster> adjusts the time of day to the nearest minute of the given
 minute C<$interval>.
 
-Given an interval of C<30> the outcome would be:
+Given an interval of C<15> the outcome would be:
     
     T10:14:59 => T10:00:00
     T10:15:00 => T10:30:00
