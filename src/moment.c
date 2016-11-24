@@ -4,6 +4,7 @@
 #include "dt_arithmetic.h"
 #include "dt_util.h"
 #include "dt_length.h"
+#include "dt_easter.h"
 
 static const int32_t kPow10[10] = {
     1,
@@ -1247,3 +1248,16 @@ bool
 moment_is_leap_year(const moment_t *mt) {
     return dt_leap_year(moment_year(mt));
 }
+
+int
+THX_moment_internal_western_easter(pTHX_ int64_t y) {
+    THX_check_year(aTHX_ y);
+    return dt_rdn(dt_from_easter((int)y, DT_WESTERN));
+}
+
+int
+THX_moment_internal_orthodox_easter(pTHX_ int64_t y) {
+    THX_check_year(aTHX_ y);
+    return dt_rdn(dt_from_easter((int)y, DT_ORTHODOX));
+}
+

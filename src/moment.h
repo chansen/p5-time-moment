@@ -177,6 +177,9 @@ moment_t    THX_moment_at_last_day_of_quarter(pTHX_ const moment_t *mt);
 moment_t    THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt);
 
 
+int         THX_moment_internal_western_easter(pTHX_ int64_t y);
+int         THX_moment_internal_orthodox_easter(pTHX_ int64_t y);
+
 #define moment_new(Y, M, D, h, m, s, ns, offset) \
     THX_moment_new(aTHX_ Y, M, D, h, m, s, ns, offset)
 
@@ -240,4 +243,13 @@ moment_t    THX_moment_at_last_day_of_month(pTHX_ const moment_t *mt);
 #define moment_compare_precision(mt1, mt2, precision) \
     THX_moment_compare_precision(aTHX_ mt1, mt2, precision)
 
+/* Internal API but exposed in Perl */
+
+#define moment_internal_western_easter(year) \
+    THX_moment_internal_western_easter(aTHX_ year)
+
+#define moment_internal_orthodox_easter(year) \
+    THX_moment_internal_orthodox_easter(aTHX_ year)
+
 #endif
+

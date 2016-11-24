@@ -1005,3 +1005,21 @@ to_string(self, ...)
     }
     XSRETURN_SV(moment_to_string(self, reduced));
 
+
+MODULE = Time::Moment  PACKAGE = Time::Moment::Internal
+
+PROTOTYPES: DISABLE
+
+void
+western_easter_sunday(year)
+    IV year
+  PPCODE:
+    XSRETURN_IV(moment_internal_western_easter(year));
+
+void
+orthodox_easter_sunday(year)
+    IV year
+  PPCODE:
+    XSRETURN_IV(moment_internal_orthodox_easter(year));
+
+

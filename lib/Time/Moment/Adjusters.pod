@@ -16,6 +16,10 @@ Time::Moment::Adjusters - Adjusters for Time::Moment
     $adjuster = LastDayOfWeekInMonth($day);
     
     $adjuster = NthDayOfWeekInMonth($ordinal, $day);
+    
+    $adjuster = WesternEasterSunday();
+    $adjuster = OrthodoxEasterSunday();
+    
 
 =head1 DESCRIPTION
 
@@ -89,6 +93,22 @@ The I<ordinal> of the week within the month [-4, -1] ∪ [1, 4].
 The I<day> of the week [1=Monday, 7=Sunday].
 
 =back
+
+=head2 WesternEasterSunday
+
+    $adjuster = WesternEasterSunday();
+
+The C<$adjuster> adjusts the date to the Western Easter Sunday the
+time of the day is unaltered. The Western computus is based on the Gregorian 
+calendar.
+
+=head2 OrthodoxEasterSunday
+
+    $adjuster = OrthodoxEasterSunday();
+
+The C<$adjuster> adjusts the date to the Orthodox Easter Sunday, the
+time of the day is unaltered. The Orthodox computus is based on the Julian 
+calendar with the Julian date converted to the equivalent Gregorian date.
 
 =head1 EXPORTS
 

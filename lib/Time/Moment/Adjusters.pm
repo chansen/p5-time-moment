@@ -12,7 +12,9 @@ BEGIN {
                           PreviousOrSameDayOfWeek
                           FirstDayOfWeekInMonth
                           LastDayOfWeekInMonth
-                          NthDayOfWeekInMonth ];
+                          NthDayOfWeekInMonth
+                          WesternEasterSunday
+                          OthodoxEasterSunday ];
 
     our %EXPORT_TAGS = (
         all => [ @EXPORT_OK ],
@@ -130,4 +132,23 @@ sub NthDayOfWeekInMonth {
     }
 }
 
+sub WesternEasterSunday {
+    @_ == 0 or Carp::croak(q<Usage: WesternEasterSunday()>);
+
+    return sub {
+        my ($tm) = @_;
+        return $tm->with_rdn(Time::Moment::Internal::western_easter_sunday($tm->year));
+    };
+}
+
+sub OrthodoxEasterSunday {
+    @_ == 0 or Carp::croak(q<Usage: OrthodoxEasterSunday()>);
+
+    return sub {
+        my ($tm) = @_;
+        return $tm->with_rdn(Time::Moment::Internal::orthodox_easter_sunday($tm->year));
+    };
+}
+
 1;
+
