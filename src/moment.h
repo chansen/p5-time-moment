@@ -129,7 +129,7 @@ dt_t        moment_local_dt(const moment_t *mt);
 void        moment_to_instant_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos);
 void        moment_to_local_rd_values(const moment_t *mt, IV *rdn, IV *sod, IV *nos);
 
-int         THX_moment_compare_precision(const moment_t *mt1, const moment_t *mt2, IV precision);
+int         THX_moment_compare_precision(pTHX_ const moment_t *mt1, const moment_t *mt2, IV precision);
 int         moment_compare_instant(const moment_t *m1, const moment_t *m2);
 int         moment_compare_local(const moment_t *m1, const moment_t *m2);
 bool        moment_equals(const moment_t *m1, const moment_t *m2);
