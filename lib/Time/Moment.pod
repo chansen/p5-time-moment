@@ -628,6 +628,14 @@ Returns the number of integral seconds from the epoch of 1970-01-01T00Z.
 
 Returns the offset from UTC in minutes [-1080, 1080] (±18:00).
 
+=head2 precision
+
+    $precision = $tm->precision;
+
+Returns the precision of the time of the day [-3, 9]. Please see 
+L<with_precision|/with_precision> for an explanation of the 
+returned precision value.
+
 =head2 jd
 
     $jd = $tm->jd;
