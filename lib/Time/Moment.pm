@@ -5,7 +5,7 @@ use warnings;
 use Carp qw[];
 
 BEGIN {
-    our $VERSION = '0.39';
+    our $VERSION = '0.40';
     require XSLoader; XSLoader::load(__PACKAGE__, $VERSION);
 }
 
