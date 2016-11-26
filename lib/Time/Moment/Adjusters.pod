@@ -100,17 +100,16 @@ The I<day> of the week [1=Monday, 7=Sunday].
 
     $adjuster = WesternEasterSunday();
 
-The C<$adjuster> adjusts the date to the Western Easter Sunday, the
-time of the day is unaltered. The Western computus is based on the Gregorian 
-calendar.
+The C<$adjuster> adjusts the date to the Western Easter Sunday. The Western 
+computus is based on the Gregorian calendar.
 
 =head2 OrthodoxEasterSunday
 
     $adjuster = OrthodoxEasterSunday();
 
-The C<$adjuster> adjusts the date to the Orthodox Easter Sunday, the
-time of the day is unaltered. The Orthodox computus is based on the Julian 
-calendar with the Julian date converted to the equivalent Gregorian date.
+The C<$adjuster> adjusts the date to the Orthodox Easter Sunday. The Orthodox 
+computus is based on the Julian calendar with the Julian date converted to 
+the equivalent Gregorian date.
 
 =head2 NearestMinuteInterval
 
