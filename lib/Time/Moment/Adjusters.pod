@@ -116,7 +116,7 @@ the equivalent Gregorian date.
     $adjuster = NearestMinuteInterval($interval);
 
 The C<$adjuster> adjusts the time of day to the nearest minute of the given
-minute I<interval>.
+minute I<interval> [1, 1440].
 
 Given an minute interval of C<30>:
     
