@@ -155,8 +155,8 @@ sub NearestMinuteInterval {
     @_ == 1 or Carp::croak(q<Usage: NearestMinuteInterval(interval)>);
     my ($interval) = @_;
     
-    ($interval >= 1 && $interval <= 1439)
-      or Carp::croak(q<Parameter 'interval' is out of the range [1, 1439]>);
+    ($interval >= 1 && $interval <= 1440)
+      or Carp::croak(q<Parameter 'interval' is out of the range [1, 1440]>);
     
     my $msec = $interval * 60 * 1000;
     my $mid  = int(($msec + 1) / 2);
