@@ -1,3 +1,8 @@
+0.40 2016-11-26
+  - Correct forward function declaration to include interpreter context
+    Bug fix for #22, compilation with threaded perls. Reported by
+    Slaven Rezić (eserte).
+
 0.39 2016-11-25
   - Added following methods to Time::Moment:
     - precision
