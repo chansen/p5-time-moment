@@ -1170,21 +1170,10 @@ the I<other> time.
 Returns an integer indicating whether the instant of this time is before, 
 after or equal the I<other> time. Returns a value less than zero if this 
 time is before the other; zero if this date is equal the other time; a value 
-greater than zero if this time is after the other time.
-
-B<Parameters:>
-
-=over 4
-
-=item precision
-
-    $integer = $tm->compare($other, precision => 9);
-
-The optional parameter I<precision> [-3, 9] specifies the precision of the
-comparison. The default precision is 9 (nanoseconds). Please see 
-L<with_precision|/with_precision> for an explanation of the precision value.
-
-=back
+greater than zero if this time is after the other time. The optional parameter
+I<precision> [-3, 9] specifies the precision of the comparison. The default 
+precision is 9 (nanoseconds). Please see L<with_precision|/with_precision> 
+for an explanation of the precision value.
 
 =head2 is_leap_year
 
