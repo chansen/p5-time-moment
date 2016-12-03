@@ -41,7 +41,7 @@ foreach my $name (@zones) {
 
 for my $clock (@clocks) {
     my ($name, $time) = @$clock;
-    my $hours = sprintf '(%+3.2fH)', ($time->offset - $now->offset) / 60;
-       $hours =~ s/\.00//;
-    printf "%-12s %-16s %s\n", $name, $time->strftime("%a %H:%M %:z"), $hours;
+    my $delta = $time->offset - $now->offset;
+    printf "%-12s %-16s (%+.2d:%.2d)\n",
+      $name, $time->strftime("%a %H:%M %:z"), $delta / 60, abs($delta) % 60;
 }
