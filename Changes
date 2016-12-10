@@ -1,3 +1,11 @@
+0.41 2016-12-10
+  - Time::Moment
+    - Documented the precision value returned by ->precision()
+    - Documented the optional precision value in ->compare()
+  - Time::Moment::Adjusters
+    - Corrected the NearestMinuteInterval example
+    - Increased and documented the accepted values for NearestMinuteInterval
+
 0.40 2016-11-26
   - Correct forward function declaration to include interpreter context
     Bug fix for #22, compilation with threaded perls. Reported by
