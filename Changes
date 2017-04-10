@@ -1,3 +1,6 @@
+0.42
+  - Avoid relying on current working directory being in @INC
+
 0.41 2016-12-10
   - Time::Moment
     - Documented the precision value returned by ->precision()
