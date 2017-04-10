@@ -1,10 +1,11 @@
 #!perl
 use strict;
 use warnings;
+use lib 't';
 
 use Test::More;
 use Test::Requires qw[Time::Piece];
-use t::Util        qw[lives_ok];
+use Util           qw[lives_ok];
 
 BEGIN {
     use_ok('Time::Moment');

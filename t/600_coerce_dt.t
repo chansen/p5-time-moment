@@ -1,10 +1,11 @@
 #!perl
 use strict;
 use warnings;
+use lib 't';
 
 use Test::More;
 use Test::Requires qw[Params::Coerce DateTime];
-use t::Util        qw[throws_ok lives_ok];
+use Util           qw[throws_ok lives_ok];
 
 BEGIN {
     use_ok('Time::Moment');
