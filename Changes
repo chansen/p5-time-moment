@@ -1,4 +1,4 @@
-0.42
+0.42 2017-04-10
   - Avoid relying on current working directory being in @INC
 
 0.41 2016-12-10
