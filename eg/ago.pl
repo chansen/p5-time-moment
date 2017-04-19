@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use v5.10;
 
 use Carp         qw[];
 use Time::Moment qw[];
@@ -13,15 +14,15 @@ sub MINUTE () { HOUR / 60                 }
 sub SECOND () { MINUTE / 60               }
 
 sub ago {
-    @_ == 1 or Carp::croak(q/Usage: ago(moment)/);
-    my ($moment) = @_;
+    @_ == 1 || @_ == 2 or Carp::croak(q/Usage: ago(since [, event])/);
+    my ($since, $event) = @_;
 
-    my $now = Time::Moment->now;
+    $event //= Time::Moment->now;
 
-    ($now->compare($moment) >= 0)
+    ($since->is_before($event))
       or Carp::croak(q/Given moment is in the future/);
 
-    my $d = $now->mjd - $moment->mjd;
+    my $d = $event->mjd - $since->mjd;
 
     if ($d < 0.75 * DAY) {
         if ($d < 0.75 * MINUTE) {
@@ -63,21 +64,21 @@ sub ago {
 }
 
 my @tests = (
-    [ SECOND  *  10, 'a few seconds ago' ],
-    [ MINUTE  *   1, 'a minute ago'      ],
-    [ SECOND  *  75, 'a minute ago'      ],
-    [ MINUTE  *  30, '30 minutes ago'    ],
-    [ HOUR    *   1, 'an hour ago'       ],
-    [ HOUR    *   2, '2 hours ago'       ],
-    [ DAY     *   1, 'a day ago'         ],
-    [ DAY     *  20, '20 days ago'       ],
-    [ MONTH   *   1, 'a month ago'       ],
-    [ MONTH   *   2, '2 months ago'      ],
-    [ MONTH   *  13, 'a year ago'        ],
-    [ YEAR    *   1, 'a year ago'        ],
-    [ YEAR    *   2, '2 years ago'       ],
-    [ YEAR    *  10, '10 years ago'      ],
-    [ YEAR    * 100, '100 years ago'     ],
+    [  10 * SECOND, 'a few seconds ago' ],
+    [  75 * SECOND, 'a minute ago'      ],
+    [   1 * MINUTE, 'a minute ago'      ],
+    [  30 * MINUTE, '30 minutes ago'    ],
+    [   1 * HOUR,   'an hour ago'       ],
+    [   2 * HOUR,   '2 hours ago'       ],
+    [   1 * DAY,    'a day ago'         ],
+    [  20 * DAY,    '20 days ago'       ],
+    [   1 * MONTH,  'a month ago'       ],
+    [   2 * MONTH,  '2 months ago'      ],
+    [  13 * MONTH,  'a year ago'        ],
+    [   1 * YEAR,   'a year ago'        ],
+    [   2 * YEAR,   '2 years ago'       ],
+    [  10 * YEAR,   '10 years ago'      ],
+    [ 100 * YEAR,   '100 years ago'     ],
 );
 
 use Time::Moment 0.25;
@@ -87,7 +88,7 @@ my $now = Time::Moment->now;
 foreach my $test (@tests) {
     my ($duration, $expected) = @$test;
     my $tm = Time::Moment->from_mjd($now->mjd - $duration);
-    is(ago($tm), $expected, "$tm ($duration)");
+    is(ago($tm, $now), $expected, "$tm ($duration)");
 }
 
 done_testing();
