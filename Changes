@@ -1,3 +1,9 @@
+0.43 2018-03-08
+  - Correct commification of epoch seconds in documentation. 
+    PR #26, by Tim Heaney (oylenshpeegul).
+  - The macro test around the inclusion of stdbool.h was too broad and 
+    didn't account for compiler abilities. PR #28 by Dale Ghent (daleghent).
+
 0.42 2017-04-10
   - Avoid relying on current working directory being in @INC
 
