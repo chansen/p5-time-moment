@@ -1,3 +1,10 @@
+0.44 2018-05-09
+  - Bug fix in Time::Moment::Adjusters that prevented the exportation
+    of OrthodoxEasterSunday(). Reported by David Romano (unobe) #29.
+  - Bug fix in Time::Moment::Adjusters, the PreviousDayOfWeek() routine 
+    computed an incorrect value, fix by Simon Shine (sshine) and tests 
+    by Julien Fiegehenn (simbabque) and Simon Shine #31 and PR #32.
+
 0.43 2018-03-08
   - Correct commification of epoch seconds in documentation. 
     PR #26, by Tim Heaney (oylenshpeegul).
