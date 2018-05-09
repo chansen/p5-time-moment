@@ -1,55 +1,79 @@
 #!perl
+use strict;
+use warnings;
+
 use Test::More;
 
 BEGIN {
   use_ok('Time::Moment');
-  use_ok('Time::Moment::Adjusters');
-  Time::Moment::Adjusters->import('PreviousDayOfWeek');
+  use_ok('Time::Moment::Adjusters', qw[ NextDayOfWeek 
+                                        PreviousDayOfWeek 
+                                        NextOrSameDayOfWeek 
+                                        PreviousOrSameDayOfWeek ]);
 }
 
-my @name = ( undef, qw/Monday Tuesday Wednesday Thursday Friday Saturday Sunday/ );
-my %weekday = (
-    Monday    => 1,
-    Tuesday   => 2,
-    Wednesday => 3,
-    Thursday  => 4,
-    Friday    => 5,
-    Saturday  => 6,
-    Sunday    => 7,
-);
+my $Sunday = Time::Moment->from_string('2018-W02-7T00Z');
 
-my $a_monday = Time::Moment->new( year => 2018, month => 1, day => 1 );
+{
+    my @M = (
+    # M T W T F S S
+      7,1,2,3,4,5,6, # M
+      6,7,1,2,3,4,5, # T
+      5,6,7,1,2,3,4, # W
+      4,5,6,7,1,2,3, # T
+      3,4,5,6,7,1,2, # F
+      2,3,4,5,6,7,1, # S
+      1,2,3,4,5,6,7, # S
+    );
 
-# Diagonal
-for my $offset ( 0 .. 6 ) {
-    my $tm = $a_monday->plus_days( $offset );
-    my $previous = $tm->with( PreviousDayOfWeek( $tm->day_of_week ) );
-    is( $tm->delta_days($previous), -7,
-        sprintf( 'PreviousDayOfWeek(%s) from %s is 7 days prior.',
-                 $name[$tm->day_of_week],
-                 $name[$tm->day_of_week] ) );
+    foreach my $d1 (1..7) {
+        my $tm = $Sunday->plus_days($d1);
+        foreach my $d2 (1..7) {
+            my $got = $tm->with(NextDayOfWeek($d2));
+            my $exp = $tm->plus_days($M[7 * $d1 + $d2 - 8]);
+            is($got, $exp, "$tm->with(NextDayOfWeek($d2))");
+        }
+    }
+
+    foreach my $d1 (1..7) {
+        my $tm = $Sunday->plus_days($d1);
+        foreach my $d2 (1..7) {
+            my $got = $tm->with(PreviousDayOfWeek($d2));
+            my $exp = $tm->minus_days($M[7 * $d2 + $d1 - 8]);
+            is($got, $exp, "$tm->with(PreviousDayOfWeek($d2))");
+        }
+    }
 }
 
-# Horizontal
-for my $offset ( 0 .. 6 ) {
-    my $tm = $a_monday;
-    my $previous = $tm->with( PreviousDayOfWeek( 1 + $offset ) );
-    is( $tm->delta_days( $previous ), $offset - 7,
-        sprintf( 'PreviousDayOfWeek(%s) from %s is %d days prior.',
-                 $name[1 + $offset],
-                 $name[$tm->day_of_week],
-                 abs($offset - 7) ) );
+{
+    my @M = (
+    # M T W T F S S
+      0,1,2,3,4,5,6, # M
+      6,0,1,2,3,4,5, # T
+      5,6,0,1,2,3,4, # W
+      4,5,6,0,1,2,3, # T
+      3,4,5,6,0,1,2, # F
+      2,3,4,5,6,0,1, # S
+      1,2,3,4,5,6,0, # S
+    );
+
+    foreach my $d1 (1..7) {
+        my $tm = $Sunday->plus_days($d1);
+        foreach my $d2 (1..7) {
+            my $got = $tm->with(NextOrSameDayOfWeek($d2));
+            my $exp = $tm->plus_days($M[7 * $d1 + $d2 - 8]);
+            is($got, $exp, "$tm->with(NextOrSameDayOfWeek($d2))");
+        }
+    }
+
+    foreach my $d1 (1..7) {
+        my $tm = $Sunday->plus_days($d1);
+        foreach my $d2 (1..7) {
+            my $got = $tm->with(PreviousOrSameDayOfWeek($d2));
+            my $exp = $tm->minus_days($M[7 * $d2 + $d1 - 8]);
+            is($got, $exp, "$tm->with(PreviousOrSameDayOfWeek($d2))");
+        }
+    }
 }
 
-# Vertical
-for my $offset ( 0 .. 6 ) {
-    my $tm = $a_monday->plus_days( $offset + 1 );
-    my $previous = $tm->with( PreviousDayOfWeek($weekday{Monday}) );
-    is( $tm->delta_days( $previous ), -1 - $offset,
-        sprintf( 'PreviousDayOfWeek(%s) from %s is %d days prior.',
-                 $name[$weekday{Monday}],
-                 $name[$tm->day_of_week],
-                 abs(-1 - $offset) ) );
-}
-
-done_testing;
+done_testing();
