@@ -14,7 +14,7 @@ BEGIN {
                           LastDayOfWeekInMonth
                           NthDayOfWeekInMonth
                           WesternEasterSunday
-                          OthodoxEasterSunday
+                          OrthodoxEasterSunday
                           NearestMinuteInterval ];
 
     our %EXPORT_TAGS = (
