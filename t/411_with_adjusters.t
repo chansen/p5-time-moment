@@ -9,7 +9,11 @@ BEGIN {
   use_ok('Time::Moment::Adjusters', qw[ NextDayOfWeek 
                                         PreviousDayOfWeek 
                                         NextOrSameDayOfWeek 
-                                        PreviousOrSameDayOfWeek ]);
+                                        PreviousOrSameDayOfWeek
+                                        FirstDayOfWeekInMonth
+                                        LastDayOfWeekInMonth
+                                        NthDayOfWeekInMonth
+                                      ]);
 }
 
 my $Sunday = Time::Moment->from_string('2018-W02-7T00Z');
@@ -72,6 +76,68 @@ my $Sunday = Time::Moment->from_string('2018-W02-7T00Z');
             my $got = $tm->with(PreviousOrSameDayOfWeek($d2));
             my $exp = $tm->minus_days($M[7 * $d2 + $d1 - 8]);
             is($got, $exp, "$tm->with(PreviousOrSameDayOfWeek($d2))");
+        }
+    }
+}
+
+my $Monday = Time::Moment->from_string('1996-01-01T00Z');
+
+{
+    my @M = (undef, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+
+    for (my $tm = $Monday; $tm->year == $Monday->year; $tm = $tm->plus_days(1)) {
+        foreach my $d1 (1..7) {
+            my $got = $tm->with(FirstDayOfWeekInMonth($d1));
+            is($got->day_of_week, $d1, "$tm->with(FirstDayOfWeekInMonth($d1))->day_of_week == $d1");
+            is($got->month, $tm->month, "$tm->with(FirstDayOfWeekInMonth($d1))->month == $tm->month");
+
+            my $got2 = $got->minus_days(7);
+            is($got2->month, $M[$got->month], "$tm->with(FirstDayOfWeekInMonth($d1))->minus_days(7)->month == $M[$got->month]");
+        }
+    }
+}
+
+{
+    my @M = (undef, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1);
+
+    for (my $tm = $Monday; $tm->year == $Monday->year; $tm = $tm->plus_days(1)) {
+        foreach my $d1 (1..7) {
+            my $got = $tm->with(LastDayOfWeekInMonth($d1));
+            is($got->day_of_week, $d1, "$tm->with(LastDayOfWeekInMonth($d1))->day_of_week == $d1");
+            is($got->month, $tm->month, "$tm->with(LastDayOfWeekInMonth($d1))->month == $tm->month");
+
+            my $got2 = $got->plus_days(7);
+            is($got2->month, $M[$got->month], "$tm->with(LastDayOfWeekInMonth($d1))->plus_days(7)->month == $M[$got->month]");
+        }
+    }
+
+}
+
+{
+    for my $m1 (1..12) {
+        my $tm = $Monday->with_month($m1);
+        for my $d1 (1..7) {
+            for my $o1 (1..4, -4..-1) {
+                my $got = $tm->with(NthDayOfWeekInMonth($o1, $d1));
+                is($got->day_of_week, $d1, "$tm->with(NthDayOfWeekInMonth($o1, $d1))->day_of_week == $d1");
+                is($got->month, $tm->month, "$tm->with(NthDayOfWeekInMonth($o1, $d1))->month == $tm->month");
+
+                if ($o1 > 0) {
+                    my $n = $o1 - 1;
+                    for my $o2 (1..$n) {
+                        my $got2 = $got->minus_days(7 * $o2);
+                        is($got2->month, $tm->month, "$got->minus_days(7 * $o2)->month == $tm->month");
+                    }
+                } else {
+                    my $n = abs($o1) - 1;
+                    for my $o2 (1..$n) {
+                        my $got2 = $got->plus_days(7 * $o2);
+                        is($got2->month, $tm->month, "$got->plus_days(7 * $o2)->month == $tm->month")
+                            or done_testing, exit;
+                    }
+                }
+            }
+
         }
     }
 }
