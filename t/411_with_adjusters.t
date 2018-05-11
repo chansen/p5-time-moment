@@ -14,6 +14,7 @@ BEGIN {
                                         LastDayOfWeekInMonth
                                         NthDayOfWeekInMonth
                                         WesternEasterSunday
+                                        NearestMinuteInterval
                                       ]);
 }
 
@@ -281,6 +282,29 @@ my $Monday = Time::Moment->from_string('1996-01-01T00Z');
         my $tm = Time::Moment->new(year => $exp->year);
         my $got = $tm->with(WesternEasterSunday);
         is($got, $exp, "$tm->with(WesternEasterSunday) == $got");
+    }
+}
+
+{
+    for my $plus_unit (qw(plus_nanoseconds plus_microseconds plus_seconds)) {
+        my $tm = $Sunday->$plus_unit(1);
+        my $got = $tm->with(NearestMinuteInterval(1));
+        my $exp = $Sunday;
+        is($got, $exp, "$tm->with(NearestMinuteInterval(1)) == $exp");
+    }
+
+    my %T = (
+        '2018-01-01T10:14:59Z' => '2018-01-01T10:00:00Z',
+        '2018-01-01T10:15:00Z' => '2018-01-01T10:30:00Z',
+        '2018-01-01T10:29:59Z' => '2018-01-01T10:30:00Z',
+        '2018-01-01T23:55:00Z' => '2018-01-02T00:00:00Z',
+    );
+
+    while (my ($from, $to) = each %T) {
+        my $tm = Time::Moment->from_string($from);
+        my $exp = Time::Moment->from_string($to);
+        my $got = $tm->with(NearestMinuteInterval(30));
+        is($got, $exp, "$tm->with(NearestMinuteInterval(30)) == $exp");
     }
 }
 
