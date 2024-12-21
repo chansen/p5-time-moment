@@ -356,7 +356,7 @@ THX_moment_now(pTHX_ bool utc) {
         if (tm == NULL)
             croak("localtime() failed: %s", Strerror(errno));
 
-        sec = ((1461 * (tm->tm_year - 1) >> 2) + tm->tm_yday - 25202) * 86400
+        sec = ((1461 * (tm->tm_year - 1) >> 2) + tm->tm_yday - 25202) * 86400LL
             + tm->tm_hour * 3600 + tm->tm_min * 60 + tm->tm_sec;
         off = (sec - tv.tv_sec) / 60;
     }
