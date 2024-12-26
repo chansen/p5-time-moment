@@ -1796,6 +1796,110 @@ L<RFC 5322 - 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322
     %d %b %Y %H:%M:%S %z        24 Dec 2012 15:30:45 +0100
     %d %b %Y %H:%M %z           24 Dec 2012 15:30 +0100
 
+=head1 TIME AND CALENDAR ARITHMETIC
+
+Time and Calendar Arithmetic refers to operations involving the addition, subtraction, or comparison of temporal values. These operations can involve either B<precise time units> (such as seconds, minutes, and hours) or B<calendar units> (like days, months, and years). These two types of arithmetic are fundamentally different due to their distinct characteristics.
+
+Mixing B<calendar units> and B<time units> can lead to confusion and inaccuracies because they adhere to different principles:
+
+=head2 1. Calendar Units Are Variable
+
+=over
+
+=item *
+
+B<Days, months, and years> do not have consistent lengths:
+
+=over
+
+=item *
+
+A day is generally 24 hours, but events like daylight saving time changes or leap seconds can alter this.
+
+=item *
+
+A month can vary between 28, 29, 30, or 31 days.
+
+=item *
+
+A year can be 365 or 366 days (leap years).
+
+=back
+
+=item *
+
+In contrast, time units such as seconds, minutes, and hours are fixed. For instance, there are always 60 seconds in a minute and 60 minutes in an hour.
+
+=back
+
+B<Example:>  
+Adding 1 calendar month to January 31 may result in February 28 (or 29 in a leap year) rather than February 31, which does not exist.
+
+=head2 2. Conceptual Differences Between Calendar and Time Units
+
+=over
+
+=item *
+
+B<Calendar units> are positional and relate to transitions within a calendar system. For example, moving from "December 31 to January 1" indicates crossing into a new day, even if only 1 second has passed.
+
+=item *
+
+B<Time units> measure exact durations, such as the total number of seconds, minutes, or hours between two timestamps.
+
+=back
+
+B<Example:>  
+The difference between C<2012-12-31T23:59:59Z> and C<2013-01-01T00:59:59Z>:
+
+=over
+
+=item *
+
+In B<calendar terms>, this spans 2 calendar days, as moving even 1 second into January 1 is considered a new day.
+
+=item *
+
+In B<time units>, the difference is precisely 1 hour or 60 minutes.
+
+=back
+
+=head2 3. Risks of Mixing Units
+
+=over
+
+=item *
+
+Mixing calendar and time units can lead to misleading interpretations:
+
+=over
+
+=item *
+
+Phrases like "1 day and 2 hours" might be ambiguous if not explicitly tied to a specific time context.
+
+=item *
+
+A span of "24 hours" does not always equate to "1 calendar day," particularly when factors like daylight saving time come into play.
+
+=back
+
+=back
+
+=head2 When to Use Each Type of Arithmetic
+
+=over
+
+=item *
+
+Use B<calendar units> when dealing with schedules, recurring events, or positional changes within a date system (e.g., adding months to calculate an anniversary).
+
+=item *
+
+Use B<time units> when working with precise durations, such as timers, interval measurements, or elapsed time calculations.
+
+=back
+
 =head1 TIME ZONES
 
 An instance of C<Time::Moment> represents an unambiguous point in time, 
