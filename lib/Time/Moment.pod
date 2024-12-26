@@ -1656,7 +1656,7 @@ Calendar date - 24 December 2012
 
     Basic format:               Example:
     %Y%m%d                      20121224
-    %y%m                        201212      (reduced accuracy)
+    %Y%m                        201212      (reduced accuracy)
 
     Extended format:            Example:
     %Y-%m-%d                    2012-12-24
