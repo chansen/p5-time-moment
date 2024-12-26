@@ -3,6 +3,9 @@
     between calendar units and time units, addressing issue #49.
   - Updated documentation to fix incorrect conversion specifier in ISO 8601 examples, 
     reported by Richlv in issue #45.
+  - Resolved a Year 2038 bug in the ->now method, which would have occurred in 2038, 
+    by switching from 32-bit to 64-bit integers for second calculations. Addressed 
+    in PR #48 and issue #47 by Bernhard M. Wiedemann (@bmwiedemann).
 
 0.44 2018-05-09
   - Bug fix in Time::Moment::Adjusters that prevented the export
