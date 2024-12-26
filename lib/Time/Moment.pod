@@ -1796,6 +1796,173 @@ L<RFC 5322 - 3.3. Date and Time Specification|http://tools.ietf.org/html/rfc5322
     %d %b %Y %H:%M:%S %z        24 Dec 2012 15:30:45 +0100
     %d %b %Y %H:%M %z           24 Dec 2012 15:30 +0100
 
+=head1 SUPPORTED CALENDARS
+
+Time::Moment primarily supports four distinct calendars through C<< ->from_string >> as well as accessor and adjustor (C<< ->with >>) methods.
+
+=head2 Calendar Date (ISO 8601)
+
+The calendar date format represents a traditional date system based on the year, month, and day. It is structured as C<YYYY-MM-DD> where C<YYYY> is the year, C<MM> is the two-digit month number (ranging from 01 for January to 12 for December), and C<DD> is the two-digit day of the month (ranging from 01 to 31, depending on the month).
+
+Examples in both basic and extended formats:
+
+=over
+
+=item * December 17, 2024
+
+=over
+
+=item * Extended format: C<2024-12-17>
+
+=item * Basic format: C<20241217>
+
+=back
+
+=item * July 1, 2024
+
+=over
+
+=item * Extended format: C<2024-07-01>  
+
+=item * Basic format: C<20240701>
+
+=back
+
+=back
+
+To construct a Time::Moment instance for July 1, 2024:
+
+    $tm = Time::Moment->new( year => 2024, month => 7, day => 1 ); 
+
+See L</Date> for example L</strftime> conversion specifications.
+
+=head2 Ordinal Date (ISO 8601)
+
+The ordinal date format represents a date using the year and the day of the year. It is structured as C<YYYY-DDD>, where C<YYYY> represents the year, and C<DDD> is the day of the year, a three-digit number ranging from C<001> to C<365> (or C<366> for leap years).
+
+Examples in both basic and extended formats:
+
+=over
+
+=item * First day of 2024
+
+=over
+
+=item * Extended format: C<2024-001> 
+
+=item * Basic format: C<2024001>
+
+=back
+
+=item * 366th day of 2024 (last day of the year, leap year)  
+
+=over
+
+=item * Extended format: C<2024-366>  
+
+=item * Basic format: C<2024366>
+
+=back
+
+=back
+
+To construct a Time::Moment instance for the 366th day of 2024:
+
+    $tm = Time::Moment->new( year => 2024 )
+                      ->with_day_of_year(366);
+
+See L</Date> for example L</strftime> conversion specifications.
+
+=head2 Week Date (ISO 8601)
+
+The week date format is a standardized way to represent dates based on the week of the year. It is structured as C<YYYY-Www-D>, where C<YYYY> represents the week-based year, which may differ from the calendar year in certain cases. C<Www> is the two-digit week number, ranging from C<01> to C<53>, indicating the specific week of the year. The final component, C<D>, represents the day of the week, with values from C<1> (Monday) to C<7> (Sunday).
+
+The system standardizes the structure of years by defining the first week (C<W01>) as the week that includes the first Thursday of the calendar year. Consequently, most years consist of 52 weeks, but some may have 53 weeks depending on how the weeks align with the calendar.
+
+The week year may differ from the calendar year at the beginning or end of the year, for example:
+
+=over
+
+=item * If January 1 falls on a Friday, Saturday, or Sunday, those days will belong to the last week of the previous week year.
+
+=item * Similarly, if December 31 falls on a Monday, Tuesday, or Wednesday, those days will belong to the first week of the next week year.
+
+=back
+
+This system ensures consistency for weeks but can cause overlaps or shifts between calendar and week years.
+
+Examples in both basic and extended formats:
+
+=over
+
+=item * Monday of the first week of 2024  
+
+=over
+
+=item * Extended format: C<2024-W01-1>
+
+=item * Basic format: C<2024W011>
+
+=back
+
+=item * Sunday of the 52nd week of 2023
+
+=over
+
+=item * Extended format: C<2023-W52-7>
+
+=item * Basic format: C<2023W527>
+
+=back
+
+=back
+
+Note: The standard defines week 01 as the week containing the first Thursday of the calendar year, which is equivalent to the week that includes January 4, due to the interdependent properties of the week.
+
+To construct a Time::Moment instance for Sunday of the 52nd week of 2023:
+
+    $tm = Time::Moment->new( year => 2023, day => 4 )
+                      ->with_week(52)
+                      ->with_day_of_week(7);
+
+See L</Date> for example L</strftime> conversion specifications.
+
+=head2 Quarter Date (Non-Standard)
+
+The quarter date format represents a date based on the year, the quarter of the year, and day within the quarter. It is structured as C<YYYY-Qq-dd>, where C<YYYY> is the year, C<Qq> indicates the quarter (C<Q1>, C<Q2>, C<Q3>, or C<Q4>), and C<dd> is the day of the quarter, ranging from C<01> to C<92> depending on the quarter. For example, C<Q1> refers to the first quarter, which includes January, February, and March; C<Q2> refers to the second quarter (April, May, and June), and so on.
+
+Examples in both basic and extended formats:
+
+=over
+
+=item * First day of the first quarter of 2024 
+
+=over
+
+=item * Extended format: C<2024-Q1-01>  
+
+=item *  Basic format: C<2024Q101>
+
+=back
+
+=item * 45th day of the second quarter of 2023 
+
+=over
+
+=item * Extended format: C<2023-Q2-45> 
+
+=item * Basic format: C<2023Q245>
+
+=back
+
+=back
+
+To construct a Time::Moment instance for 45th day of the second quarter of 2023:
+
+    $tm = Time::Moment->new( year => 2023 )
+                      ->with_quarter(2)
+                      ->with_day_of_quarter(45);
+
 =head1 TIME AND CALENDAR ARITHMETIC
 
 Time and Calendar Arithmetic refers to operations involving the addition, subtraction, or comparison of temporal values. These operations can involve either B<precise time units> (such as seconds, minutes, and hours) or B<calendar units> (like days, months, and years). These two types of arithmetic are fundamentally different due to their distinct characteristics.
