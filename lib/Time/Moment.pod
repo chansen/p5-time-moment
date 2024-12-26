@@ -831,7 +831,15 @@ Returns a copy of this instance with the given I<nanosecond> of the day
 
 Returns a copy of this instance with the given I<offset> from UTC in 
 minutes [-1080, 1080] (±18:00) altered. The resulting time is at the same 
-instant.
+instant. 
+
+This method modifies the offset of an object while maintaining the exact 
+moment in time (the "instant"). It ensures that the resulting object reflects 
+the same point in time but with a different offset.
+
+Use this method to convert between time zones without altering the absolute time,
+or when you need to represent a specific moment in a different time zone for 
+purposes such as reporting or logging.
 
     $tm = Time::Moment->from_string('2012-12-24T15-05')
                       ->with_offset_same_instant(0);
@@ -844,6 +852,14 @@ instant.
 Returns a copy of this instance with the given I<offset> from UTC in 
 minutes [-1080, 1080] (±18:00) altered. The resulting time has the same 
 local time.
+
+This method modifies the offset of an object while preserving the local time. 
+It is commonly used in scenarios where the local time stays the same, but the 
+offset changes, such as during daylight saving time transitions.
+
+Use this method to apply an offset that represents the same local time in a 
+different time zone or to adjust offsets during ambiguous local times, like 
+those occurring in daylight saving changes.
 
     $tm = Time::Moment->from_string('2012-12-24T15-05')
                       ->with_offset_same_local(0);
