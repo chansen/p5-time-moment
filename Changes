@@ -1,6 +1,8 @@
 0.45
   - Added a new documentation section explaining the fundamental differences 
     between calendar units and time units, addressing issue #49.
+  - Added a new documentation section on supported calendars, specifically detailing 
+    the ISO 8601 week date representation, addressing issue #21.
   - Updated documentation to fix incorrect conversion specifier in ISO 8601 examples, 
     reported by Richlv in issue #45.
   - Resolved a Year 2038 bug in the ->now method, which would have occurred in 2038, 
