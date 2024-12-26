@@ -1,5 +1,9 @@
+0.45
+  - Added a new documentation section explaining the fundamental differences 
+    between calendar units and time units, addressing issue #49.
+
 0.44 2018-05-09
-  - Bug fix in Time::Moment::Adjusters that prevented the exportation
+  - Bug fix in Time::Moment::Adjusters that prevented the export
     of OrthodoxEasterSunday(). Reported by David Romano (unobe) #29.
   - Bug fix in Time::Moment::Adjusters, the PreviousDayOfWeek() routine 
     computed an incorrect value, fix by Simon Shine (sshine) and tests 
