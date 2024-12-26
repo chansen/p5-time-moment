@@ -2069,10 +2069,10 @@ Use B<time units> when working with precise durations, such as timers, interval 
 
 =head1 TIME ZONES
 
-An instance of C<Time::Moment> represents an unambiguous point in time, 
-but it's not time zone aware. When performing arithmetic on the local 
-date/time or altering the components of the local date/time it may be 
-necessary to use a time zone to convert to the correct representation.
+A C<Time::Moment> instance represents a precise point in time but does 
+not account for time zones. When performing arithmetic or modifying 
+components of the local date/time, it may be necessary to apply a 
+time zone conversion to ensure accurate representation.
 
 C<Time::Moment> is API compatible with L<DateTime::TimeZone> and 
 L<DateTime::TimeZone::Tzfile>.
