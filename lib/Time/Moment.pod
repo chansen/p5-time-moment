@@ -163,7 +163,7 @@ are not accounted for in C<Time::Moment>; each day is assumed to have exactly
 C<86,400,000,000,000> nanoseconds.
 
 Time::Moment supports all epoch integers from C<-62,135,596,800> to 
-C<253,402,300,799, allowing for nanosecond precision for any instant within 
+C<253,402,300,799>, allowing for nanosecond precision for any instant within 
 the range C<0001-01-01T00:00:00Z> to C<9999-12-31T23:59:59Z>.
 
 =head1 CONSTRUCTORS
