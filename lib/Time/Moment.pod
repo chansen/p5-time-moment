@@ -1027,39 +1027,39 @@ subtracted.
 
     $years = $tm->delta_years($other);
 
-Returns the difference between the local date of this moment and the I<other> 
-in terms of complete years. The result will be negative if the local date of 
+Returns the difference between the B<local date> of this moment and the I<other> 
+in terms of complete B<calendar years>. The result will be negative if the local date of 
 the I<other> moment is before this.
 
 =head2 delta_months
 
     $months = $tm->delta_months($other);
 
-Returns the difference between the local date of this moment and the I<other> 
-in terms of complete months. The result will be negative if the local date of 
+Returns the difference between the B<local date> of this moment and the I<other> 
+in terms of complete B<calendar months>. The result will be negative if the local date of 
 the I<other> moment is before this.
 
 =head2 delta_weeks
 
     $weeks = $tm->delta_weeks($other);
 
-Returns the difference between the local date of this moment and the I<other> 
-in terms of complete weeks. The result will be negative if the local date of 
+Returns the difference between the B<local date> of this moment and the I<other> 
+in terms of complete B<calendar weeks>. The result will be negative if the local date of 
 the I<other> moment is before this.
 
 =head2 delta_days
 
     $days = $tm->delta_days($other);
 
-Returns the difference between the local date of this moment and the I<other> 
-in terms of complete days. The result will be negative if the local date of 
+Returns the difference between the B<local date> of this moment and the I<other> 
+in terms of complete B<calendar days>. The result will be negative if the local date of 
 the I<other> moment is before this.
 
 =head2 delta_hours
 
     $hours = $tm->delta_hours($other);
 
-Returns the difference between the instant of this moment and the I<other> 
+Returns the difference between the B<instant> of this moment and the I<other> 
 in terms of complete hours. The result will be negative if the instant of 
 the I<other> moment is before this.
 
@@ -1067,7 +1067,7 @@ the I<other> moment is before this.
 
     $minutes = $tm->delta_minutes($other);
 
-Returns the difference between the instant of this moment and the I<other> 
+Returns the difference between the B<instant> of this moment and the I<other> 
 in terms of complete minutes. The result will be negative if the instant of 
 the I<other> moment is before this.
 
@@ -1075,7 +1075,7 @@ the I<other> moment is before this.
 
     $seconds = $tm->delta_seconds($other);
 
-Returns the difference between the instant of this moment and the I<other> in 
+Returns the difference between the B<instant> of this moment and the I<other> in 
 terms of complete seconds. The result will be negative if the instant of the 
 I<other> moment is before this.
 
@@ -1083,7 +1083,7 @@ I<other> moment is before this.
 
     $milliseconds = $tm->delta_milliseconds($other);
 
-Returns the difference between the instant of this moment and the I<other> in 
+Returns the difference between the B<instant> of this moment and the I<other> in 
 terms of complete milliseconds. The result will be negative if the instant of 
 the I<other> moment is before this.
 
@@ -1091,7 +1091,7 @@ the I<other> moment is before this.
 
     $microseconds = $tm->delta_microseconds($other);
 
-Returns the difference between the instant of this moment and the I<other> in 
+Returns the difference between the B<instant> of this moment and the I<other> in 
 terms of complete microseconds. The result will be negative if the instant of 
 the I<other> moment is before this.
 
@@ -1099,7 +1099,7 @@ the I<other> moment is before this.
 
     $nanoseconds = $tm->delta_nanoseconds($other);
 
-Returns the difference between the instant of this moment and the I<other> in 
+Returns the difference between the B<instant> of this moment and the I<other> in 
 terms of complete nanoseconds. The result will be negative if the instant of 
 the I<other> moment is before this.
 
