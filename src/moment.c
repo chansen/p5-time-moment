@@ -461,7 +461,7 @@ THX_moment_with_month(pTHX_ const moment_t *mt, int64_t v) {
 
     THX_check_month(aTHX_ v);
     dt_to_ymd(moment_local_dt(mt), &y, NULL, &d);
-    return THX_moment_with_local_dt(aTHX_ mt, dt_from_ymd(y, (int)v, d));
+    return THX_moment_with_ymd(aTHX_ mt, y, (int)v, d);
 }
 
 static moment_t
