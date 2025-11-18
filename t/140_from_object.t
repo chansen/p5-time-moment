@@ -36,11 +36,21 @@ BEGIN {
 }
 
 {
+    package MySub;
+    our @ISA = ('Time::Moment');
+}
+
+{
     my $mf = MyFoo->new(epoch => 123456789);
     my $tm;
 
     lives_ok { $tm = Time::Moment->from_object($mf) };
     isa_ok($tm, 'Time::Moment');
+    is($tm->epoch,  123456789, '->epoch');
+    is($tm->offset, 0,         '->offset');
+
+    lives_ok { $tm = MySub->from_object($mf) };
+    isa_ok($tm, 'MySub');
     is($tm->epoch,  123456789, '->epoch');
     is($tm->offset, 0,         '->offset');
 }
