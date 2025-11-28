@@ -11,6 +11,8 @@ Time::Moment::Adjusters - Adjusters for Time::Moment
     
     $adjuster = PreviousDayOfWeek($day);
     $adjuster = PreviousOrSameDayOfWeek($day);
+
+    $adjuster = NearestDayOfWeek($day);
     
     $adjuster = FirstDayOfWeekInMonth($day);
     $adjuster = LastDayOfWeekInMonth($day);
@@ -60,6 +62,13 @@ I<day> of the week [1=Monday, 7=Sunday] that is before the date.
 The C<$adjuster> adjusts the date to the previous occurrence of the given 
 I<day> of the week [1=Monday, 7=Sunday]. If the date already falls on the 
 given I<day> of the week it's unaltered.
+
+=head2 NearestDayOfWeek
+
+    $adjuster = NearestDayOfWeek($day);
+
+The C<$adjuster> adjusts the date to the nearest occurrence of the given 
+I<day> of the week [1=Monday, 7=Sunday].
 
 =head2 FirstDayOfWeekInMonth
 

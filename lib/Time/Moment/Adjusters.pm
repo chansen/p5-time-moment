@@ -10,6 +10,7 @@ BEGIN {
                           NextOrSameDayOfWeek
                           PreviousDayOfWeek
                           PreviousOrSameDayOfWeek
+                          NearestDayOfWeek
                           FirstDayOfWeekInMonth
                           LastDayOfWeekInMonth
                           NthDayOfWeekInMonth
@@ -74,6 +75,19 @@ sub PreviousOrSameDayOfWeek {
     return sub {
         my ($tm) = @_;
         return $tm->minus_days(($tm->day_of_week - $day) % 7);
+    };
+}
+
+sub NearestDayOfWeek {
+    @_ == 1 or Carp::croak(q<Usage: NearestDayOfWeek(day)>);
+    my ($day) = @_;
+
+    ($day >= 1 && $day <= 7)
+      or Carp::croak(q<Parameter 'day' is out of the range [1, 7]>);
+
+    return sub {
+        my ($tm) = @_;
+        return $tm->plus_days((($day - $tm->day_of_week + 3) % 7) - 3);
     };
 }
 

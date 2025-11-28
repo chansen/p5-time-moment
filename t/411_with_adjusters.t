@@ -10,6 +10,7 @@ BEGIN {
                                         PreviousDayOfWeek 
                                         NextOrSameDayOfWeek 
                                         PreviousOrSameDayOfWeek
+                                        NearestDayOfWeek
                                         FirstDayOfWeekInMonth
                                         LastDayOfWeekInMonth
                                         NthDayOfWeekInMonth
@@ -307,5 +308,37 @@ my $Monday = Time::Moment->from_string('1996-01-01T00Z');
         is($got, $exp, "$tm->with(NearestMinuteInterval(30)) == $exp");
     }
 }
+
+{
+    my $tm = Time::Moment->from_string("2012-12-24T00Z");
+    # 2012-12-24 is Monday (day_of_week == 1)
+
+    for my $day (1..7) {
+        my $got = $tm->with(NearestDayOfWeek(($day)));
+        my $prefix = "$tm->NearestDayOfWeek($day)";
+        is($got->day_of_week, $day, "$prefix->day_of_week");
+    }
+}
+
+{
+    my $tm = Time::Moment->from_string("2012-12-26T00Z");
+    # 2012-12-26 is Wednesday (day_of_week == 3)
+
+    # Nearest Monday (1) from Wednesday (3) is the previous Monday (2012-12-24)
+    {
+        my $got = $tm->with(NearestDayOfWeek(1));
+        my $prefix = "NearestDayOfWeek(1)->($tm)";
+        is($got->to_string, "2012-12-24T00:00:00Z", "$prefix->to_string");
+    }
+
+    # Nearest Friday (5) from Wednesday (3) is the coming Friday (2012-12-28)
+    {
+        my $got = $tm->with(NearestDayOfWeek(5));
+        my $prefix = "NearestDayOfWeek(5)->($tm)";
+        is($got->to_string, "2012-12-28T00:00:00Z", "$prefix->to_string");
+    }
+}
+
+
 
 done_testing();
