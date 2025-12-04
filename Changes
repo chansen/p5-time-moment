@@ -1,3 +1,11 @@
+0.46
+  - Fix Time::Moment->from_epoch when called with a floating-point value whose 
+    fractional part rounds to exactly 1.000000000 seconds at 9 decimal digits.
+    Such values previously caused a “Parameter 'nanosecond' is out of the range 
+    [0, 999_999_999]” error; they are now normalized by incrementing the second
+    and wrapping nanoseconds to zero, consistent with the rd/jd/mjd constructors. 
+    Reported by @butzsch, addressing issue #40.
+
 0.45 2025-11-18
   - Ensure ->with_month preserves the original day-of-month, clamping to the target
     month’s final day when necessary. Reported by @bokutin, addressing issue #43.
