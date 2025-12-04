@@ -1,4 +1,6 @@
-0.46
+0.46 2025-12-04
+  - Added an example to eg/
+    - eg/isocal.pl
   - Added an implementation of NearestDayOfWeek() in Time::Moment::Adjusters.
   - Fix Time::Moment->from_epoch when called with a floating-point value whose 
     fractional part rounds to exactly 1.000000000 seconds at 9 decimal digits.
@@ -7,7 +9,7 @@
     and wrapping nanoseconds to zero, consistent with the rd/jd/mjd constructors. 
     Reported by @butzsch, addressing issue #40.
 
-0.45 2025-11-18
+0.45 2025-11-18 (unreleased on CPAN)
   - Ensure ->with_month preserves the original day-of-month, clamping to the target
     month’s final day when necessary. Reported by @bokutin, addressing issue #43.
   - Ensure ->from_object correctly respects class inheritance. Reported by @Grinnz,
