@@ -272,6 +272,8 @@ THX_moment_from_epoch_nv(pTHX_ NV sec, IV precision) {
     static const NV SEC_MIN = -62135596801.0; /*  0000-12-31T23:59:59Z */
     static const NV SEC_MAX = 253402300800.0; /* 10000-01-01T00:00:00Z */
     NV s, f, n, denom;
+    IV nsec;
+    int64_t isec;
 
     if (precision < 0 || precision > 9)
         croak("Parameter 'precision' is out of the range [0, 9]");
@@ -286,7 +288,15 @@ THX_moment_from_epoch_nv(pTHX_ NV sec, IV precision) {
     s = s + Perl_floor(f - n);
     denom = Perl_pow(10.0, (NV)precision);
     n = (Perl_floor(n * denom + 0.5) / denom) * 1E9;
-    return THX_moment_from_epoch(aTHX_ (int64_t)s, (IV)(n + 0.5), 0);
+
+    isec = (int64_t)s;
+    nsec = (IV)(n + 0.5);
+
+    if (nsec >= NANOS_PER_SEC) {
+        nsec -= NANOS_PER_SEC;
+        isec += 1;
+    }
+    return THX_moment_from_epoch(aTHX_ isec, nsec, 0);
 }
 
 static int
