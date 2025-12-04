@@ -1,4 +1,5 @@
 0.46
+  - Added an implementation of NearestDayOfWeek() in Time::Moment::Adjusters.
   - Fix Time::Moment->from_epoch when called with a floating-point value whose 
     fractional part rounds to exactly 1.000000000 seconds at 9 decimal digits.
     Such values previously caused a “Parameter 'nanosecond' is out of the range 
