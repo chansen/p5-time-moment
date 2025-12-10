@@ -27,10 +27,30 @@ Getopt::Long::GetOptions(
 
         $Moment = $Moment->with_month($month);
     },
+    'w|week=i' => sub {
+        my ($name, $week) = @_;
+
+        my $year   = $Moment->year;
+        my $length = $Moment->with_day_of_month(4)
+                            ->length_of_week_year;
+
+        ($week >= 1 && $week <= $length)
+          or die qq/Option '$name' is out of the range [1, $length] for year $year\n/;
+
+        $Moment = $Moment->with_month(1)
+                         ->with_day_of_month(4)
+                         ->with_week($week)
+                         ->with_day_of_month(1);
+
+        if ($Moment->year > $year) {
+          $Moment = $Moment->minus_months(1);
+        }
+    },
 ) or do {
     say "usage: $0 [-y year] [-m month]";
     say "    -y --year    the year [1, 9999]";
     say "    -m --month   the month of the year [1=January, 12=December]";
+    say "    -w --week    month by the week of the year [1, 53]";
     exit(1);
 };
 
