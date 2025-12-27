@@ -1022,73 +1022,86 @@ subtracted.
 
     $years = $tm->delta_years($other);
 
-Returns the difference between the B<local date> of this moment and the 
-I<other>  in terms of whole B<calendar years>. The result will be negative 
+Returns the difference between the B<local date> of this moment and that of 
+I<other> in terms of whole B<calendar years>. The result will be negative 
 if the local date of the I<other> moment is before this.
 
-The calculation returns a whole number and represents the number of complete
-calendar years separating the two dates. Partial years do not contribute to
-the result. For example, the difference between C<2010-06-15> and
-C<2012-06-14> is only one year, because it is one day short of a full
-two-year interval.
+The calculation returns an integer and represents the number of complete
+calendar years separating the two dates. Partial years do not count toward 
+the result. For example, the difference between C<2010-06-15> and 
+C<2012-06-14> is one year, because it is one day short of a full two-year 
+interval.
 
-This method conceptually counts how many complete year boundaries can be
-crossed when moving from C<$tm> toward C<$other> (or the reverse), without
-passing the target. Only the local date participates in the calculation.
+Conceptually, the method counts how many complete year boundaries can be
+crossed when moving from this moment toward I<other> (or vice versa),
+without passing the target. Only the local date participates in the 
+calculation.
 
-As with months, year calculations can involve asymmetric edge cases due to
-leap years. For instance, stepping forward from February 29 will normalise
-to February 28 in non-leap years.
-
-Use C<delta_years>, C<delta_months>, C<delta_weeks> and C<delta_days> 
-for calendar-based  calculations, such as recurrence rules, schedules, 
-and billing cycles. For elapsed-time measurements, use C<delta_hours>, 
-C<delta_minutes>, or C<delta_seconds> instead.
+As with months, year calculations may involve asymmetric edge cases due to
+leap years. For instance, advancing from February 29 normalises to
+February 28 in non-leap years.
 
 =head2 delta_months
 
     $months = $tm->delta_months($other);
 
-Returns the difference between the B<local date> of this moment and the 
+Returns the difference between the B<local date> of this moment and that of 
 I<other> in terms of whole B<calendar months>. The result will be negative 
 if the local date of the I<other> moment is before this.
 
-The calculation returns a whole number and represents the number of complete
-calendar months separating the two dates. Partial months do not count toward
-the result. For example, the difference between C<2025-10-10> and
-C<2025-12-11> is only one month, because it is one day short of an exact
-two-month interval.
+The calculation returns an integer and reflects the number of complete calendar
+months separating the two dates. Partial months do not count toward the result. 
+For example, the difference between C<2025-10-11> and C<2025-12-10> is one 
+month, because it falls one day short of a full two-month interval.
 
-This method conceptually counts how many complete month boundaries can be
-crossed when moving from C<$tm> toward C<$other> (or the reverse), using
-calendar-month arithmetic without passing the target. Only the local date
+Conceptually, the method counts how many complete month boundaries can be
+crossed when moving from this moment toward I<other> (or vice versa) without
+passing the target, using calendar-month arithmetic. Only the local date 
 participates in the calculation.
 
-Calendar months have different lengths, and dates such as the 29th, 30th,
-and 31st do not exist in every month. As a result, certain edge cases are
-asymmetric. For example, stepping forward from the 31st normalises the day
-to the last valid day of the resulting month.
-
-Use C<delta_years>, C<delta_months>, C<delta_weeks> and C<delta_days> 
-for calendar-based  calculations, such as recurrence rules, schedules, 
-and billing cycles. For elapsed-time measurements, use C<delta_hours>, 
-C<delta_minutes>, or C<delta_seconds> instead.
+Because calendar months vary in length, and dates such as the 29th, 30th, and
+31st are not present in every month, some edge cases are asymmetric. For
+example, advancing from the 31st normalises the day to the last valid date in
+the destination month.
 
 =head2 delta_weeks
 
     $weeks = $tm->delta_weeks($other);
 
-Returns the difference between the B<local date> of this moment and the I<other> 
-in terms of whole B<calendar weeks>. The result will be negative if the local date of 
-the I<other> moment is before this.
+Returns the difference between the B<local date> of this moment and that of 
+I<other> in terms of whole B<calendar weeks>. The result will be negative 
+if the local date of the I<other> moment is before this.
+
+The calculation returns an integer and represents the number of complete
+seven-day calendar intervals separating the two dates. Partial weeks do not 
+count toward the result.
+
+Conceptually, the method counts how many complete seven-day boundaries can be
+crossed when moving from this moment toward I<other> (or vice versa) without
+passing the target. Only the local date participates in the calculation.
+
+This calculation is not affected by timezone offsets, except insofar as they 
+determine which local date each moment falls on.
 
 =head2 delta_days
 
     $days = $tm->delta_days($other);
 
-Returns the difference between the B<local date> of this moment and the I<other> 
-in terms of whole B<calendar days>. The result will be negative if the local date of 
-the I<other> moment is before this.
+Returns the difference between the B<local date> of this moment and that of 
+I<other> in terms of whole B<calendar days>. The result will be negative 
+if the local date of the I<other> moment is before this.
+
+The calculation returns an integer and represents the number of complete
+calendar days separating the two dates. Partial days do not count toward 
+the result.
+
+Conceptually, the method counts how many calendar-day boundaries (midnights)
+can be crossed when moving from this moment toward I<other> (or vice versa)
+without passing the target. Only the local date participates in the 
+calculation.
+
+This calculation is not affected by timezone offsets, except insofar as they 
+determine which local date each moment falls on.
 
 =head2 delta_hours
 
@@ -2019,7 +2032,9 @@ B<Days, months, and years> do not have consistent lengths:
 
 =item *
 
-A day is generally 24 hours, but events like daylight saving time changes or leap seconds can alter this.
+A calendar day represents a transition between local midnights. While it
+often spans 24 hours, daylight saving time changes and other adjustments
+may cause it to be shorter or longer.
 
 =item *
 
@@ -2104,6 +2119,93 @@ Use B<calendar units> when dealing with schedules, recurring events, or position
 Use B<time units> when working with precise durations, such as timers, interval measurements, or elapsed time calculations.
 
 =back
+
+=head2 Boundary-Crossing Model for Calendar Arithmetic
+
+Calendar-based delta methods operate by counting how many complete calendar
+unit boundaries can be crossed when moving from one local date toward the
+other, without passing the target date.
+
+Conceptually:
+
+=over
+
+=item 1.
+
+Identify the earlier and later local dates.
+
+=item 2.
+
+Starting from the earlier date, repeatedly advance by one calendar unit (year, month, week, or day).
+
+=item 3.
+
+Count how many such advances can be made without exceeding the later date.
+
+=back
+
+Partial units are ignored. Only complete boundary crossings are counted.
+
+=head2 Choosing the Correct Delta Method
+
+The following table provides a quick reference for selecting the
+appropriate delta method. It distinguishes between calendar-based and
+time-based deltas.
+
+=over
+
+=item *
+
+Calendar-based deltas operate on the local date and count whole calendar
+units. This calculation is not affected by timezone offsets, except
+insofar as they determine which local date each moment falls on.
+
+=item *
+
+Time-based deltas operate on the exact instant in time and measure elapsed
+duration using fixed-length time units. These calculations are affected
+by timezone offsets.
+
+=back
+
+    +----------------------+-------------+-----------+
+    | Method               | Based on    | Unit type |
+    +----------------------+-------------+-----------+
+    | delta_years          | Local date  | Calendar  |
+    | delta_months         | Local date  | Calendar  |
+    | delta_weeks          | Local date  | Calendar  |
+    | delta_days           | Local date  | Calendar  |
+    | delta_hours          | Instant     | Time      |
+    | delta_minutes        | Instant     | Time      |
+    | delta_seconds        | Instant     | Time      |
+    | delta_milliseconds   | Instant     | Time      |
+    | delta_microseconds   | Instant     | Time      |
+    | delta_nanoseconds    | Instant     | Time      |
+    +----------------------+-------------+-----------+
+
+=head3 Example
+
+Consider the following two moments:
+
+  2012-12-31T23:59:59Z → 2013-01-01T00:59:59Z
+
+Only one hour of time has elapsed between these instants, yet a calendar
+day boundary has been crossed.
+
+  delta_days   = 1
+  delta_hours  = 1
+
+Use C<delta_days> when the question is:
+
+  "How many calendar days apart are these dates?"
+
+Use C<delta_hours> when the question is:
+
+  "How much time actually elapsed between these moments?"
+
+Although only one hour has elapsed, the calendar-based and time-based
+results differ because calendar arithmetic counts date boundaries, not
+durations.
 
 =head1 TIME ZONES
 
