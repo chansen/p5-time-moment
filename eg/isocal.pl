@@ -40,10 +40,11 @@ Getopt::Long::GetOptions(
         $Moment = $Moment->with_month(1)
                          ->with_day_of_month(4)
                          ->with_week($week)
+                         ->with_day_of_week(1)
                          ->with_day_of_month(1);
 
-        if ($Moment->year > $year) {
-          $Moment = $Moment->minus_months(1);
+        if ($Moment->year < $year) {
+          $Moment = $Moment->plus_months(1);
         }
     },
 ) or do {
