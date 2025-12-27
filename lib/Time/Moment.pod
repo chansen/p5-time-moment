@@ -1041,6 +1041,8 @@ As with months, year calculations may involve asymmetric edge cases due to
 leap years. For instance, advancing from February 29 normalises to
 February 28 in non-leap years.
 
+See L</TIME AND CALENDAR ARITHMETIC>.
+
 =head2 delta_months
 
     $months = $tm->delta_months($other);
@@ -1064,6 +1066,8 @@ Because calendar months vary in length, and dates such as the 29th, 30th, and
 example, advancing from the 31st normalises the day to the last valid date in
 the destination month.
 
+See L</TIME AND CALENDAR ARITHMETIC>.
+
 =head2 delta_weeks
 
     $weeks = $tm->delta_weeks($other);
@@ -1082,6 +1086,8 @@ passing the target. Only the local date participates in the calculation.
 
 This calculation is not affected by timezone offsets, except insofar as they 
 determine which local date each moment falls on.
+
+See L</TIME AND CALENDAR ARITHMETIC>.
 
 =head2 delta_days
 
@@ -1102,6 +1108,8 @@ calculation.
 
 This calculation is not affected by timezone offsets, except insofar as they 
 determine which local date each moment falls on.
+
+See L</TIME AND CALENDAR ARITHMETIC>.
 
 =head2 delta_hours
 
@@ -1883,7 +1891,9 @@ Examples in both basic and extended formats:
 
 To construct a Time::Moment instance for July 1, 2024:
 
-    $tm = Time::Moment->new( year => 2024, month => 7, day => 1 ); 
+    $tm = Time::Moment->from_string('20240701T00Z');
+    $tm = Time::Moment->from_string('2024-07-01T00Z');
+    $tm = Time::Moment->new(year => 2024, month => 7, day => 1); 
 
 See L</Date> for example L</strftime> conversion specifications.
 
@@ -1919,7 +1929,9 @@ Examples in both basic and extended formats:
 
 To construct a Time::Moment instance for the 366th day of 2024:
 
-    $tm = Time::Moment->new( year => 2024 )
+    $tm = Time::Moment->from_string('2024366T00Z');
+    $tm = Time::Moment->from_string('2024-366T00Z');
+    $tm = Time::Moment->new(year => 2024)
                       ->with_day_of_year(366);
 
 See L</Date> for example L</strftime> conversion specifications.
@@ -1972,7 +1984,9 @@ Note: The standard defines week 01 as the week containing the first Thursday of 
 
 To construct a Time::Moment instance for Sunday of the 52nd week of 2023:
 
-    $tm = Time::Moment->new( year => 2023, day => 4 )
+    $tm = Time::Moment->from_string('2023W527T00Z');
+    $tm = Time::Moment->from_string('2023-W52-7T00Z');
+    $tm = Time::Moment->new(year => 2023, day => 4)
                       ->with_week(52)
                       ->with_day_of_week(7);
 
@@ -2010,7 +2024,9 @@ Examples in both basic and extended formats:
 
 To construct a Time::Moment instance for 45th day of the second quarter of 2023:
 
-    $tm = Time::Moment->new( year => 2023 )
+    $tm = Time::Moment->from_string('2023Q245T00Z');
+    $tm = Time::Moment->from_string('2023-Q2-45T00Z');
+    $tm = Time::Moment->new(year => 2023)
                       ->with_quarter(2)
                       ->with_day_of_quarter(45);
 
@@ -2163,8 +2179,9 @@ insofar as they determine which local date each moment falls on.
 =item *
 
 Time-based deltas operate on the exact instant in time and measure elapsed
-duration using fixed-length time units. These calculations are affected
-by timezone offsets.
+duration using fixed-length time units. These calculations are based on 
+absolute instants and are therefore independent of local calendar effects, 
+though the instants themselves may originate from timezone-aware moments.
 
 =back
 
@@ -2183,11 +2200,9 @@ by timezone offsets.
     | delta_nanoseconds    | Instant     | Time      |
     +----------------------+-------------+-----------+
 
-=head3 Example
-
 Consider the following two moments:
 
-  2012-12-31T23:59:59Z → 2013-01-01T00:59:59Z
+  C<2012-12-31T23:59:59Z> and C<2013-01-01T00:59:59Z>
 
 Only one hour of time has elapsed between these instants, yet a calendar
 day boundary has been crossed.
