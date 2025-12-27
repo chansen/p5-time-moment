@@ -90,15 +90,15 @@ sub align {
     return sprintf "%*s", ($width + length $string) / 2, $string;
 }
 
-say align($Moment->strftime('%B %Y'), 24);
-say 'Wk Mo Tu We Th Fr Sa Su';
+say align($Moment->strftime('%B %Y'), 25);
+say 'Wk  Mo Tu We Th Fr Sa Su';
 
 my $this_month = $Moment;
 my $next_month = $Moment->plus_months(1);
 my $date       = $Moment->with_day_of_week(1);
 
 while ($date->is_before($next_month)) {
-    my @week = (sprintf('%.2d', $date->week), (('  ') x 7));
+    my @week = (sprintf('%.2d ', $date->week), (('  ') x 7));
     foreach my $index (1..7) {
         if (!$date->is_before($this_month) && $date->is_before($next_month)) {
             $week[$index] = sprintf '%2d', $date->day_of_month;
