@@ -59,10 +59,12 @@ Time::Moment - Represents a date and time of day with an offset from UTC
     $tm2          = $tm1->with_quarter($quarter);
     $tm2          = $tm1->with_month($month);
     $tm2          = $tm1->with_week($week);
+    
     $tm2          = $tm1->with_day_of_year($day);
     $tm2          = $tm1->with_day_of_quarter($day);
     $tm2          = $tm1->with_day_of_month($day);
     $tm2          = $tm1->with_day_of_week($day);
+    
     $tm2          = $tm1->with_hour($hour);
     $tm2          = $tm1->with_minute($minute);
     $tm2          = $tm1->with_minute_of_day($minute);
@@ -244,8 +246,9 @@ and time from the system clock in the UTC time zone.
     $tm = Time::Moment->from_epoch($seconds [, nanosecond => 0] [, precision => 6]);
 
 Constructs an instance of C<Time::Moment> from the given I<seconds> from the 
-epoch of 1970-01-01T00Z. Fractional seconds is supported if the constructor 
-is invoked with I<seconds> only, the default precision is 6 (microseconds).
+epoch of 1970-01-01T00Z. Fractional seconds are supported when only seconds 
+are provided, supplying a nanosecond value takes precedence. The default 
+precision is of the fractional seconds is 6 (microseconds).
 
 B<Parameters:>
 
@@ -524,7 +527,7 @@ Returns the month of the year [1, 12].
 
     $week = $tm->week;
 
-Returns the week of the year [1, 53].
+Returns the week of the week-based year [1, 53].
 
 =head2 day_of_year
 
@@ -708,7 +711,7 @@ given month.
 
     $tm2 = $tm1->with_week($week);
 
-Returns a copy of this instance with the given I<week> of the year [1, 53] 
+Returns a copy of this instance with the given I<week> of the week-based year [1, 53] 
 altered. The week must be valid for the year, otherwise an exception is raised.
 
 =head2 with_day_of_year
@@ -1019,24 +1022,64 @@ subtracted.
 
     $years = $tm->delta_years($other);
 
-Returns the difference between the B<local date> of this moment and the I<other> 
-in terms of complete B<calendar years>. The result will be negative if the local date of 
-the I<other> moment is before this.
+Returns the difference between the B<local date> of this moment and the 
+I<other>  in terms of whole B<calendar years>. The result will be negative 
+if the local date of the I<other> moment is before this.
+
+The calculation returns a whole number and represents the number of complete
+calendar years separating the two dates. Partial years do not contribute to
+the result. For example, the difference between C<2010-06-15> and
+C<2012-06-14> is only one year, because it is one day short of a full
+two-year interval.
+
+This method conceptually counts how many complete year boundaries can be
+crossed when moving from C<$tm> toward C<$other> (or the reverse), without
+passing the target. Only the local date participates in the calculation.
+
+As with months, year calculations can involve asymmetric edge cases due to
+leap years. For instance, stepping forward from February 29 will normalise
+to February 28 in non-leap years.
+
+Use C<delta_years>, C<delta_months>, C<delta_weeks> and C<delta_days> 
+for calendar-based  calculations, such as recurrence rules, schedules, 
+and billing cycles. For elapsed-time measurements, use C<delta_hours>, 
+C<delta_minutes>, or C<delta_seconds> instead.
 
 =head2 delta_months
 
     $months = $tm->delta_months($other);
 
-Returns the difference between the B<local date> of this moment and the I<other> 
-in terms of complete B<calendar months>. The result will be negative if the local date of 
-the I<other> moment is before this.
+Returns the difference between the B<local date> of this moment and the 
+I<other> in terms of whole B<calendar months>. The result will be negative 
+if the local date of the I<other> moment is before this.
+
+The calculation returns a whole number and represents the number of complete
+calendar months separating the two dates. Partial months do not count toward
+the result. For example, the difference between C<2025-10-10> and
+C<2025-12-11> is only one month, because it is one day short of an exact
+two-month interval.
+
+This method conceptually counts how many complete month boundaries can be
+crossed when moving from C<$tm> toward C<$other> (or the reverse), using
+calendar-month arithmetic without passing the target. Only the local date
+participates in the calculation.
+
+Calendar months have different lengths, and dates such as the 29th, 30th,
+and 31st do not exist in every month. As a result, certain edge cases are
+asymmetric. For example, stepping forward from the 31st normalises the day
+to the last valid day of the resulting month.
+
+Use C<delta_years>, C<delta_months>, C<delta_weeks> and C<delta_days> 
+for calendar-based  calculations, such as recurrence rules, schedules, 
+and billing cycles. For elapsed-time measurements, use C<delta_hours>, 
+C<delta_minutes>, or C<delta_seconds> instead.
 
 =head2 delta_weeks
 
     $weeks = $tm->delta_weeks($other);
 
 Returns the difference between the B<local date> of this moment and the I<other> 
-in terms of complete B<calendar weeks>. The result will be negative if the local date of 
+in terms of whole B<calendar weeks>. The result will be negative if the local date of 
 the I<other> moment is before this.
 
 =head2 delta_days
@@ -1044,7 +1087,7 @@ the I<other> moment is before this.
     $days = $tm->delta_days($other);
 
 Returns the difference between the B<local date> of this moment and the I<other> 
-in terms of complete B<calendar days>. The result will be negative if the local date of 
+in terms of whole B<calendar days>. The result will be negative if the local date of 
 the I<other> moment is before this.
 
 =head2 delta_hours
@@ -1052,81 +1095,68 @@ the I<other> moment is before this.
     $hours = $tm->delta_hours($other);
 
 Returns the difference between the B<instant> of this moment and the I<other> 
-in terms of complete hours. The result will be negative if the instant of 
-the I<other> moment is before this.
+in terms of whole hours. The result will be negative if the instant of the 
+I<other> moment is before this.
 
 =head2 delta_minutes
 
     $minutes = $tm->delta_minutes($other);
 
 Returns the difference between the B<instant> of this moment and the I<other> 
-in terms of complete minutes. The result will be negative if the instant of 
-the I<other> moment is before this.
+in terms of whole minutes. The result will be negative if the instant of the 
+I<other> moment is before this.
 
 =head2 delta_seconds
 
     $seconds = $tm->delta_seconds($other);
 
 Returns the difference between the B<instant> of this moment and the I<other> in 
-terms of complete seconds. The result will be negative if the instant of the 
-I<other> moment is before this.
+terms of whole seconds. The result will be negative if the instant of the I<other> 
+moment is before this.
 
 =head2 delta_milliseconds
 
     $milliseconds = $tm->delta_milliseconds($other);
 
 Returns the difference between the B<instant> of this moment and the I<other> in 
-terms of complete milliseconds. The result will be negative if the instant of 
-the I<other> moment is before this.
+terms of whole milliseconds. The result will be negative if the instant of the 
+I<other> moment is before this.
 
 =head2 delta_microseconds
 
     $microseconds = $tm->delta_microseconds($other);
 
 Returns the difference between the B<instant> of this moment and the I<other> in 
-terms of complete microseconds. The result will be negative if the instant of 
-the I<other> moment is before this.
+terms of whole microseconds. The result will be negative if the instant of the 
+I<other> moment is before this.
 
 =head2 delta_nanoseconds
 
     $nanoseconds = $tm->delta_nanoseconds($other);
 
 Returns the difference between the B<instant> of this moment and the I<other> in 
-terms of complete nanoseconds. The result will be negative if the instant of 
-the I<other> moment is before this.
+terms of whole nanoseconds. The result will be negative if the instant of the 
+I<other> moment is before this.
 
 =head2 at_utc
 
     $tm2 = $tm1->at_utc;
 
-Returns a copy of this instance with the offset from UTC set to zero. This 
-method is equivalent to:
-
-    $tm2 = $tm1->with_offset_same_instant(0);
+Returns a copy of this instance with the offset from UTC set to zero.
 
 =head2 at_midnight
 
     $tm2 = $tm1->at_midnight;
 
 Returns a copy of this instance with the time of day set to midnight, 
-T00:00:00.0. This method is equivalent to:
-
-    $tm2 = $tm1->with_hour(0)
-               ->with_minute(0)
-               ->with_second(0)
-               ->with_nanosecond(0);
+T00:00:00.0.
 
 =head2 at_noon
 
     $tm2 = $tm1->at_noon;
 
 Returns a copy of this instance with the time of day set to noon, 
-T12:00:00.0. This method is equivalent to:
-
-    $tm2 = $tm1->with_hour(12)
-               ->with_minute(0)
-               ->with_second(0)
-               ->with_nanosecond(0);
+T12:00:00.0.
 
 =head2 at_last_day_of_year
 
