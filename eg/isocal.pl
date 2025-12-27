@@ -62,15 +62,15 @@ sub align {
 }
 
 say align($Moment->strftime('%B %Y'), 24);
-say 'Mo Tu We Th Fr Sa Su Wk';
+say 'Wk Mo Tu We Th Fr Sa Su';
 
 my $this_month = $Moment;
 my $next_month = $Moment->plus_months(1);
 my $date       = $Moment->with_day_of_week(1);
 
 while ($date->is_before($next_month)) {
-    my @week = ((('  ') x 7), sprintf '%.2d', $date->week);
-    foreach my $index (0..6) {
+    my @week = (sprintf('%.2d', $date->week), (('  ') x 7));
+    foreach my $index (1..7) {
         if (!$date->is_before($this_month) && $date->is_before($next_month)) {
             $week[$index] = sprintf '%2d', $date->day_of_month;
         }
