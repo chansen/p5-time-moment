@@ -37,12 +37,41 @@ Getopt::Long::GetOptions(
         ($week >= 1 && $week <= $length)
           or die qq/Option '$name' is out of the range [1, $length] for year $year\n/;
 
+        # Select the calendar month corresponding to a given ISO week ($week)
+        # within a calendar year.
+        #
+        # Important distinction:
+        # - Calendar year: January 1 to December 31; used when referring to months.
+        # - ISO week-year: defined by ISO-8601 week numbering; it may begin in late
+        #   December of the previous calendar year or extend into early January of
+        #   the next calendar year.
+        #
+        # Key ISO rule:
+        #   ISO week 1 is the week that contains January 4. Therefore, the ISO
+        #   week-year associated with a calendar year is the one whose week 1
+        #   includes January 4 of that year.
+        #
+        # Therefore:
+        # 1) Set the date to January 4 of the calendar year to ensure we are within
+        #    the correct ISO week-year.
+        # 2) Select the requested ISO week number within that ISO week-year.
+        # 3) Move to Monday of that ISO week, since ISO weeks start on Monday. 
+        #    Anchoring the date to Monday ensures we stay at the start of the 
+        #    ISO week, rather than on a later weekday that could fall in January 
+        #    of the next calendar year.
+        # 4) Force the date to the first day of its month to identify the
+        #    corresponding calendar month.
         $Moment = $Moment->with_month(1)
                          ->with_day_of_month(4)
                          ->with_week($week)
                          ->with_day_of_week(1)
                          ->with_day_of_month(1);
 
+        # Corner case handling:
+        # ISO week 1 can start in late December of the previous calendar year.
+        # If setting the day to the 1st put us back into the previous year,
+        # move forward one month to bring the date back into the intended 
+        # calendar year.
         if ($Moment->year < $year) {
           $Moment = $Moment->plus_months(1);
         }
