@@ -313,7 +313,7 @@ C<DateTime> and C<Time::Piece>:
 =head2 from_string
 
     $tm = Time::Moment->from_string($string);
-    $tm = Time::Moment->from_string($string [, lenient => false]);
+    $tm = Time::Moment->from_string($string [, lenient => 0]);
 
 Constructs an instance of C<Time::Moment> from the given I<string>. The 
 string must consist of a complete date representation and time of day 
@@ -642,7 +642,7 @@ returned precision value.
 =head2 jd
 
     $jd = $tm->jd;
-    $jd = $tm->jd([precision => 3]);
+    $jd = $tm->jd(precision => 3);
 
 Returns the Julian Date. The Julian Date is a count of days elapsed since 
 -4713-11-24T12Z. The fractional part corresponds to the fraction of the 
@@ -653,7 +653,7 @@ the precision of the fractional seconds. The default precision is 3
 =head2 mjd
 
     $mjd = $tm->mjd;
-    $mjd = $tm->mjd([precision => 3]);
+    $mjd = $tm->mjd(precision => 3);
 
 Returns the Modified Julian Date. The Modified Julian Date is a count of days 
 elapsed since 1858-11-17T00Z. The fractional part corresponds to the fraction 
@@ -664,7 +664,7 @@ specifies the precision of the fractional seconds. The default precision is 3
 =head2 rd
 
     $rd = $tm->rd;
-    $rd = $tm->rd([precision => 3]);
+    $rd = $tm->rd(precision => 3);
 
 Returns the Rata Die. The Rata Die is a count of days elapsed since 
 0000-12-31T00. The fractional part corresponds to the fraction of the day 
@@ -1041,7 +1041,7 @@ As with months, year calculations may involve asymmetric edge cases due to
 leap years. For instance, advancing from February 29 normalises to
 February 28 in non-leap years.
 
-See L</TIME AND CALENDAR ARITHMETIC>.
+See also the documentation section titled L</TIME AND CALENDAR ARITHMETIC>.
 
 =head2 delta_months
 
@@ -1066,7 +1066,7 @@ Because calendar months vary in length, and dates such as the 29th, 30th, and
 example, advancing from the 31st normalises the day to the last valid date in
 the destination month.
 
-See L</TIME AND CALENDAR ARITHMETIC>.
+See also the documentation section titled L</TIME AND CALENDAR ARITHMETIC>.
 
 =head2 delta_weeks
 
@@ -1087,7 +1087,7 @@ passing the target. Only the local date participates in the calculation.
 This calculation is not affected by timezone offsets, except insofar as they 
 determine which local date each moment falls on.
 
-See L</TIME AND CALENDAR ARITHMETIC>.
+See also the documentation section titled L</TIME AND CALENDAR ARITHMETIC>.
 
 =head2 delta_days
 
@@ -1109,7 +1109,7 @@ calculation.
 This calculation is not affected by timezone offsets, except insofar as they 
 determine which local date each moment falls on.
 
-See L</TIME AND CALENDAR ARITHMETIC>.
+See also the documentation section titled L</TIME AND CALENDAR ARITHMETIC>
 
 =head2 delta_hours
 
@@ -1326,7 +1326,7 @@ a single digit is preceded by a space.
 =item C<%f>
 
 Replaced by the fractional second including the preceding decimal point or 
-by an empty string if no fractional seconds are present. This conversion 
+by an B<empty string if no fractional seconds are present>. This conversion 
 specification permits use of an optional maximum field width [0, 9] where 
 the default field width of 0 will use the shortest of the following 
 representations:
@@ -1352,6 +1352,8 @@ are present.
 
 I<This conversion specification is an extension to the 
 L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
+
+See also the C<%N> conversion specification.
 
 =item C<%F>
 
@@ -1433,6 +1435,8 @@ right or truncated if needed).
 
 I<This conversion specification is an extension to the 
 L<"IEEE Std 1003.1"|http://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html>>.
+
+See also the C<%f> conversion specification.
 
 =item C<%p>
 
@@ -1554,7 +1558,7 @@ Returns the length of the month of the year in days [28, 31].
 
     $integer = $tm->length_of_week_year;
 
-Returns the length of the week of the year in weeks [52, 53].
+Returns the length of the week-based year in weeks [52, 53].
 
 =head2 utc_rd_values
 
@@ -1891,11 +1895,12 @@ Examples in both basic and extended formats:
 
 To construct a Time::Moment instance for July 1, 2024:
 
+    $tm = Time::Moment->new(year => 2024, month => 7, day => 1); 
+    
     $tm = Time::Moment->from_string('20240701T00Z');
     $tm = Time::Moment->from_string('2024-07-01T00Z');
-    $tm = Time::Moment->new(year => 2024, month => 7, day => 1); 
 
-See L</Date> for example L</strftime> conversion specifications.
+See also the documentation L</Date> for example L</strftime> conversion specifications.
 
 =head2 Ordinal Date (ISO 8601)
 
@@ -1929,12 +1934,13 @@ Examples in both basic and extended formats:
 
 To construct a Time::Moment instance for the 366th day of 2024:
 
-    $tm = Time::Moment->from_string('2024366T00Z');
-    $tm = Time::Moment->from_string('2024-366T00Z');
     $tm = Time::Moment->new(year => 2024)
                       ->with_day_of_year(366);
+    
+    $tm = Time::Moment->from_string('2024366T00Z');
+    $tm = Time::Moment->from_string('2024-366T00Z');
 
-See L</Date> for example L</strftime> conversion specifications.
+See also the documentation L</Date> for example L</strftime> conversion specifications.
 
 =head2 Week Date (ISO 8601)
 
@@ -1984,13 +1990,14 @@ Note: The standard defines week 01 as the week containing the first Thursday of 
 
 To construct a Time::Moment instance for Sunday of the 52nd week of 2023:
 
-    $tm = Time::Moment->from_string('2023W527T00Z');
-    $tm = Time::Moment->from_string('2023-W52-7T00Z');
     $tm = Time::Moment->new(year => 2023, day => 4)
                       ->with_week(52)
                       ->with_day_of_week(7);
+    
+    $tm = Time::Moment->from_string('2023W527T00Z');
+    $tm = Time::Moment->from_string('2023-W52-7T00Z');
 
-See L</Date> for example L</strftime> conversion specifications.
+See also the documentation L</Date> for example L</strftime> conversion specifications.
 
 =head2 Quarter Date (Non-Standard)
 
@@ -2024,17 +2031,23 @@ Examples in both basic and extended formats:
 
 To construct a Time::Moment instance for 45th day of the second quarter of 2023:
 
-    $tm = Time::Moment->from_string('2023Q245T00Z');
-    $tm = Time::Moment->from_string('2023-Q2-45T00Z');
     $tm = Time::Moment->new(year => 2023)
                       ->with_quarter(2)
                       ->with_day_of_quarter(45);
+    
+    $tm = Time::Moment->from_string('2023Q245T00Z');
+    $tm = Time::Moment->from_string('2023-Q2-45T00Z');
 
 =head1 TIME AND CALENDAR ARITHMETIC
 
-Time and Calendar Arithmetic refers to operations involving the addition, subtraction, or comparison of temporal values. These operations can involve either B<precise time units> (such as seconds, minutes, and hours) or B<calendar units> (like days, months, and years). These two types of arithmetic are fundamentally different due to their distinct characteristics.
+Time and Calendar Arithmetic refers to operations involving the addition, 
+subtraction, or comparison of temporal values. These operations can 
+involve either B<precise time units> (such as seconds, minutes, and hours) 
+or B<calendar units> (like days, months, and years). These two types of 
+arithmetic are fundamentally different due to their distinct characteristics.
 
-Mixing B<calendar units> and B<time units> can lead to confusion and inaccuracies because they adhere to different principles:
+Mixing B<calendar units> and B<time units> can lead to confusion and 
+inaccuracies because they adhere to different principles:
 
 =head2 1. Calendar Units Are Variable
 
@@ -2060,16 +2073,22 @@ A month can vary between 28, 29, 30, or 31 days.
 
 A year can be 365 or 366 days (leap years).
 
+=item *
+
+A decade can have between 1 and 3 leap years.
+
 =back
 
 =item *
 
-In contrast, time units such as seconds, minutes, and hours are fixed. For instance, there are always 60 seconds in a minute and 60 minutes in an hour.
+In contrast, time units such as seconds, minutes, and hours are fixed. For 
+instance, there are always 60 seconds in a minute and 60 minutes in an hour.
 
 =back
 
 B<Example:>  
-Adding 1 calendar month to January 31 may result in February 28 (or 29 in a leap year) rather than February 31, which does not exist.
+Adding 1 calendar month to January 31 may result in February 28 
+(or 29 in a leap year) rather than February 31, which does not exist.
 
 =head2 2. Conceptual Differences Between Calendar and Time Units
 
@@ -2077,26 +2096,14 @@ Adding 1 calendar month to January 31 may result in February 28 (or 29 in a leap
 
 =item *
 
-B<Calendar units> are positional and relate to transitions within a calendar system. For example, moving from "December 31 to January 1" indicates crossing into a new day, even if only 1 second has passed.
+B<Calendar units> are positional and relate to transitions within a calendar 
+system. For example, moving from "December 31 to January 1" indicates 
+crossing into a new day, even if only 1 second has passed.
 
 =item *
 
-B<Time units> measure exact durations, such as the total number of seconds, minutes, or hours between two timestamps.
-
-=back
-
-B<Example:>  
-The difference between C<2012-12-31T23:59:59Z> and C<2013-01-01T00:59:59Z>:
-
-=over
-
-=item *
-
-In B<calendar terms>, this spans 2 calendar days, as moving even 1 second into January 1 is considered a new day.
-
-=item *
-
-In B<time units>, the difference is precisely 1 hour or 60 minutes.
+B<Time units> measure exact durations, such as the total number of seconds, 
+minutes, or hours between two timestamps.
 
 =back
 
@@ -2112,11 +2119,13 @@ Mixing calendar and time units can lead to misleading interpretations:
 
 =item *
 
-Phrases like "1 day and 2 hours" might be ambiguous if not explicitly tied to a specific time context.
+Phrases like "1 day and 2 hours" might be ambiguous if not explicitly 
+tied to a specific time context.
 
 =item *
 
-A span of "24 hours" does not always equate to "1 calendar day," particularly when factors like daylight saving time come into play.
+A span of "24 hours" does not always equate to "1 calendar day," 
+particularly when factors like daylight saving time come into play.
 
 =back
 
@@ -2128,11 +2137,14 @@ A span of "24 hours" does not always equate to "1 calendar day," particularly wh
 
 =item *
 
-Use B<calendar units> when dealing with schedules, recurring events, or positional changes within a date system (e.g., adding months to calculate an anniversary).
+Use B<calendar units> when dealing with schedules, recurring events, or 
+positional changes within a date system (e.g., adding months to 
+calculate an anniversary).
 
 =item *
 
-Use B<time units> when working with precise durations, such as timers, interval measurements, or elapsed time calculations.
+Use B<time units> when working with precise durations, such as timers, 
+interval measurements, or elapsed time calculations.
 
 =back
 
@@ -2152,7 +2164,8 @@ Identify the earlier and later local dates.
 
 =item 2.
 
-Starting from the earlier date, repeatedly advance by one calendar unit (year, month, week, or day).
+Starting from the earlier date, repeatedly advance by one calendar unit 
+(year, month, week, or day).
 
 =item 3.
 
@@ -2202,7 +2215,7 @@ though the instants themselves may originate from timezone-aware moments.
 
 Consider the following two moments:
 
-  C<2012-12-31T23:59:59Z> and C<2013-01-01T00:59:59Z>
+C<2012-12-31T23:59:59Z> and C<2013-01-01T00:59:59Z>
 
 Only one hour of time has elapsed between these instants, yet a calendar
 day boundary has been crossed.
