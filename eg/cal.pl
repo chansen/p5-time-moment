@@ -64,7 +64,7 @@ while ($date->is_before($next_month)) {
     my @week = ('  ') x 7;
     foreach my $index (0..6) {
         if (!$date->is_before($this_month) && $date->is_before($next_month)) {
-            $week[$index] = sprintf '%2d', $date->day_of_month;
+            $week[$index] = $date->strftime('%d');
         }
         $date = $date->plus_days(1);
     }
