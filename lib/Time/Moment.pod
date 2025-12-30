@@ -1032,10 +1032,9 @@ the result. For example, the difference between C<2010-06-15> and
 C<2012-06-14> is one year, because it is one day short of a full two-year 
 interval.
 
-Conceptually, the method counts how many complete year boundaries can be
-crossed when moving from this moment toward I<other> (or vice versa),
-without passing the target. Only the local date participates in the 
-calculation.
+The method counts how many complete year boundaries can be crossed when 
+moving from this moment toward I<other> (or vice versa), without passing 
+the target. Only the local date participates in the calculation.
 
 As with months, year calculations may involve asymmetric edge cases due to
 leap years. For instance, advancing from February 29 normalises to
@@ -1056,10 +1055,10 @@ months separating the two dates. Partial months do not count toward the result.
 For example, the difference between C<2025-10-11> and C<2025-12-10> is one 
 month, because it falls one day short of a full two-month interval.
 
-Conceptually, the method counts how many complete month boundaries can be
-crossed when moving from this moment toward I<other> (or vice versa) without
-passing the target, using calendar-month arithmetic. Only the local date 
-participates in the calculation.
+The method counts how many complete month boundaries can be crossed when moving 
+from this moment toward I<other> (or vice versa) without passing the target, 
+using calendar-month arithmetic. Only the local date participates in the 
+calculation.
 
 Because calendar months vary in length, and dates such as the 29th, 30th, and
 31st are not present in every month, some edge cases are asymmetric. For
@@ -1080,9 +1079,9 @@ The calculation returns an integer and represents the number of complete
 seven-day calendar intervals separating the two dates. Partial weeks do not 
 count toward the result.
 
-Conceptually, the method counts how many complete seven-day boundaries can be
-crossed when moving from this moment toward I<other> (or vice versa) without
-passing the target. Only the local date participates in the calculation.
+The method counts how many complete seven-day boundaries can be crossed when 
+moving from this moment toward I<other> (or vice versa) without passing the 
+target. Only the local date participates in the calculation.
 
 This calculation is not affected by timezone offsets, except insofar as they 
 determine which local date each moment falls on.
@@ -1101,8 +1100,8 @@ The calculation returns an integer and represents the number of complete
 calendar days separating the two dates. Partial days do not count toward 
 the result.
 
-Conceptually, the method counts how many calendar-day boundaries (midnights)
-can be crossed when moving from this moment toward I<other> (or vice versa)
+The method counts how many calendar-day boundaries (midnights) can be 
+crossed when moving from this moment toward I<other> (or vice versa)
 without passing the target. Only the local date participates in the 
 calculation.
 
@@ -2150,22 +2149,22 @@ interval measurements, or elapsed time calculations.
 
 =head2 Boundary-Crossing Model for Calendar Arithmetic
 
-Calendar-based delta methods operate by counting how many complete calendar
-unit boundaries can be crossed when moving from one local date toward the
-other, without passing the target date.
+Calendar-based delta methods operate by counting the number of complete
+calendar unit boundaries that can be crossed when moving from one local date
+toward another, without passing the target date.
 
-Conceptually:
+The calculation proceeds as follows:
 
 =over
 
 =item 1.
 
-Identify the earlier and later local dates.
+Determine the two local dates involved.
 
 =item 2.
 
-Starting from the earlier date, repeatedly advance by one calendar unit 
-(year, month, week, or day).
+Starting from the earlier date, advance by one calendar unit
+(year, month, week, or day) at a time.
 
 =item 3.
 
@@ -2173,7 +2172,7 @@ Count how many such advances can be made without exceeding the later date.
 
 =back
 
-Partial units are ignored. Only complete boundary crossings are counted.
+Only complete boundary crossings are counted; partial units are ignored.
 
 =head2 Choosing the Correct Delta Method
 
